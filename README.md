@@ -1,65 +1,124 @@
 # SafeCheck
 
-répo du projet SafeCheck
+Application web d'accompagnement personnalisé en cybersécurité.
 
-Convention des branche à respecter : 
-main          → production, protégée, merge via PR uniquement
-feature/*     → toutes les features
-fix/*         → corrections (fix/scoring-bug)
-chore/*       → infra, config, docs (chore/setup-eslint)
+Stack : Next.js 16, React 19, TypeScript, PostgreSQL, Prisma 7, Docker.
 
 ## Prérequis
 
-- Node.js >= 20
-- npm >= 10
-- Docker (pour PostgreSQL local)
+- Docker (Docker Desktop sur Windows/Mac).
 
-## Installation
-
-```bash
-git clone https://github.com/ton-org/safecheck.git
-cd safecheck
-npm install
-```
-
-## Variables d'environnement
-
-```bash
-cp .env.example .env
-# Ajuster les valeurs si besoin (Prisma lit DATABASE_URL depuis .env)
-```
-
-## Base de données locale
-
-PostgreSQL tourne dans Docker (voir `docker-compose.yml`). Le client Prisma est
-généré dans `src/generated/prisma` (ignoré par git, régénéré via `postinstall`).
-
-```bash
-npm run db:up        # démarre PostgreSQL (docker compose up -d)
-npm run db:migrate   # applique les migrations et régénère le client Prisma
-```
-
-> Si le port 5432 est déjà utilisé sur ta machine, change `POSTGRES_PORT` et le
-> port de `DATABASE_URL` dans ton `.env` (ex. 5433).
+Docker suffit : Node, la base et les dépendances tournent dans des conteneurs.
 
 ## Lancer le projet
 
 ```bash
-npm run dev
-# → http://localhost:3000
+git clone https://github.com/ton-org/safecheck.git
+cd safecheck
+cp .env.example .env
+docker compose up --build -d
 ```
 
-## Commandes utiles
+L'application est disponible sur http://localhost:3000
+
+Le code source est monté dans le conteneur, ce qui active le rechargement à chaud :
+modifier un fichier puis rafraîchir la page suffit à voir le changement.
+
+Au démarrage, dans l'ordre :
+
+1. `postgres` démarre et attend d'être prêt (healthcheck).
+2. `app` applique les migrations Prisma, régénère le client, puis lance le serveur
+   de développement.
+
+## Commandes Docker
 
 | Commande | Description |
 |---|---|
-| `npm run dev` | Serveur de dev |
+| `docker compose up -d` | Démarrer (build seulement au premier lancement) |
+| `docker compose up --build -d` | Reconstruire l'image puis démarrer |
+| `docker compose logs -f app` | Suivre les logs de l'application |
+| `docker compose restart app` | Redémarrer l'application |
+| `docker compose down` | Tout arrêter |
+| `docker compose down -v` | Tout arrêter et supprimer la base |
+
+Reconstruire (`--build`) est nécessaire uniquement après un changement de
+`package.json` ou du `Dockerfile`. Pour du code, un rafraîchissement suffit.
+
+Changer le port si 3000 est occupé : `APP_PORT=3001 docker compose up -d`.
+
+## Base de données
+
+PostgreSQL tourne dans Docker. Le client Prisma est généré dans
+`src/generated/prisma` (ignoré par git, régénéré automatiquement).
+
+Les migrations existantes s'appliquent automatiquement au démarrage.
+
+### Créer une migration
+
+Après une modification de `prisma/schema.prisma` (nouvelle table, nouveau champ) :
+
+```bash
+docker compose exec app npx prisma migrate dev --name decris_le_changement
+```
+
+Cette commande crée le fichier de migration dans `prisma/migrations/`, l'applique
+à la base et régénère le client. Le fichier de migration doit être commité.
+
+### Exporter la base (dump)
+
+```bash
+docker compose exec -T postgres pg_dump -U safecheck safecheck > backup.sql
+```
+
+### Importer un dump
+
+```bash
+docker compose exec -T postgres psql -U safecheck -d safecheck < backup.sql
+```
+
+### Réinitialiser la base
+
+```bash
+docker compose down -v
+docker compose up -d
+```
+
+### Autres commandes Prisma
+
+```bash
+docker compose exec app npx prisma generate
+docker compose exec app npx prisma migrate deploy
+```
+
+## Convention de branches
+
+| Branche | Usage |
+|---|---|
+| `main` | production, protégée, merge par pull request uniquement |
+| `feature/*` | nouvelles fonctionnalités |
+| `fix/*` | corrections (exemple : `fix/scoring-bug`) |
+| `chore/*` | infrastructure, configuration, documentation |
+
+## Développer sans Docker (optionnel)
+
+L'application peut tourner directement sur la machine (Node.js >= 20 requis) :
+
+```bash
+npm install
+npm run db:up
+npm run db:migrate
+npm run dev
+```
+
+| Commande | Description |
+|---|---|
+| `npm run dev` | Serveur de développement |
 | `npm run build` | Build de production |
 | `npm run lint` | Vérification ESLint |
 | `npm run typecheck` | Vérification TypeScript |
-| `npm run db:up` | Démarre PostgreSQL (Docker) |
-| `npm run db:down` | Arrête PostgreSQL |
+| `npm run db:up` | Démarrer PostgreSQL (Docker) |
+| `npm run db:down` | Arrêter PostgreSQL |
 | `npm run db:logs` | Logs du conteneur PostgreSQL |
-| `npm run db:migrate` | Crée/applique les migrations Prisma |
-| `npm run db:generate` | Régénère le client Prisma |
-| `npm run db:studio` | Ouvre Prisma Studio |
+| `npm run db:migrate` | Créer et appliquer les migrations Prisma |
+| `npm run db:generate` | Régénérer le client Prisma |
+| `npm run db:studio` | Ouvrir Prisma Studio |
