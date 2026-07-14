@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, type CSSProperties } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ScButton } from "@/components/safecheck/primitives"
-import { Shield, User, UserPlus, LogOut, Menu as MenuIcon, X, ListChecks } from "lucide-react"
+import { SafeCheckMark, ScButton } from "@/components/safecheck/primitives"
+import { User, UserPlus, LogOut, Menu as MenuIcon, X, ListChecks } from "lucide-react"
 import { useAuth } from "@/components/safecheck/AuthProvider"
 import { SignupModal } from "@/components/safecheck/SignupModal"
 import { useI18n } from "@/components/safecheck/I18nProvider"
@@ -30,14 +30,6 @@ interface NavbarProps {
    * /compte/creer.
    */
   onSignupClick?: () => void
-}
-
-const logoMarkClassName =
-  "relative inline-flex items-center justify-center w-8 h-8 rounded-lg transition-transform duration-200 group-hover:scale-110 group-hover:rotate-[-4deg]"
-
-const logoMarkStyle: CSSProperties = {
-  background: "linear-gradient(135deg,#3B82F6,#2563EB 60%,#6366F1)",
-  boxShadow: "0 6px 16px -6px rgba(37,99,235,0.55)",
 }
 
 const logoTextClassName =
@@ -138,9 +130,7 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
           className="flex items-center gap-2 shrink-0 mr-0 sm:mr-3 group cursor-pointer"
           onClick={closeMenus}
         >
-          <span className={logoMarkClassName} style={logoMarkStyle}>
-            <Shield className="w-4 h-4 text-white" strokeWidth={2.5} />
-          </span>
+          <SafeCheckMark className="relative transition-transform duration-200 group-hover:scale-110 group-hover:rotate-[-4deg]" />
           <span
             aria-hidden="false"
             className={logoTextClassName}

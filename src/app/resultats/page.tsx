@@ -7,6 +7,7 @@ import Footer from "@/components/safecheck/Footer"
 import { SignupModal } from "@/components/safecheck/SignupModal"
 import { useAuth } from "@/components/safecheck/AuthProvider"
 import { useI18n } from "@/components/safecheck/I18nProvider"
+import { PageShell } from "@/components/safecheck/layout/PageShell"
 import { ResultsAssessment } from "@/features/results/components/ResultsAssessment"
 import { ResultsAuditInfo } from "@/features/results/components/ResultsAuditInfo"
 import { ResultsComparison } from "@/features/results/components/ResultsComparison"
@@ -51,7 +52,7 @@ function ResultatsContent() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[color:var(--sc-bg)] font-sans">
+    <PageShell>
       <Navbar />
 
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-8 md:py-12 flex flex-col gap-6">
@@ -99,7 +100,7 @@ function ResultatsContent() {
         pendingHref={pendingHref}
         reason={t("signup.reasonTutorial")}
       />
-    </div>
+    </PageShell>
   )
 }
 

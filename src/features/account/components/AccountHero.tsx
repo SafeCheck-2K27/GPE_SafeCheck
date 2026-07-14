@@ -1,5 +1,5 @@
 import type { ComponentType } from "react"
-import { ScBadge } from "@/components/safecheck/primitives"
+import { ScBadge, ScCard } from "@/components/safecheck/primitives"
 import {
   Camera,
   GraduationCap,
@@ -18,7 +18,7 @@ function StatPill({
   label: string
 }) {
   return (
-    <div className="flex flex-col items-center justify-center px-3 py-2.5 rounded-xl bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[var(--sc-shadow-sm)] min-w-[68px]">
+    <ScCard className="flex min-w-[68px] flex-col items-center justify-center px-3 py-2.5">
       <Icon className="w-4 h-4 text-[color:var(--sc-blue)] mb-1" />
       <span className="font-display font-bold text-base text-[color:var(--sc-text)] leading-none tabular-nums">
         {value}
@@ -26,7 +26,7 @@ function StatPill({
       <span className="text-[10px] font-medium uppercase tracking-wide text-[color:var(--sc-text-muted)] mt-0.5">
         {label}
       </span>
-    </div>
+    </ScCard>
   )
 }
 

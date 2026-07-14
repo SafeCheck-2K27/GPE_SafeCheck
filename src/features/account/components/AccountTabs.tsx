@@ -5,6 +5,7 @@ import {
   Settings,
   ShieldCheck,
 } from "lucide-react"
+import { cn } from "@/lib/utils"
 import type { AccountTabId } from "../types"
 
 const ACCOUNT_TABS: Array<{
@@ -36,11 +37,12 @@ export function AccountTabs({
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 cursor-pointer ${
+              className={cn(
+                "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 cursor-pointer",
                 active
                   ? "bg-[linear-gradient(180deg,var(--sc-blue-soft),var(--sc-blue))] text-white shadow-[var(--sc-shadow-blue-sm)]"
-                  : "text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-blue)] hover:bg-[color:var(--sc-bg-soft)]"
-              }`}
+                  : "text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-blue)] hover:bg-[color:var(--sc-bg-soft)]",
+              )}
               aria-current={active ? "page" : undefined}
             >
               <Icon className="w-4 h-4" />

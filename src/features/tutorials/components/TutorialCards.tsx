@@ -2,6 +2,7 @@ import Link from "next/link"
 import { ScButton } from "@/components/safecheck/primitives"
 import { CATEGORY_LABEL } from "@/lib/tutoriels-data"
 import type { Niveau, Tutoriel } from "@/lib/tutoriels-data"
+import { cn } from "@/lib/utils"
 import {
   ArrowRight,
   BookOpen,
@@ -39,11 +40,23 @@ export function TutorialRow({
 
   return (
     <div
-      className={`group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 rounded-xl border bg-[color:var(--sc-surface)] p-3 sm:p-4 transition-all hover:shadow-[var(--sc-shadow-sm)] ${isDone ? "border-[color:var(--sc-success)]/30 hover:border-[color:var(--sc-success)]/50" : isInProgress ? "border-[color:var(--sc-blue)]/30 hover:border-[color:var(--sc-blue)]/50" : "border-[color:var(--sc-border)] hover:border-[color:var(--sc-blue)]/30" }`}
+      className={cn(
+        "group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 rounded-xl border bg-[color:var(--sc-surface)] p-3 sm:p-4 transition-all hover:shadow-[var(--sc-shadow-sm)]",
+        isDone
+          ? "border-[color:var(--sc-success)]/30 hover:border-[color:var(--sc-success)]/50"
+          : isInProgress
+            ? "border-[color:var(--sc-blue)]/30 hover:border-[color:var(--sc-blue)]/50"
+            : "border-[color:var(--sc-border)] hover:border-[color:var(--sc-blue)]/30",
+      )}
     >
       {/* Icon */}
       <div
-        className={`shrink-0 w-10 h-10 rounded-lg flex items-center justify-center ${isDone ? "bg-[color:var(--sc-success)]/10 text-[color:var(--sc-success)]" : "bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue)]"}`}
+        className={cn(
+          "shrink-0 w-10 h-10 rounded-lg flex items-center justify-center",
+          isDone
+            ? "bg-[color:var(--sc-success)]/10 text-[color:var(--sc-success)]"
+            : "bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue)]",
+        )}
       >
         <div className="scale-110">{tuto.icon}</div>
       </div>
@@ -157,7 +170,14 @@ export function TutorialCard({
 
   return (
     <article
-      className={`group relative rounded-xl overflow-hidden flex flex-col bg-[color:var(--sc-surface)] border shadow-[var(--sc-shadow-sm)] hover:shadow-[var(--sc-shadow-md)] hover:-translate-y-1 transition-all duration-300 ease-out ${isDone ? "border-[color:var(--sc-success)]/40 hover:border-[color:var(--sc-success)]/60" : isInProgress ? "border-[color:var(--sc-blue)]/40 hover:border-[color:var(--sc-blue)]/60" : "border-[color:var(--sc-border)] hover:border-[color:var(--sc-blue)]/40" }`}
+      className={cn(
+        "group relative rounded-xl overflow-hidden flex flex-col bg-[color:var(--sc-surface)] border shadow-[var(--sc-shadow-sm)] hover:shadow-[var(--sc-shadow-md)] hover:-translate-y-1 transition-all duration-300 ease-out",
+        isDone
+          ? "border-[color:var(--sc-success)]/40 hover:border-[color:var(--sc-success)]/60"
+          : isInProgress
+            ? "border-[color:var(--sc-blue)]/40 hover:border-[color:var(--sc-blue)]/60"
+            : "border-[color:var(--sc-border)] hover:border-[color:var(--sc-blue)]/40",
+      )}
     >
       {/* Status stripe at top */}
       {isDone && (
@@ -207,7 +227,14 @@ export function TutorialCard({
         )}
       </div>
 
-      <div className={`h-24 flex items-center justify-center text-[color:var(--sc-blue)] relative overflow-hidden ${isDone ? "bg-[color:var(--sc-success)]/8" : "bg-[color:var(--sc-bg-soft)]"}`}>
+      <div
+        className={cn(
+          "h-24 flex items-center justify-center text-[color:var(--sc-blue)] relative overflow-hidden",
+          isDone
+            ? "bg-[color:var(--sc-success)]/8"
+            : "bg-[color:var(--sc-bg-soft)]",
+        )}
+      >
         <div
           className="absolute inset-0 opacity-30"
           style={{
@@ -216,7 +243,12 @@ export function TutorialCard({
               : "radial-gradient(circle at 50% 120%, rgba(37,99,235,0.25), transparent 60%)",
           }}
         />
-        <div className={`relative scale-[2.5] transition-transform group-hover:scale-[2.8] ${isDone ? "text-[color:var(--sc-success)]" : ""}`}>
+        <div
+          className={cn(
+            "relative scale-[2.5] transition-transform group-hover:scale-[2.8]",
+            isDone && "text-[color:var(--sc-success)]",
+          )}
+        >
           {tuto.icon}
         </div>
         {isDone && (

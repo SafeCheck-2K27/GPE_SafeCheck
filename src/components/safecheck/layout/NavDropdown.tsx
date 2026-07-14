@@ -4,6 +4,7 @@ import React from "react"
 import Link from "next/link"
 import { ChevronDown } from "lucide-react"
 import type { DropdownItem } from "@/components/safecheck/layout/nav-data"
+import { cn } from "@/lib/utils"
 
 export function NavDropdown({
   label,
@@ -39,17 +40,30 @@ export function NavDropdown({
     <div className="relative">
       <button
         onClick={onToggle}
-        className={`flex items-center gap-1 px-3 py-2 rounded-lg text-[14px] font-medium transition-all duration-200 cursor-pointer ${isOpen ? "bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue)]" : "text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-text)] hover:bg-[color:var(--sc-bg-soft)]/70" }`}
+        className={cn(
+          "flex items-center gap-1 px-3 py-2 rounded-lg text-[14px] font-medium transition-all duration-200 cursor-pointer",
+          isOpen
+            ? "bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue)]"
+            : "text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-text)] hover:bg-[color:var(--sc-bg-soft)]/70",
+        )}
         aria-expanded={isOpen}
         aria-controls={`menu-${id}`}
       >
         {label}
-        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown
+          className={cn(
+            "w-3.5 h-3.5 transition-transform duration-200",
+            isOpen && "rotate-180",
+          )}
+        />
       </button>
       {isOpen && (
         <div
           id={`menu-${id}`}
-          className={`absolute top-full left-0 mt-2 ${wide ? "w-80" : "w-64"} rounded-xl z-50 overflow-hidden sc-fade-in border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] shadow-[0_12px_36px_-12px_rgba(15,23,42,0.18),0_4px_12px_-4px_rgba(15,23,42,0.10)] p-1.5`}
+          className={cn(
+            "absolute top-full left-0 mt-2 rounded-xl z-50 overflow-hidden sc-fade-in border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] shadow-[0_12px_36px_-12px_rgba(15,23,42,0.18),0_4px_12px_-4px_rgba(15,23,42,0.10)] p-1.5",
+            wide ? "w-80" : "w-64",
+          )}
         >
           {items.map((item) => {
             const Icon = item.icon

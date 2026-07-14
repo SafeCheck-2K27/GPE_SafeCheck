@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
 import Navbar from "@/components/safecheck/Navbar"
 import Footer from "@/components/safecheck/Footer"
+import { PageShell } from "@/components/safecheck/layout/PageShell"
 import { ScButton, ScBadge } from "@/components/safecheck/primitives"
 import { tutoriels, CATEGORY_LABEL } from "@/lib/tutoriels-data"
 import type { Tutoriel } from "@/lib/tutoriels-data"
@@ -835,7 +836,7 @@ export default function TutorielDetailPage() {
 
   if (!tuto) {
     return (
-      <div className="min-h-screen flex flex-col bg-[color:var(--sc-bg)] font-sans">
+      <PageShell>
         <Navbar />
         <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-12 flex flex-col items-center justify-center text-center">
           <Shield className="w-12 h-12 text-[color:var(--sc-text-muted)] mb-4 opacity-40" />
@@ -849,7 +850,7 @@ export default function TutorielDetailPage() {
           </ScButton>
         </main>
         <Footer />
-      </div>
+      </PageShell>
     )
   }
 
@@ -867,7 +868,7 @@ export default function TutorielDetailPage() {
     .slice(0, 3)
 
   return (
-    <div className="min-h-screen flex flex-col bg-[color:var(--sc-bg)] font-sans">
+    <PageShell>
       <Navbar />
 
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-6">
@@ -1224,6 +1225,6 @@ export default function TutorielDetailPage() {
           stepTitle={precisionStepTitle}
         />
       )}
-    </div>
+    </PageShell>
   )
 }

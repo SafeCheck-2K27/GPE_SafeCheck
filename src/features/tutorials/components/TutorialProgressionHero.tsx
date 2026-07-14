@@ -1,5 +1,6 @@
-import { ScButton } from "@/components/safecheck/primitives"
+import { ScButton, ScCard } from "@/components/safecheck/primitives"
 import type { Tutoriel } from "@/lib/tutoriels-data"
+import { cn } from "@/lib/utils"
 import { Award, Sparkles, Star, Target, TrendingUp, Users, Zap } from "lucide-react"
 import { levels, userProgress } from "../data"
 
@@ -72,16 +73,28 @@ export function TutorialProgressionHero({
                 {levels.map((level, i) => (
                   <div
                     key={level.name}
-                    className={`flex flex-col items-center ${ i <= userProgress.levelIndex ? "opacity-100" : "opacity-40" }`}
+                    className={cn(
+                      "flex flex-col items-center",
+                      i <= userProgress.levelIndex ? "opacity-100" : "opacity-40",
+                    )}
                   >
                     <div
-                      className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white mb-1 transition-transform ${ i === userProgress.levelIndex ? "scale-125 ring-2 ring-offset-2 ring-[color:var(--sc-blue)]" : "" }`}
+                      className={cn(
+                        "w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white mb-1 transition-transform",
+                        i === userProgress.levelIndex &&
+                          "scale-125 ring-2 ring-offset-2 ring-[color:var(--sc-blue)]",
+                      )}
                       style={{ backgroundColor: level.color }}
                     >
                       {level.icon}
                     </div>
                     <span
-                      className={`text-[9px] font-medium ${ i === userProgress.levelIndex ? "text-[color:var(--sc-blue)] font-bold" : "text-[color:var(--sc-text-muted)]" }`}
+                      className={cn(
+                        "text-[9px] font-medium",
+                        i === userProgress.levelIndex
+                          ? "text-[color:var(--sc-blue)] font-bold"
+                          : "text-[color:var(--sc-text-muted)]",
+                      )}
                     >
                       {level.name.split(" ")[0]}
                     </span>
@@ -138,7 +151,7 @@ export function TutorialProgressionHero({
 
           {/* RIGHT */}
           <div className="flex flex-col gap-4 lg:w-64">
-            <div className="rounded-xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] p-4 shadow-[var(--sc-shadow-sm)]">
+            <ScCard className="p-4">
               <div className="flex items-center gap-2 mb-3">
                 <Target className="w-4 h-4 text-[color:var(--sc-blue)]" />
                 <span className="text-xs font-semibold text-[color:var(--sc-blue)] uppercase tracking-wider">
@@ -168,7 +181,7 @@ export function TutorialProgressionHero({
                 <TrendingUp className="w-3 h-3" />
                 Tu progresses plus vite que la moyenne !
               </div>
-            </div>
+            </ScCard>
 
             <div className="rounded-xl border-2 border-[color:var(--sc-blue)]/30 bg-[linear-gradient(135deg,rgba(37,99,235,0.06)_0%,rgba(99,102,241,0.06)_100%)] p-4">
               <div className="flex items-center gap-2 mb-2">

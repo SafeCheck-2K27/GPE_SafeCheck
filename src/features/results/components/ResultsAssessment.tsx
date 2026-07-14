@@ -1,4 +1,5 @@
 import { AlertTriangle, Check } from "lucide-react"
+import { ScCard } from "@/components/safecheck/primitives"
 import type { ResultLevelConfig, ResultTranslator } from "../types"
 
 export function ResultsAssessment({
@@ -12,7 +13,7 @@ export function ResultsAssessment({
 }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="rounded-xl p-4 bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[var(--sc-shadow-sm)]">
+      <ScCard className="p-4">
         <h2 className="font-bold text-sm mb-3 flex items-center gap-2 text-[color:var(--sc-text)]">
           <Check className="w-4 h-4 text-[color:var(--sc-success)]" />
           {t("res.strong")}
@@ -50,9 +51,9 @@ export function ResultsAssessment({
             </>
           )}
         </ul>
-      </div>
+      </ScCard>
 
-      <div className="rounded-xl p-4 bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[var(--sc-shadow-sm)]">
+      <ScCard className="p-4">
         <h2 className="font-bold text-sm mb-3 flex items-center gap-2 text-[color:var(--sc-text)]">
           <AlertTriangle className="w-4 h-4 text-[color:var(--sc-warn)]" />
           {t("res.weak")}
@@ -89,7 +90,7 @@ export function ResultsAssessment({
             </li>
           )}
         </ul>
-      </div>
+      </ScCard>
     </div>
   )
 }

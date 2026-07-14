@@ -2,7 +2,7 @@
 
 import type { ComponentType } from "react"
 import { useRouter } from "next/navigation"
-import { ScBadge, ScButton } from "@/components/safecheck/primitives"
+import { ScBadge, ScButton, ScCard } from "@/components/safecheck/primitives"
 import {
   BookOpen,
   CheckCircle2,
@@ -168,13 +168,13 @@ function SummaryTile({
       "bg-[color:var(--sc-surface-2)]/60 border-[color:var(--sc-border)] text-[color:var(--sc-text-2)]",
   }
   return (
-    <div className="rounded-xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] p-4 shadow-[var(--sc-shadow-sm)]">
+    <ScCard className="p-4">
       <div className={`inline-flex items-center justify-center w-9 h-9 rounded-lg border ${palette[tone]} mb-2`}>
         <Icon className="w-4 h-4" />
       </div>
       <div className="font-display font-bold text-2xl text-[color:var(--sc-text)] leading-none tabular-nums">{value}</div>
       <div className="text-[12px] text-[color:var(--sc-text-muted)] mt-1">{label}</div>
-    </div>
+    </ScCard>
   )
 }
 

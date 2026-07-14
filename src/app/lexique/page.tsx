@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Navbar from "@/components/safecheck/Navbar"
 import { ScButton, ScBadge } from "@/components/safecheck/primitives"
 import Footer from "@/components/safecheck/Footer"
+import { PageShell } from "@/components/safecheck/layout/PageShell"
 import {
   Search,
   X,
@@ -75,7 +76,7 @@ function LexiqueContent() {
   const activeDomainMeta = DOMAINS.find((d) => d.id === activeDomain)
 
   return (
-    <div className="min-h-screen flex flex-col bg-[color:var(--sc-bg)] font-sans">
+    <PageShell>
       <Navbar onSignupClick={() => router.push("/compte/creer")} />
 
       <main className="flex-1">
@@ -223,7 +224,7 @@ function LexiqueContent() {
           onTutoriel={(id) => router.push(`/tutoriels/${id}`)}
         />
       )}
-    </div>
+    </PageShell>
   )
 }
 

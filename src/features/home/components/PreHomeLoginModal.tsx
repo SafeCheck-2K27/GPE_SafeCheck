@@ -1,14 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { Shield } from "lucide-react"
-import { ScButton } from "@/components/safecheck/primitives"
+import { SafeCheckMark, ScButton } from "@/components/safecheck/primitives"
+import { ModalBackdrop } from "@/components/safecheck/layout/ModalBackdrop"
 
 const loginCardClassName =
   "w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgba(15,23,42,0.30)]"
-
-const loginLogoClassName =
-  "inline-flex items-center justify-center w-8 h-8 rounded-lg text-white bg-[linear-gradient(135deg,#3B82F6,#2563EB_60%,#6366F1)] shadow-[0_6px_16px_-6px_rgba(37,99,235,0.55)]"
 
 const loginInputClassName =
   "sc-focus w-full px-3 py-2.5 rounded-lg text-sm bg-[color:var(--sc-surface)] text-[color:var(--sc-text)] border border-[color:var(--sc-border-strong)] focus:border-[color:var(--sc-blue)] outline-none transition-colors"
@@ -36,15 +33,10 @@ export function PreHomeLoginModal({
   }
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[color:var(--sc-text)]/40 backdrop-blur-sm px-4"
-      onClick={onClose}
-    >
+    <ModalBackdrop onClick={onClose}>
       <div className={loginCardClassName} onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center gap-2 mb-1">
-          <span className={loginLogoClassName}>
-            <Shield className="w-4 h-4" strokeWidth={2.5} />
-          </span>
+          <SafeCheckMark />
           <h2 className="font-display text-xl font-semibold text-[color:var(--sc-text)]">
             Connexion
           </h2>
@@ -96,6 +88,6 @@ export function PreHomeLoginModal({
           </button>
         </div>
       </div>
-    </div>
+    </ModalBackdrop>
   )
 }

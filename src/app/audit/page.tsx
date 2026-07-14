@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Navbar from "@/components/safecheck/Navbar"
 import Footer from "@/components/safecheck/Footer"
+import { PageShell } from "@/components/safecheck/layout/PageShell"
 import { AuditProgressSidebar } from "@/features/audit/components/AuditProgressSidebar"
 import { AuditQuestionPanel } from "@/features/audit/components/AuditQuestionPanel"
 import { AuditTopBar } from "@/features/audit/components/AuditTopBar"
@@ -64,7 +65,7 @@ export default function AuditPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[color:var(--sc-bg)] font-sans">
+    <PageShell>
       <Navbar />
 
       <main className="flex-1 flex relative">
@@ -119,6 +120,6 @@ export default function AuditPage() {
       </main>
 
       <Footer />
-    </div>
+    </PageShell>
   )
 }

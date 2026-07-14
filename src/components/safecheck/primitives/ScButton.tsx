@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { cn } from "@/lib/utils"
 
 /* Reusable SafeCheck button (V2 premium) */
 export interface ScButtonProps {
@@ -78,7 +79,13 @@ export function ScButton({
       disabled={disabled}
       onClick={onClick}
       aria-label={ariaLabel}
-      className={`font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer transition-[transform,box-shadow,background,color,border-color] duration-200 ease-out active:translate-y-0 active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--sc-blue)]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--sc-bg)] ${sizeClasses[size]} ${variantClass[variant]} ${disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : ""} ${className}`}
+      className={cn(
+        "font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer transition-[transform,box-shadow,background,color,border-color] duration-200 ease-out active:translate-y-0 active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--sc-blue)]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--sc-bg)]",
+        sizeClasses[size],
+        variantClass[variant],
+        disabled && "opacity-50 cursor-not-allowed pointer-events-none",
+        className,
+      )}
     >
       {children}
     </button>

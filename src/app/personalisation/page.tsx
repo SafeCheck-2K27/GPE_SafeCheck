@@ -4,6 +4,7 @@ import { Suspense, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Footer from "@/components/safecheck/Footer"
 import Navbar from "@/components/safecheck/Navbar"
+import { PageShell } from "@/components/safecheck/layout/PageShell"
 import { PersonalizationActions } from "@/features/personalization/components/PersonalizationActions"
 import { PersonalizationHero } from "@/features/personalization/components/PersonalizationHero"
 import { PersonalizationQuestionnaire } from "@/features/personalization/components/PersonalizationQuestionnaire"
@@ -59,7 +60,7 @@ function PersonalisationContent() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[color:var(--sc-bg)] font-sans">
+    <PageShell>
       <Navbar />
 
       <main className="flex-1 w-full max-w-2xl mx-auto px-4 py-8 md:py-12 flex flex-col gap-6">
@@ -83,7 +84,7 @@ function PersonalisationContent() {
       </main>
 
       <Footer />
-    </div>
+    </PageShell>
   )
 }
 

@@ -6,6 +6,7 @@ import { useTheme } from "next-themes"
 import { useAuth } from "@/components/safecheck/AuthProvider"
 import Footer from "@/components/safecheck/Footer"
 import Navbar from "@/components/safecheck/Navbar"
+import { PageShell } from "@/components/safecheck/layout/PageShell"
 import { AccountDashboard } from "@/features/account/components/AccountDashboard"
 import { AccountDeleteModal } from "@/features/account/components/AccountDeleteModal"
 import { AccountHero } from "@/features/account/components/AccountHero"
@@ -107,7 +108,7 @@ export default function MonComptePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[color:var(--sc-bg)] font-sans">
+    <PageShell>
       <Suspense fallback={null}>
         <AccountTabSynchronizer onTabChange={setActiveTab} />
       </Suspense>
@@ -157,6 +158,6 @@ export default function MonComptePage() {
           onClose={() => setShowDeleteConfirm(false)}
         />
       )}
-    </div>
+    </PageShell>
   )
 }

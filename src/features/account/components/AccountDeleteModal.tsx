@@ -1,4 +1,5 @@
 import { ScButton } from "@/components/safecheck/primitives"
+import { ModalBackdrop } from "@/components/safecheck/layout/ModalBackdrop"
 import { AlertTriangle } from "lucide-react"
 
 export function AccountDeleteModal({
@@ -9,10 +10,7 @@ export function AccountDeleteModal({
   onClose: () => void
 }) {
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[color:var(--sc-text)]/40 backdrop-blur-sm px-4"
-      onClick={onClose}
-    >
+    <ModalBackdrop onClick={onClose}>
       <div
         className="w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[var(--sc-shadow-lg)]"
         onClick={(event) => event.stopPropagation()}
@@ -48,6 +46,6 @@ export function AccountDeleteModal({
           </ScButton>
         </div>
       </div>
-    </div>
+    </ModalBackdrop>
   )
 }

@@ -4,6 +4,7 @@ import { Suspense, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import Footer from "@/components/safecheck/Footer"
 import Navbar from "@/components/safecheck/Navbar"
+import { PageShell } from "@/components/safecheck/layout/PageShell"
 import { TutorialCatalogView } from "@/features/tutorials/components/TutorialCatalogView"
 import { TutorialLevelView } from "@/features/tutorials/components/TutorialLevelView"
 import { TutorialModal } from "@/features/tutorials/components/TutorialModal"
@@ -76,7 +77,7 @@ function TutorielsContent() {
         : "Debutant"
 
   return (
-    <div className="min-h-screen flex flex-col bg-[color:var(--sc-bg)] font-sans">
+    <PageShell>
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-6">
@@ -119,6 +120,6 @@ function TutorielsContent() {
           stepTitle={precisionStepTitle}
         />
       )}
-    </div>
+    </PageShell>
   )
 }

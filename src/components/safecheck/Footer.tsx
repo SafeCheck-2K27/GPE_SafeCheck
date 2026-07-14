@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Shield } from "lucide-react"
+import { SafeCheckMark } from "@/components/safecheck/primitives"
 
 export default function Footer() {
   return (
@@ -9,11 +9,7 @@ export default function Footer() {
         {/* Brand column */}
         <div className="col-span-2 md:col-span-1">
           <Link href="/accueil" className="inline-flex items-center gap-2 mb-4 group">
-            <span
-              className="relative inline-flex items-center justify-center w-8 h-8 rounded-lg text-white bg-[linear-gradient(135deg,#3B82F6,#2563EB_60%,#6366F1)] shadow-[0_6px_16px_-6px_rgba(37,99,235,0.55)] transition-transform group-hover:scale-105"
-            >
-              <Shield className="w-4 h-4" strokeWidth={2.5} />
-            </span>
+            <SafeCheckMark className="relative transition-transform group-hover:scale-105" />
             <span className="font-display text-lg font-bold tracking-tight text-[color:var(--sc-text)]">
               Safe<span className="sc-gradient-text">Check</span>
             </span>

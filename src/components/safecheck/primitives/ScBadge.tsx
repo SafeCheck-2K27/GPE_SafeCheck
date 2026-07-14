@@ -1,4 +1,5 @@
 import * as React from "react"
+import { cn } from "@/lib/utils"
 
 /* Reusable badge component (V2) */
 export function ScBadge({
@@ -30,7 +31,11 @@ export function ScBadge({
   }
   return (
     <span
-      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11.5px] font-semibold tracking-wide border ${tones[tone]} ${className}`}
+      className={cn(
+        "inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11.5px] font-semibold tracking-wide border",
+        tones[tone],
+        className,
+      )}
     >
       {children}
     </span>

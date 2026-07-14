@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react"
-import { ScButton } from "@/components/safecheck/primitives"
+import { ScButton, ScCard } from "@/components/safecheck/primitives"
 import type {
   Recommendation,
   ResultLanguage,
@@ -12,9 +12,6 @@ import {
   urgencyColors,
   urgencyTranslationKeys,
 } from "./data"
-
-const cardClassName =
-  "rounded-xl p-4 flex items-start gap-4 bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[var(--sc-shadow-sm)] hover:shadow-[var(--sc-shadow)] transition-shadow"
 
 export function RecommendationCard({
   reco,
@@ -31,7 +28,7 @@ export function RecommendationCard({
 }) {
   const copy = recoCopy[reco.key][lang]
   return (
-    <div className={cardClassName}>
+    <ScCard className="flex items-start gap-4 p-4 transition-shadow hover:shadow-[var(--sc-shadow)]">
       <div
         className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 text-white"
         style={{ background: "linear-gradient(135deg, var(--sc-blue-soft), var(--sc-blue))" }}
@@ -70,6 +67,6 @@ export function RecommendationCard({
           <ArrowRight className="w-3.5 h-3.5 ml-1" />
         </ScButton>
       </div>
-    </div>
+    </ScCard>
   )
 }

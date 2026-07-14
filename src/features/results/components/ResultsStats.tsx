@@ -1,8 +1,6 @@
 import { Clock, Target, TrendingUp } from "lucide-react"
+import { ScCard } from "@/components/safecheck/primitives"
 import type { ResultMetrics } from "../types"
-
-const statCardClassName =
-  "rounded-xl p-4 flex items-start gap-3 bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[var(--sc-shadow-sm)]"
 
 const statIconClassName =
   "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-white mt-0.5"
@@ -35,7 +33,7 @@ export function ResultsStats({ metrics }: { metrics: ResultMetrics }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
       {items.map((item) => (
-        <div key={item.label} className={statCardClassName}>
+        <ScCard key={item.label} className="flex items-start gap-3 p-4">
           <span
             className={statIconClassName}
             style={{ background: item.color }}
@@ -53,7 +51,7 @@ export function ResultsStats({ metrics }: { metrics: ResultMetrics }) {
               {item.sub}
             </p>
           </div>
-        </div>
+        </ScCard>
       ))}
     </div>
   )
