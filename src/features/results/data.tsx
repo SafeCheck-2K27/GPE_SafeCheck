@@ -132,3 +132,27 @@ export const categoryLabels: Record<Recommendation["category"], { fr: string; en
   reseau: { fr: "Réseau Wi-Fi", en: "Wi-Fi network", icon: <Wifi className="w-3.5 h-3.5" /> },
   phishing: { fr: "Phishing & arnaques", en: "Phishing & scams", icon: <AlertTriangle className="w-3.5 h-3.5" /> },
 }
+
+export const urgencyColors: Record<Recommendation["urgency"], string> = {
+  Haute: "#DC2626",
+  Moyenne: "#EA580C",
+  Faible: "#16A34A",
+}
+
+export const impactColors: Record<Recommendation["impact"], string> = {
+  Fort: "var(--sc-blue)",
+  Moyen: "var(--sc-blue-soft)",
+  Faible: "var(--sc-text-muted)",
+}
+
+export const urgencyTranslationKeys: Record<Recommendation["urgency"], string> = {
+  Haute: "value.haute",
+  Moyenne: "value.moyenne",
+  Faible: "value.faible",
+}
+
+export const impactTranslationKeys: Record<Recommendation["impact"], string> = {
+  Fort: "value.fort",
+  Moyen: "value.moyen",
+  Faible: "value.faible",
+}

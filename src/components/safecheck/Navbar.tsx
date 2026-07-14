@@ -4,7 +4,7 @@ import { useState, type CSSProperties } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ScButton } from "@/components/safecheck/primitives"
-import { Shield, User, LogOut, Menu as MenuIcon, X, ListChecks } from "lucide-react"
+import { Shield, User, UserPlus, LogOut, Menu as MenuIcon, X, ListChecks } from "lucide-react"
 import { useAuth } from "@/components/safecheck/AuthProvider"
 import { SignupModal } from "@/components/safecheck/SignupModal"
 import { useI18n } from "@/components/safecheck/I18nProvider"
@@ -41,7 +41,7 @@ const logoMarkStyle: CSSProperties = {
 }
 
 const logoTextClassName =
-  "text-lg font-bold tracking-tight text-[color:var(--sc-text)] font-display transition-opacity duration-200 group-hover:opacity-0 group-focus-visible:opacity-100"
+  "hidden sm:inline text-lg font-bold tracking-tight text-[color:var(--sc-text)] font-display transition-opacity duration-200 group-hover:opacity-0 group-focus-visible:opacity-100"
 
 const profileLinkClassName =
   "hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-blue)] hover:bg-[color:var(--sc-bg-soft)] transition-colors"
@@ -50,10 +50,10 @@ const loginButtonClassName =
   "hidden sm:inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-blue)] hover:bg-[color:var(--sc-bg-soft)] transition-colors cursor-pointer"
 
 const mobileMenuButtonClassName =
-  "lg:hidden p-2 rounded-lg text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-blue)] hover:bg-[color:var(--sc-bg-soft)] transition-colors"
+  "xl:hidden p-2 rounded-lg text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-blue)] hover:bg-[color:var(--sc-bg-soft)] transition-colors"
 
 const mobileDrawerClassName =
-  "lg:hidden border-t border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] max-h-[80vh] overflow-y-auto"
+  "xl:hidden border-t border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] max-h-[80vh] overflow-y-auto"
 
 const mobileActionRowClassName =
   "p-4 border-t border-[color:var(--sc-border)] flex items-center gap-3"
@@ -135,7 +135,7 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
           href="/accueil"
           aria-label="Aller à la page d'accueil SafeCheck"
           title="SafeCheck - accueil"
-          className="flex items-center gap-2 shrink-0 mr-3 group cursor-pointer"
+          className="flex items-center gap-2 shrink-0 mr-0 sm:mr-3 group cursor-pointer"
           onClick={closeMenus}
         >
           <span className={logoMarkClassName} style={logoMarkStyle}>
@@ -150,7 +150,7 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
         </Link>
 
         {/* Desktop menu */}
-        <div className="hidden lg:flex items-center gap-0.5 flex-1">
+        <div className="hidden xl:flex items-center gap-0.5 flex-1">
           <NavDropdown
             label={t("nav.audits")}
             id="audits"
@@ -218,7 +218,12 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
                 <User className="w-3.5 h-3.5" />
                 {t("nav.monProfil")}
               </Link>
-              <ScButton variant="destructive" size="sm" onClick={handleLogout}>
+              <ScButton
+                variant="destructive"
+                size="sm"
+                onClick={handleLogout}
+                ariaLabel={t("nav.deconnexion")}
+              >
                 <LogOut className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">{t("nav.deconnexion")}</span>
               </ScButton>
@@ -232,8 +237,14 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
               >
                 {t("nav.connexion")}
               </button>
-              <ScButton variant="primary" size="sm" onClick={handleSignupClick}>
-                <span className="whitespace-nowrap">{t("nav.creerCompte")}</span>
+              <ScButton
+                variant="primary"
+                size="sm"
+                onClick={handleSignupClick}
+                ariaLabel={t("nav.creerCompte")}
+              >
+                <UserPlus className="w-3.5 h-3.5 sm:hidden" />
+                <span className="hidden sm:inline whitespace-nowrap">{t("nav.creerCompte")}</span>
               </ScButton>
             </>
           )}
