@@ -1083,9 +1083,55 @@ export const TERMS: LexiqueTerm[] = [
   },
 ]
 
+export const INLINE_LEXIQUE_TERMS = [
+  "double authentification",
+  "2FA",
+  "phishing",
+  "mot de passe",
+  "compte Google",
+  "appareil de confiance",
+  "codes de secours",
+  "authentificateur",
+  "VPN",
+  "chiffrement",
+  "ransomware",
+  "Wi-Fi",
+  "DNS",
+] as const
+
+const INLINE_LEXIQUE_SLUGS: Record<string, string> = {
+  "double authentification": "2fa",
+  "2fa": "2fa",
+  phishing: "phishing",
+  "mot de passe": "mot-de-passe",
+  authentificateur: "authentificateur",
+  vpn: "vpn",
+  chiffrement: "chiffrement",
+  ransomware: "ransomware",
+  dns: "dns",
+}
+
+const INLINE_LEXIQUE_FALLBACK_DEFINITIONS: Record<string, string> = {
+  "compte google": "Identifiant centralise donnant acces a tous les services Google : Gmail, Drive, YouTube, etc.",
+  "appareil de confiance": "Appareil reconnu par un service qui n'exige plus la double authentification a chaque connexion.",
+  "codes de secours": "Codes a usage unique generes lors de l'activation de la 2FA. Permettent d'acceder au compte si tu perds ton telephone.",
+  "wi-fi": "Reseau sans fil. Un Wi-Fi public ou mal securise peut etre intercepte par des attaquants.",
+}
+
 /* Helpers */
 export function getTerm(slug: string): LexiqueTerm | undefined {
   return TERMS.find((t) => t.slug === slug)
+}
+
+export function getInlineLexiqueDefinition(term: string): string | undefined {
+  const normalizedTerm = term.trim().toLowerCase()
+  const canonicalSlug = INLINE_LEXIQUE_SLUGS[normalizedTerm]
+
+  if (canonicalSlug) {
+    return getTerm(canonicalSlug)?.definitionCourte
+  }
+
+  return INLINE_LEXIQUE_FALLBACK_DEFINITIONS[normalizedTerm]
 }
 
 export function getTermsByDomain(domain: DomainId): LexiqueTerm[] {

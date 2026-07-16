@@ -7,7 +7,6 @@ export interface TutorialDetailMockComment {
 }
 
 export interface TutorialDetailLexiconTag {
-  label: string
   slug: string
   patterns: string[]
 }

@@ -4,9 +4,11 @@ import { useState } from "react"
 import Link from "next/link"
 import { BookText, Hash } from "lucide-react"
 import {
-  TUTORIAL_DETAIL_LEXICON_TAGS,
-  TUTORIAL_DETAIL_LEXICON_TERMS,
-} from "../data"
+  getInlineLexiqueDefinition,
+  getTerm,
+  INLINE_LEXIQUE_TERMS,
+} from "@/lib/lexique-data"
+import { TUTORIAL_DETAIL_LEXICON_TAGS } from "../data"
 
 function TutorialLexiconTooltip({
   text,
@@ -16,9 +18,7 @@ function TutorialLexiconTooltip({
   term: string
 }) {
   const [open, setOpen] = useState(false)
-  const definition =
-    TUTORIAL_DETAIL_LEXICON_TERMS[term.toLowerCase()] ||
-    TUTORIAL_DETAIL_LEXICON_TERMS[term]
+  const definition = getInlineLexiqueDefinition(term)
 
   if (!definition) return <span>{text}</span>
 
@@ -53,7 +53,7 @@ function TutorialLexiconTooltip({
 }
 
 export function TutorialTextWithLexicon({ text }: { text: string }) {
-  const terms = Object.keys(TUTORIAL_DETAIL_LEXICON_TERMS)
+  const terms = [...INLINE_LEXIQUE_TERMS]
   const sortedTerms = [...terms].sort((a, b) => b.length - a.length)
   const pattern = sortedTerms
     .map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
@@ -85,9 +85,16 @@ export function TutorialTextWithLexicon({ text }: { text: string }) {
 
 export function TutorialLexiconTags({ text }: { text: string }) {
   const haystack = text.toLowerCase()
-  const matches = TUTORIAL_DETAIL_LEXICON_TAGS.filter((tag) =>
-    tag.patterns.some((pattern) => haystack.includes(pattern)),
-  ).slice(0, 5)
+  const matches = TUTORIAL_DETAIL_LEXICON_TAGS.flatMap((tag) => {
+    const lexiqueTerm = getTerm(tag.slug)
+    const matchesText = tag.patterns.some((pattern) =>
+      haystack.includes(pattern),
+    )
+
+    return lexiqueTerm && matchesText
+      ? [{ ...tag, label: lexiqueTerm.nom }]
+      : []
+  }).slice(0, 5)
 
   if (matches.length === 0) return null
 
