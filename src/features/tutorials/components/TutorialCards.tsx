@@ -17,6 +17,7 @@ import {
   TrendingUp,
 } from "lucide-react"
 import type { TutoStatus } from "../types"
+import { TutorialIcon } from "./TutorialIcon"
 
 export function TutorialRow({
   tuto,
@@ -58,7 +59,9 @@ export function TutorialRow({
             : "bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue)]",
         )}
       >
-        <div className="scale-110">{tuto.icon}</div>
+        <div className="scale-110">
+          <TutorialIcon icon={tuto.icon} />
+        </div>
       </div>
 
       {/* Body */}
@@ -249,7 +252,7 @@ export function TutorialCard({
             isDone && "text-[color:var(--sc-success)]",
           )}
         >
-          {tuto.icon}
+          <TutorialIcon icon={tuto.icon} />
         </div>
         {isDone && (
           <div className="absolute bottom-2 right-2">

@@ -8,6 +8,7 @@ import {
 } from "lucide-react"
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
 import type { Tutoriel } from "../data/catalog"
+import { TutorialIcon } from "./TutorialIcon"
 import {
   RECOMMENDED_REASONS,
   mockTutoLastStep,
@@ -94,7 +95,9 @@ export function TutorialFeaturedSections({
                   className="flex items-center gap-4 rounded-xl border border-[color:var(--sc-blue)]/30 bg-[color:var(--sc-surface)] shadow-[var(--sc-shadow-sm)] p-4 hover:border-[color:var(--sc-blue)]/50 hover:shadow-[var(--sc-shadow-md)] transition-all"
                 >
                   <div className="shrink-0 w-10 h-10 rounded-xl bg-[color:var(--sc-bg-soft)] flex items-center justify-center text-[color:var(--sc-blue)]">
-                    <div className="scale-150">{tutorial.icon}</div>
+                    <div className="scale-150">
+                      <TutorialIcon icon={tutorial.icon} />
+                    </div>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">

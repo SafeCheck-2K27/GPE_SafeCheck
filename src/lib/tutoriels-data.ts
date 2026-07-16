@@ -1,26 +1,3 @@
-"use client"
-
-import {
-  Shield,
-  Lock,
-  Wifi,
-  AlertTriangle,
-  Save,
-  Globe,
-  Key,
-  HardDrive,
-  Eye,
-  Smartphone,
-  Server,
-  Cpu,
-  Settings,
-  Terminal,
-  Layers,
-  Activity,
-  Users,
-  Compass,
-} from "lucide-react"
-
 /* TYPES */
 export type Niveau = "Debutant" | "Intermediaire" | "Avance"
 export type Category =
@@ -45,6 +22,26 @@ export type Tag =
   | "mobile"
   | "systeme"
 
+export type TutorialIconKey =
+  | "activity"
+  | "alert-triangle"
+  | "compass"
+  | "cpu"
+  | "eye"
+  | "globe"
+  | "hard-drive"
+  | "key"
+  | "layers"
+  | "lock"
+  | "save"
+  | "server"
+  | "settings"
+  | "shield"
+  | "smartphone"
+  | "terminal"
+  | "users"
+  | "wifi"
+
 export interface TutoStep {
   title: string
   description: string
@@ -59,7 +56,7 @@ export interface Tutoriel {
   description: string
   category: Category
   tags: Tag[]
-  icon: React.ReactNode
+  icon: TutorialIconKey
   steps: TutoStep[]
   tip?: string
   isRecommended?: boolean
@@ -99,7 +96,7 @@ export const tutoriels: Tutoriel[] = [
       "Protege ton compte Google en ajoutant une deuxieme couche de verification. Meme si ton mot de passe est vole, personne ne pourra acceder sans ton telephone.",
     category: "comptes",
     tags: ["essentiel", "comptes", "populaire"],
-    icon: <Shield className="w-5 h-5" />,
+    icon: "shield",
     isRecommended: true,
     isEssential: true,
     objective:
@@ -137,7 +134,7 @@ export const tutoriels: Tutoriel[] = [
       "Apprends les regles pour creer des mots de passe qui resistent aux attaques par force brute, dictionnaire et techniques de devinette.",
     category: "motsdepasse",
     tags: ["essentiel", "comptes"],
-    icon: <Key className="w-5 h-5" />,
+    icon: "key",
     isNextStep: true,
     objective: "Creer des mots de passe robustes qui resistsent aux attaques automatisees.",
     learns: [
@@ -167,7 +164,7 @@ export const tutoriels: Tutoriel[] = [
       "Bitwarden est un gestionnaire de mots de passe open source et gratuit. Stocke tous tes mots de passe chiffres et remplis-les automatiquement.",
     category: "motsdepasse",
     tags: ["essentiel", "populaire", "comptes"],
-    icon: <Lock className="w-5 h-5" />,
+    icon: "lock",
     isRecommended: true,
     objective: "Centraliser et securiser tous tes mots de passe dans un coffre chiffre gratuit.",
     learns: [
@@ -197,7 +194,7 @@ export const tutoriels: Tutoriel[] = [
       "HaveIBeenPwned te permet de verifier en quelques secondes si ton adresse email figure dans une fuite de donnees connue.",
     category: "donnees",
     tags: ["essentiel", "donnees"],
-    icon: <Eye className="w-5 h-5" />,
+    icon: "eye",
     objective: "Savoir si tes donnees ont fuite et agir immediatement.",
     learns: [
       "Utiliser HaveIBeenPwned pour verifier une adresse email",
@@ -226,7 +223,7 @@ export const tutoriels: Tutoriel[] = [
       "Apprends a mettre en place la regle 3-2-1 pour ne jamais perdre tes photos et documents, meme en cas de ransomware.",
     category: "sauvegardes",
     tags: ["essentiel", "donnees"],
-    icon: <Save className="w-5 h-5" />,
+    icon: "save",
     objective: "Mettre en place une strategie de sauvegarde qui resiste aux ransomwares et pannes.",
     learns: [
       "Identifier quels fichiers sauvegarder en priorite",
@@ -255,7 +252,7 @@ export const tutoriels: Tutoriel[] = [
       "Le phishing represente 90% des attaques. Apprends a reconnaitre les signaux d'alarme pour ne plus jamais cliquer sur un lien malveillant.",
     category: "phishing",
     tags: ["essentiel", "phishing", "populaire"],
-    icon: <AlertTriangle className="w-5 h-5" />,
+    icon: "alert-triangle",
     isEssential: true,
     objective: "Reconnaitre un email frauduleux avant de cliquer sur quoi que ce soit.",
     learns: [
@@ -285,7 +282,7 @@ export const tutoriels: Tutoriel[] = [
       "Les mises a jour systeme sont la premiere ligne de defense. Apprends a les activer et les gerer correctement.",
     category: "os",
     tags: ["essentiel", "systeme"],
-    icon: <HardDrive className="w-5 h-5" />,
+    icon: "hard-drive",
     objective: "Maintenir ton systeme a jour pour combler les failles de securite connues.",
     learns: [
       "Verifier la version de ton systeme d'exploitation",
@@ -314,7 +311,7 @@ export const tutoriels: Tutoriel[] = [
       "Un Wi-Fi mal securise permet a tes voisins d'espionner tes communications ou de lancer des attaques depuis chez toi.",
     category: "reseau",
     tags: ["essentiel", "reseau"],
-    icon: <Wifi className="w-5 h-5" />,
+    icon: "wifi",
     isRecommended: true,
     objective: "Empecher toute intrusion sur ton reseau Wi-Fi domestique.",
     learns: [
@@ -344,7 +341,7 @@ export const tutoriels: Tutoriel[] = [
       "Beaucoup d'apps demandent des acces qui n'ont rien a voir avec leur fonction (camera, micro, contacts). Reprends le controle.",
     category: "mobile",
     tags: ["mobile", "confidentialite"],
-    icon: <Smartphone className="w-5 h-5" />,
+    icon: "smartphone",
     objective: "Reprendre le controle sur les acces accordes a chaque application installee.",
     learns: [
       "Localiser les parametres de permissions sur iOS et Android",
@@ -373,7 +370,7 @@ export const tutoriels: Tutoriel[] = [
       "Les pirates creent des URL qui imitent les marques connues. Apprends a lire une URL pour reperer les pieges.",
     category: "phishing",
     tags: ["phishing", "essentiel"],
-    icon: <Eye className="w-5 h-5" />,
+    icon: "eye",
     objective: "Lire et analyser une URL pour detecter une tentative d'usurpation.",
     learns: [
       "Lire une URL de droite a gauche pour trouver le vrai domaine",
@@ -402,7 +399,7 @@ export const tutoriels: Tutoriel[] = [
       "Faux support technique, faux gain, faux livreur SMS : un tour d'horizon des arnaques courantes et comment les detecter.",
     category: "phishing",
     tags: ["phishing", "populaire"],
-    icon: <AlertTriangle className="w-5 h-5" />,
+    icon: "alert-triangle",
     objective: "Identifier et dejouer les arnaques en ligne les plus repandues.",
     learns: [
       "Reconnaitre l'arnaque du faux support technique",
@@ -431,7 +428,7 @@ export const tutoriels: Tutoriel[] = [
       "Ton navigateur est ta principale porte d'entree internet. Une version obsolete = une porte ouverte aux attaques.",
     category: "navigateur",
     tags: ["essentiel", "systeme"],
-    icon: <Globe className="w-5 h-5" />,
+    icon: "globe",
     objective: "Garder ton navigateur a jour pour bloquer les failles connues.",
     learns: [
       "Verifier la version de ton navigateur",
@@ -460,7 +457,7 @@ export const tutoriels: Tutoriel[] = [
       "Mal configure, ton navigateur peut laisser passer des malwares, collecter tes donnees et t'exposer a des sites frauduleux.",
     category: "navigateur",
     tags: ["confidentialite", "systeme"],
-    icon: <Globe className="w-5 h-5" />,
+    icon: "globe",
     objective: "Durcir la configuration de ton navigateur pour reduire les risques.",
     learns: [
       "Auditer et supprimer les extensions inutiles",
@@ -489,7 +486,7 @@ export const tutoriels: Tutoriel[] = [
       "Synchronise ton coffre Bitwarden entre PC, Mac, telephone et tablette, en gardant le maximum de securite.",
     category: "motsdepasse",
     tags: ["comptes", "confidentialite"],
-    icon: <Lock className="w-5 h-5" />,
+    icon: "lock",
     objective: "Deployer Bitwarden sur tous tes appareils sans compromettre la securite.",
     learns: [
       "Activer la 2FA sur Bitwarden lui-meme",
@@ -518,7 +515,7 @@ export const tutoriels: Tutoriel[] = [
       "Apprends a chiffrer documents bancaires, scans de papiers d'identite et fichiers professionnels avec VeraCrypt ou 7-Zip.",
     category: "donnees",
     tags: ["donnees", "confidentialite", "technique"],
-    icon: <Layers className="w-5 h-5" />,
+    icon: "layers",
     objective: "Rendre tes fichiers sensibles inaccessibles sans le bon mot de passe.",
     learns: [
       "Choisir le bon outil selon ton usage (7-Zip vs VeraCrypt)",
@@ -547,7 +544,7 @@ export const tutoriels: Tutoriel[] = [
       "Une session orpheline sur un PC public ou un ancien telephone peut compromettre ton compte. Audite et deconnecte regulierement.",
     category: "comptes",
     tags: ["comptes", "confidentialite"],
-    icon: <Activity className="w-5 h-5" />,
+    icon: "activity",
     objective: "Fermer toutes les sessions ouvertes sur des appareils inconnus ou oublies.",
     learns: [
       "Consulter les sessions actives sur Google, Microsoft et Apple",
@@ -576,7 +573,7 @@ export const tutoriels: Tutoriel[] = [
       "Windows envoie pas mal de donnees a Microsoft par defaut. Apprends a reduire la collecte sans casser ton systeme.",
     category: "os",
     tags: ["systeme", "confidentialite"],
-    icon: <Settings className="w-5 h-5" />,
+    icon: "settings",
     objective: "Reduire la collecte de donnees par Windows sans affecter les fonctions essentielles.",
     learns: [
       "Acceder aux parametres de confidentialite et securite",
@@ -605,7 +602,7 @@ export const tutoriels: Tutoriel[] = [
       "Quelques extensions bien choisies renforcent ta securite. Mais une mauvaise extension est une porte ouverte. Selection commentee.",
     category: "navigateur",
     tags: ["confidentialite", "technique"],
-    icon: <Globe className="w-5 h-5" />,
+    icon: "globe",
     objective: "Choisir et installer uniquement les extensions qui renforcent vraiment ta securite.",
     learns: [
       "Connaitre les extensions de reference (uBlock, Privacy Badger, Bitwarden)",
@@ -634,7 +631,7 @@ export const tutoriels: Tutoriel[] = [
       "Apprends a reperer les apps abusives ou suspectes sur Android et iOS, et a les supprimer proprement.",
     category: "mobile",
     tags: ["mobile", "confidentialite"],
-    icon: <Smartphone className="w-5 h-5" />,
+    icon: "smartphone",
     objective: "Identifier et supprimer les applications mobiles abusives ou malveillantes.",
     learns: [
       "Auditer les permissions accordees application par application",
@@ -663,7 +660,7 @@ export const tutoriels: Tutoriel[] = [
       "Une vraie strategie de sauvegarde, automatisee, qui resiste aux ransomwares et aux pannes materielles.",
     category: "sauvegardes",
     tags: ["donnees", "technique"],
-    icon: <Save className="w-5 h-5" />,
+    icon: "save",
     objective: "Automatiser une strategie de sauvegarde robuste et testee.",
     learns: [
       "Cartographier toutes les donnees critiques",
@@ -692,7 +689,7 @@ export const tutoriels: Tutoriel[] = [
       "Tout le monde parle de VPN, mais peu de gens en comprennent les limites. Apprends a quoi ca sert vraiment et lequel choisir.",
     category: "reseau",
     tags: ["reseau", "confidentialite"],
-    icon: <Globe className="w-5 h-5" />,
+    icon: "globe",
     objective: "Comprendre ce qu'un VPN fait reellement et choisir un fournisseur de confiance.",
     learns: [
       "Comprendre ce qu'un VPN chiffre et ne chiffre pas",
@@ -721,7 +718,7 @@ export const tutoriels: Tutoriel[] = [
       "Au-dela du phishing de masse, certaines attaques sont ciblees, personnalisees, et beaucoup plus credibles. Apprends a les detecter.",
     category: "phishing",
     tags: ["phishing", "technique"],
-    icon: <AlertTriangle className="w-5 h-5" />,
+    icon: "alert-triangle",
     objective: "Detecter les attaques de phishing ciblees, personalisees et difficiles a distinguer.",
     learns: [
       "Reconnaitre un email de spear phishing",
@@ -750,7 +747,7 @@ export const tutoriels: Tutoriel[] = [
       "Avoir un compte unique pour tout est une erreur. Apprends a creer une hygiene de comptes minimaliste mais robuste.",
     category: "comptes",
     tags: ["comptes", "confidentialite"],
-    icon: <Users className="w-5 h-5" />,
+    icon: "users",
     objective: "Organiser ses comptes email et numeros pour limiter l'impact d'une fuite.",
     learns: [
       "Distinguer les usages critiques des usages quotidiens",
@@ -780,7 +777,7 @@ export const tutoriels: Tutoriel[] = [
       "Reduit drastiquement les donnees envoyees par Windows et macOS, sans casser ton systeme. Pour profils experts.",
     category: "os",
     tags: ["systeme", "technique", "confidentialite"],
-    icon: <Settings className="w-5 h-5" />,
+    icon: "settings",
     objective: "Minimiser les donnees envoyees a l'editeur du systeme d'exploitation.",
     learns: [
       "Auditer le trafic sortant avec Wireshark ou Little Snitch",
@@ -809,7 +806,7 @@ export const tutoriels: Tutoriel[] = [
       "Identifie ce qui se lance avec Windows, supprime le superflu et detecte d'eventuels persistants malveillants.",
     category: "os",
     tags: ["systeme", "technique"],
-    icon: <Activity className="w-5 h-5" />,
+    icon: "activity",
     objective: "Detecter et eliminer les services de demarrage suspects ou inutiles.",
     learns: [
       "Utiliser Autoruns (Sysinternals)",
@@ -838,7 +835,7 @@ export const tutoriels: Tutoriel[] = [
       "Identifie les services qui ecoutent sur le reseau, ferme ce qui ne devrait pas l'etre.",
     category: "reseau",
     tags: ["reseau", "technique", "systeme"],
-    icon: <Terminal className="w-5 h-5" />,
+    icon: "terminal",
     objective: "Identifier et fermer les ports reseau ouverts inutilement.",
     learns: [
       "Utiliser netstat pour lister les ports en ecoute",
@@ -867,7 +864,7 @@ export const tutoriels: Tutoriel[] = [
       "Au-dela du 'pare-feu active', apprends a creer des regles fines pour controler precisement entrant et sortant.",
     category: "reseau",
     tags: ["reseau", "technique"],
-    icon: <Shield className="w-5 h-5" />,
+    icon: "shield",
     objective: "Creer des regles pare-feu fines pour controler entrant et sortant.",
     learns: [
       "Distinguer regles entrantes et sortantes",
@@ -896,7 +893,7 @@ export const tutoriels: Tutoriel[] = [
       "Au-dela des permissions visibles, decortique le manifeste d'une app Android pour comprendre ce qu'elle demande vraiment.",
     category: "mobile",
     tags: ["mobile", "technique", "confidentialite"],
-    icon: <Smartphone className="w-5 h-5" />,
+    icon: "smartphone",
     objective: "Analyser en profondeur les permissions et traceurs d'une application Android.",
     learns: [
       "Recuperer et analyser un APK",
@@ -925,7 +922,7 @@ export const tutoriels: Tutoriel[] = [
       "Confirme que ton disque est reellement chiffre, gere ta cle de recuperation et comprends les limites du modele.",
     category: "donnees",
     tags: ["donnees", "technique", "systeme"],
-    icon: <Cpu className="w-5 h-5" />,
+    icon: "cpu",
     objective: "Confirmer que le chiffrement disque est bien actif et que la cle de recuperation est protegee.",
     learns: [
       "Verifier l'etat BitLocker (Windows) ou FileVault (macOS)",
@@ -954,7 +951,7 @@ export const tutoriels: Tutoriel[] = [
       "Va plus loin que la separation perso / pro : compartimentation par usage avec aliases, profils navigateur et numeros virtuels.",
     category: "comptes",
     tags: ["comptes", "confidentialite", "technique"],
-    icon: <Users className="w-5 h-5" />,
+    icon: "users",
     objective: "Mettre en place une hygiene de comptes par compartiments etanches.",
     learns: [
       "Creer et gerer des aliases email avec SimpleLogin",
@@ -983,7 +980,7 @@ export const tutoriels: Tutoriel[] = [
       "Cartographie tout ce qui est expose sur ton reseau domestique : box, NAS, IoT, et durcis chaque element.",
     category: "reseau",
     tags: ["reseau", "technique"],
-    icon: <Server className="w-5 h-5" />,
+    icon: "server",
     objective: "Cartographier et reduire la surface d'attaque reseau de ton domicile.",
     learns: [
       "Lister tous les peripheriques connectes au reseau",
@@ -1012,7 +1009,7 @@ export const tutoriels: Tutoriel[] = [
       "Apprends a interpreter les journaux d'acces sur tes comptes principaux pour detecter les acces suspects.",
     category: "comptes",
     tags: ["comptes", "technique"],
-    icon: <Eye className="w-5 h-5" />,
+    icon: "eye",
     objective: "Detecter les acces suspects en interpretant les journaux de connexion.",
     learns: [
       "Consulter les logs de securite Google et Microsoft",
@@ -1041,7 +1038,7 @@ export const tutoriels: Tutoriel[] = [
       "Profils Firefox, conteneurs (Multi-Account Containers), navigateurs distincts : compartimente vraiment ta navigation.",
     category: "navigateur",
     tags: ["confidentialite", "technique"],
-    icon: <Layers className="w-5 h-5" />,
+    icon: "layers",
     objective: "Isoler les usages de navigation pour eviter tout croisement de donnees.",
     learns: [
       "Creer des profils Firefox dedies par usage",
@@ -1070,7 +1067,7 @@ export const tutoriels: Tutoriel[] = [
       "Empeche ton FAI ou un attaquant local de voir tes requetes DNS, en chiffrant la resolution sur tout ton reseau.",
     category: "reseau",
     tags: ["reseau", "technique", "confidentialite"],
-    icon: <Compass className="w-5 h-5" />,
+    icon: "compass",
     objective: "Chiffrer les requetes DNS pour empecher leur interception.",
     learns: [
       "Comprendre la difference entre DoH et DoT",
