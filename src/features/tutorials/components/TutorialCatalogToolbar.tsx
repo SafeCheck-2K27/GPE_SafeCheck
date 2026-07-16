@@ -11,7 +11,7 @@ import {
   Zap,
 } from "lucide-react"
 import { ScBadge } from "@/components/safecheck/primitives"
-import { tutoriels } from "@/lib/tutoriels-data"
+import { tutoriels } from "../data/catalog"
 import { SEARCH_SUGGESTIONS } from "../data"
 import { normalizeSearch } from "../search"
 import type { SortOption, TutorialFilters } from "../types"

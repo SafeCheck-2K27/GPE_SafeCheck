@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ScButton } from "@/components/safecheck/primitives"
-import { CATEGORY_LABEL } from "@/lib/tutoriels-data"
-import type { Niveau, Tutoriel } from "@/lib/tutoriels-data"
+import { CATEGORY_LABEL } from "../data/catalog"
+import type { Niveau, Tutoriel } from "../data/catalog"
 import { cn } from "@/lib/utils"
 import {
   ArrowRight,

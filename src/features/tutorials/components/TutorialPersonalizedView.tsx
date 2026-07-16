@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation"
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
-import { tutoriels } from "@/lib/tutoriels-data"
-import type { Tutoriel } from "@/lib/tutoriels-data"
+import { tutoriels } from "../data/catalog"
+import type { Tutoriel } from "../data/catalog"
 import {
   ArrowRight,
   BookOpen,

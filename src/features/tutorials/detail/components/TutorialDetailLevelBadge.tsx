@@ -1,5 +1,5 @@
 import { ScBadge } from "@/components/safecheck/primitives"
-import type { Tutoriel } from "@/lib/tutoriels-data"
+import type { Tutoriel } from "../../data/catalog"
 import { Flame, GraduationCap, Zap } from "lucide-react"
 
 export function TutorialDetailLevelBadge({

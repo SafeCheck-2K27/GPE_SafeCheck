@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { CATEGORY_LABEL } from "@/lib/tutoriels-data"
-import type { Category, Niveau } from "@/lib/tutoriels-data"
+import { CATEGORY_LABEL } from "../data/catalog"
+import type { Category, Niveau } from "../data/catalog"
 import {
   ChevronDown,
   ChevronUp,

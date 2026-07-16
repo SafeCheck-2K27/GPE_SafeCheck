@@ -1,4 +1,4 @@
-import type { Category, Niveau, Tutoriel } from "@/lib/tutoriels-data"
+import type { Category, Niveau, Tutoriel } from "./data/catalog"
 
 export type TutoStatus = "todo" | "inprogress" | "done"
 

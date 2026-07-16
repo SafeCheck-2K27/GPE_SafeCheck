@@ -4,8 +4,8 @@ import { useMemo } from "react"
 import type { ReactNode } from "react"
 import { useRouter } from "next/navigation"
 import { ScBadge } from "@/components/safecheck/primitives"
-import { tutoriels } from "@/lib/tutoriels-data"
-import type { Niveau, Tutoriel } from "@/lib/tutoriels-data"
+import { tutoriels } from "../data/catalog"
+import type { Niveau, Tutoriel } from "../data/catalog"
 import {
   BookOpen,
   Flame,

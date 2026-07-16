@@ -1,4 +1,4 @@
-import type { Tutoriel } from "@/lib/tutoriels-data"
+import type { Tutoriel } from "./data/catalog"
 import { mockTutoStatus, POPULAR_IDS } from "./data"
 import type {
   LibraryCategoryDefinition,

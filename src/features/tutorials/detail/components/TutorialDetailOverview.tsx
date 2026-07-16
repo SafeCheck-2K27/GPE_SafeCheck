@@ -1,5 +1,5 @@
 import { ScButton } from "@/components/safecheck/primitives"
-import type { Tutoriel } from "@/lib/tutoriels-data"
+import type { Tutoriel } from "../../data/catalog"
 import { Check, ListChecks, Sparkles, Zap } from "lucide-react"
 import type { TutorialDetailState } from "../types"
 import { TutorialTextWithLexicon } from "./TutorialDetailLexicon"

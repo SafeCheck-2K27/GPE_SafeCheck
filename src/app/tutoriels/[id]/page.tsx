@@ -22,7 +22,7 @@ import {
   getTutorialProgressPercent,
   resolveTutorialRoute,
 } from "@/features/tutorials/detail/utils"
-import { tutoriels } from "@/lib/tutoriels-data"
+import { tutoriels } from "@/features/tutorials/data/catalog"
 import { Send } from "lucide-react"
 
 export default function TutorielDetailPage() {

@@ -1,5 +1,5 @@
 import { Layers, Search } from "lucide-react"
-import type { Tutoriel } from "@/lib/tutoriels-data"
+import type { Tutoriel } from "../data/catalog"
 import { POPULAR_IDS, SEARCH_SUGGESTIONS, mockTutoStatus } from "../data"
 import { TutorialCard } from "./TutorialCards"
 

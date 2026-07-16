@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
-import type { Tutoriel } from "@/lib/tutoriels-data"
+import type { Tutoriel } from "../../data/catalog"
 import {
   AlertCircle,
   CheckCircle2,

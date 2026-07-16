@@ -14,7 +14,7 @@ import {
   Wifi,
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
-import type { Niveau, Tutoriel } from "@/lib/tutoriels-data"
+import type { Niveau, Tutoriel } from "../data/catalog"
 import { mockTutoStatus, POPULAR_IDS } from "../data"
 import { parseDuration } from "../sorting"
 import type {

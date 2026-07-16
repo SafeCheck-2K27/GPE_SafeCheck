@@ -1,4 +1,4 @@
-import type { Tutoriel } from "@/lib/tutoriels-data"
+import type { Tutoriel } from "../data/catalog"
 import type { TutorialDetailState } from "./types"
 
 export function resolveTutorialRoute(

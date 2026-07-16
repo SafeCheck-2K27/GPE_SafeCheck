@@ -1,5 +1,5 @@
 import { ScButton, ScCard } from "@/components/safecheck/primitives"
-import type { Tutoriel } from "@/lib/tutoriels-data"
+import type { Tutoriel } from "../data/catalog"
 import { cn } from "@/lib/utils"
 import { Award, Sparkles, Star, Target, TrendingUp, Users, Zap } from "lucide-react"
 import { levels, userProgress } from "../data"

@@ -1,6 +1,6 @@
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
-import { CATEGORY_LABEL } from "@/lib/tutoriels-data"
-import type { Tutoriel } from "@/lib/tutoriels-data"
+import { CATEGORY_LABEL } from "../../data/catalog"
+import type { Tutoriel } from "../../data/catalog"
 import {
   Bookmark,
   CheckCircle2,

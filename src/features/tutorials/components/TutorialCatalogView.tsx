@@ -1,8 +1,8 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { tutoriels } from "@/lib/tutoriels-data"
-import type { Category, Niveau, Tutoriel } from "@/lib/tutoriels-data"
+import { tutoriels } from "../data/catalog"
+import type { Category, Niveau, Tutoriel } from "../data/catalog"
 import { mockTutoStatus, RECOMMENDED_IDS } from "../data"
 import {
   DEFAULT_TUTORIAL_FILTERS,

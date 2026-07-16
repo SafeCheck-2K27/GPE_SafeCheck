@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { BookOpen, Layers } from "lucide-react"
-import type { Tutoriel } from "@/lib/tutoriels-data"
+import type { Tutoriel } from "../data/catalog"
 import { LIBRARY_CATEGORIES, mockTutoStatus, POPULAR_IDS } from "../data"
 import { matchesLibraryCategory } from "../filters"
 import { TutorialCard } from "./TutorialCards"

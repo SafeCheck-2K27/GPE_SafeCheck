@@ -1,4 +1,4 @@
-import type { Niveau, Tutoriel } from "@/lib/tutoriels-data"
+import type { Niveau, Tutoriel } from "./data/catalog"
 import { POPULAR_IDS } from "./data"
 import type { SortOption } from "./types"
 

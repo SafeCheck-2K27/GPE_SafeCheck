@@ -10,7 +10,7 @@ import { TutorialLevelView } from "@/features/tutorials/components/TutorialLevel
 import { TutorialModal } from "@/features/tutorials/components/TutorialModal"
 import { TutorialPersonalizedView } from "@/features/tutorials/components/TutorialPersonalizedView"
 import { TutorialPrecisionModal } from "@/features/tutorials/components/TutorialPrecisionModal"
-import type { Category, Niveau, Tutoriel } from "@/lib/tutoriels-data"
+import type { Category, Niveau, Tutoriel } from "@/features/tutorials/data/catalog"
 
 export default function TutorielsPage() {
   return (

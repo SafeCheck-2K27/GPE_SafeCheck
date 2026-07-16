@@ -1,6 +1,6 @@
 import type { LibraryCategoryDefinition, PrecisionType, TutoStatus } from "./types"
 
-export { levels, userProgress } from "@/lib/tutoriels-data"
+export { levels, userProgress } from "./data/catalog"
 
 export const mockTutoStatus: Record<number, TutoStatus> = {
   1: "done",
