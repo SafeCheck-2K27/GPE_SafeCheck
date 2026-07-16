@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
 import { CATEGORY_LABEL } from "@/lib/tutoriels-data"
 import type { Tutoriel } from "@/lib/tutoriels-data"
@@ -21,6 +22,8 @@ export function TutorialModal({
   onMarkStep,
   onClose,
   onOpenPrecision,
+  renderStepDescription,
+  precisionLinkPosition = "before-completion",
 }: {
   tuto: Tutoriel
   currentStep: number
@@ -29,10 +32,36 @@ export function TutorialModal({
   onMarkStep: (i: number) => void
   onClose: () => void
   onOpenPrecision: (stepTitle?: string) => void
+  renderStepDescription?: (description: string) => ReactNode
+  precisionLinkPosition?: "before-completion" | "after-completion"
 }) {
   const step = tuto.steps[currentStep]
   const isLast = currentStep === tuto.steps.length - 1
   const allDone = completedSteps.size === tuto.steps.length
+  const precisionLink = (
+    <div
+      className={`mt-4 ${precisionLinkPosition === "after-completion" ? "pt-4" : "pt-3"} border-t border-[color:var(--sc-border)]`}
+    >
+      <button
+        type="button"
+        onClick={() => onOpenPrecision(step.title)}
+        className="inline-flex items-center gap-1.5 text-xs text-[color:var(--sc-text-muted)] hover:text-[color:var(--sc-blue)] transition-colors"
+      >
+        <Flag className="w-3 h-3" />
+        Un probleme avec cette etape ? Signaler une precision
+      </button>
+    </div>
+  )
+  const completionNotice = allDone ? (
+    <div className="mt-5 rounded-xl bg-[color:var(--sc-success)]/10 border border-[color:var(--sc-success)]/30 p-4">
+      <div className="flex items-center gap-2">
+        <CheckCircle2 className="w-5 h-5 text-[color:var(--sc-success)]" />
+        <p className="text-sm font-semibold text-[color:var(--sc-success)]">
+          Tutoriel termine ! Bravo, c&apos;est une etape de moins vers ton prochain niveau.
+        </p>
+      </div>
+    </div>
+  ) : null
 
   return (
     <div
@@ -99,7 +128,9 @@ export function TutorialModal({
             </div>
             <div className="flex-1">
               <h3 className="font-bold text-base text-[color:var(--sc-text)] mb-2">{step.title}</h3>
-              <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed">{step.description}</p>
+              <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed">
+                {renderStepDescription ? renderStepDescription(step.description) : step.description}
+              </p>
             </div>
           </div>
 
@@ -132,28 +163,9 @@ export function TutorialModal({
             </div>
           )}
 
-          {/* Discrete precision link */}
-          <div className="mt-4 pt-3 border-t border-[color:var(--sc-border)]">
-            <button
-              type="button"
-              onClick={() => onOpenPrecision(tuto.steps[currentStep].title)}
-              className="inline-flex items-center gap-1.5 text-xs text-[color:var(--sc-text-muted)] hover:text-[color:var(--sc-blue)] transition-colors"
-            >
-              <Flag className="w-3 h-3" />
-              Un probleme avec cette etape ? Signaler une precision
-            </button>
-          </div>
-
-          {allDone && (
-            <div className="mt-5 rounded-xl bg-[color:var(--sc-success)]/10 border border-[color:var(--sc-success)]/30 p-4">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-[color:var(--sc-success)]" />
-                <p className="text-sm font-semibold text-[color:var(--sc-success)]">
-                  Tutoriel termine ! Bravo, c&apos;est une etape de moins vers ton prochain niveau.
-                </p>
-              </div>
-            </div>
-          )}
+          {precisionLinkPosition === "before-completion" && precisionLink}
+          {completionNotice}
+          {precisionLinkPosition === "after-completion" && precisionLink}
         </div>
 
         <div className="px-5 py-4 border-t border-[color:var(--sc-border)] bg-[color:var(--sc-bg-soft)] flex items-center justify-between gap-3">

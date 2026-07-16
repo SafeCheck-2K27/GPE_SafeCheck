@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, type ReactNode } from "react"
 import { ScButton } from "@/components/safecheck/primitives"
 import { ArrowRight, Check, CheckCircle2, Flag, X } from "lucide-react"
 import { PRECISION_LABELS } from "../data"
@@ -9,9 +9,11 @@ import type { PrecisionType } from "../types"
 export function TutorialPrecisionModal({
   onClose,
   stepTitle,
+  submitIcon,
 }: {
   onClose: () => void
   stepTitle?: string
+  submitIcon?: ReactNode
 }) {
   const [type, setType] = useState<PrecisionType | "">("")
   const [message, setMessage] = useState("")
@@ -113,7 +115,7 @@ export function TutorialPrecisionModal({
               disabled={!type || !message.trim()}
               className="w-full"
             >
-              <ArrowRight className="w-3.5 h-3.5" />
+              {submitIcon ?? <ArrowRight className="w-3.5 h-3.5" />}
               Envoyer la precision
             </ScButton>
           </div>
