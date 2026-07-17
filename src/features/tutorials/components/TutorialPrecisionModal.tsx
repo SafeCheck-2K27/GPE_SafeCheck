@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, type ReactNode } from "react"
+import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 import { ScButton } from "@/components/safecheck/primitives"
 import { ArrowRight, Check, CheckCircle2, Flag, X } from "lucide-react"
 import { PRECISION_LABELS } from "../data"
@@ -26,9 +27,12 @@ export function TutorialPrecisionModal({
   }
 
   return (
-    <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
-      onClick={onClose}
+    <AccessibleModal
+      open
+      onClose={onClose}
+      zIndex={60}
+      aria-labelledby="tutorial-precision-title"
+      className="bg-black/40 p-4"
     >
       <div
         className="w-full max-w-lg rounded-2xl overflow-hidden bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[var(--sc-shadow-lg)]"
@@ -38,7 +42,12 @@ export function TutorialPrecisionModal({
           <div>
             <div className="flex items-center gap-2 mb-1">
               <Flag className="w-4 h-4 text-[color:var(--sc-blue)]" />
-              <span className="text-sm font-bold text-[color:var(--sc-text)]">Apporter une precision</span>
+              <span
+                id="tutorial-precision-title"
+                className="text-sm font-bold text-[color:var(--sc-text)]"
+              >
+                Apporter une precision
+              </span>
             </div>
             {stepTitle && (
               <p className="text-xs text-[color:var(--sc-text-muted)]">
@@ -121,6 +130,6 @@ export function TutorialPrecisionModal({
           </div>
         )}
       </div>
-    </div>
+    </AccessibleModal>
   )
 }

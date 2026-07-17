@@ -1,5 +1,5 @@
 import { ScButton } from "@/components/safecheck/primitives"
-import { ModalBackdrop } from "@/components/safecheck/layout/ModalBackdrop"
+import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 import { AlertTriangle } from "lucide-react"
 
 export function AccountDeleteModal({
@@ -10,7 +10,12 @@ export function AccountDeleteModal({
   onClose: () => void
 }) {
   return (
-    <ModalBackdrop onClick={onClose}>
+    <AccessibleModal
+      open
+      onClose={onClose}
+      role="alertdialog"
+      aria-labelledby="account-delete-title"
+    >
       <div
         className="w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[var(--sc-shadow-lg)]"
         onClick={(event) => event.stopPropagation()}
@@ -19,7 +24,10 @@ export function AccountDeleteModal({
           <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[rgba(239,68,68,0.12)] text-[color:var(--sc-danger)]">
             <AlertTriangle className="w-5 h-5" />
           </span>
-          <h2 className="font-display font-semibold text-base text-[color:var(--sc-text)]">
+          <h2
+            id="account-delete-title"
+            className="font-display font-semibold text-base text-[color:var(--sc-text)]"
+          >
             Confirmer la suppression
           </h2>
         </div>
@@ -46,6 +54,6 @@ export function AccountDeleteModal({
           </ScButton>
         </div>
       </div>
-    </ModalBackdrop>
+    </AccessibleModal>
   )
 }

@@ -8,6 +8,7 @@ import {
   X,
   Zap,
 } from "lucide-react"
+import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
 import { CATEGORY_LABELS, STATUS_LABELS } from "../data"
 import type {
@@ -28,7 +29,12 @@ export function TechnicalRecommendationDetail({
 }) {
   const Icon = t.icon
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-6" onClick={onClose}>
+    <AccessibleModal
+      open
+      onClose={onClose}
+      aria-labelledby="technical-recommendation-detail-title"
+      className="bg-black/40 px-4 py-6 backdrop-blur-none"
+    >
       <div
         className="w-full max-w-xl rounded-xl bg-[#FFFFFF] sc-fade-in max-h-[90vh] overflow-y-auto"
         style={{ border: "1px solid #B3DBEF", boxShadow: "5px 5px 0px #C0DDF8" }}
@@ -42,7 +48,12 @@ export function TechnicalRecommendationDetail({
                 <Icon className="w-5 h-5 text-[#157FE2]" />
               </div>
               <div>
-                <h3 className="font-extrabold text-lg text-[#000] leading-tight">{t.title}</h3>
+                <h3
+                  id="technical-recommendation-detail-title"
+                  className="font-extrabold text-lg text-[#000] leading-tight"
+                >
+                  {t.title}
+                </h3>
                 <p className="text-xs text-[#000]/55 italic mt-0.5">{t.subtitle}</p>
                 <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                   <ScBadge tone={t.urgency === "Haute" ? "warn" : t.urgency === "Moyenne" ? "info" : "muted"}>
@@ -167,6 +178,6 @@ export function TechnicalRecommendationDetail({
           </div>
         </div>
       </div>
-    </div>
+    </AccessibleModal>
   )
 }

@@ -11,7 +11,7 @@ import {
 } from "@/components/safecheck/primitives"
 import { useAuth } from "@/components/safecheck/AuthProvider"
 import { useI18n } from "@/components/safecheck/I18nProvider"
-import { ModalBackdrop } from "@/components/safecheck/layout/ModalBackdrop"
+import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 
 /**
  * SignupModal - frictionless account creation overlay used whenever a logged
@@ -59,21 +59,6 @@ export function SignupModal({
   const [showPw, setShowPw] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
   const [submitting, setSubmitting] = React.useState(false)
-
-  // Close on Escape + lock body scroll while open.
-  React.useEffect(() => {
-    if (!open) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose()
-    }
-    window.addEventListener("keydown", onKey)
-    const prevOverflow = document.body.style.overflow
-    document.body.style.overflow = "hidden"
-    return () => {
-      window.removeEventListener("keydown", onKey)
-      document.body.style.overflow = prevOverflow
-    }
-  }, [open, onClose])
 
   // Reset state whenever the modal is freshly opened so it never reopens
   // with leftover input from a previous attempt.
@@ -143,11 +128,10 @@ export function SignupModal({
   }
 
   return (
-    <ModalBackdrop
-      className="z-[70]"
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
+    <AccessibleModal
+      open={open}
+      onClose={onClose}
+      zIndex={70}
       aria-labelledby="signup-modal-title"
     >
       <form
@@ -288,6 +272,6 @@ export function SignupModal({
           </button>
         </div>
       </form>
-    </ModalBackdrop>
+    </AccessibleModal>
   )
 }

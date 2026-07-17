@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Navbar from "@/components/safecheck/Navbar"
 import { ScButton, ScBadge } from "@/components/safecheck/primitives"
 import Footer from "@/components/safecheck/Footer"
+import { PageSuspenseFallback } from "@/components/safecheck/layout/PageSuspenseFallback"
 import { ArrowLeft, Bell, Hammer, HardHat, Wrench, Cone, CheckCircle2 } from "lucide-react"
 
 const FEATURE_LABELS: Record<string, { title: string; subtitle: string }> = {
@@ -141,13 +142,7 @@ function WipContent() {
 
 export default function WipPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-[#FFFFFF]">
-          <div className="w-8 h-8 border-2 border-[#157FE2] border-t-transparent rounded-full animate-spin" />
-        </div>
-      }
-    >
+    <Suspense fallback={<PageSuspenseFallback />}>
       <WipContent />
     </Suspense>
   )

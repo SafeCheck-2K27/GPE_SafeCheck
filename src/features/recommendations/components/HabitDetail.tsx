@@ -9,6 +9,7 @@ import {
   X,
   Zap,
 } from "lucide-react"
+import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
 import { STATUS_LABELS } from "../data"
 import type { Habit, RecommendationStatus } from "../types"
@@ -26,7 +27,12 @@ export function HabitDetail({
 }) {
   const Icon = h.icon
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-6" onClick={onClose}>
+    <AccessibleModal
+      open
+      onClose={onClose}
+      aria-labelledby="habit-detail-title"
+      className="bg-black/40 px-4 py-6 backdrop-blur-none"
+    >
       <div
         className="w-full max-w-lg rounded-xl bg-[#FFFFFF] sc-fade-in max-h-[90vh] overflow-y-auto"
         style={{ border: "1px solid #B3DBEF", boxShadow: "5px 5px 0px #C0DDF8" }}
@@ -40,7 +46,12 @@ export function HabitDetail({
                 <Icon className="w-5 h-5 text-[#157FE2]" />
               </div>
               <div>
-                <h3 className="font-extrabold text-lg text-[#000] leading-tight">{h.title}</h3>
+                <h3
+                  id="habit-detail-title"
+                  className="font-extrabold text-lg text-[#000] leading-tight"
+                >
+                  {h.title}
+                </h3>
                 <div className="flex items-center gap-1.5 mt-1 flex-wrap">
                   <ScBadge tone={h.level === "Débutant" ? "success" : h.level === "Intermédiaire" ? "info" : "premium"}>
                     {h.level}
@@ -148,6 +159,6 @@ export function HabitDetail({
           </div>
         </div>
       </div>
-    </div>
+    </AccessibleModal>
   )
 }

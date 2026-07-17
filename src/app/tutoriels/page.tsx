@@ -4,6 +4,7 @@ import { Suspense, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import Footer from "@/components/safecheck/Footer"
 import Navbar from "@/components/safecheck/Navbar"
+import { PageSuspenseFallback } from "@/components/safecheck/layout/PageSuspenseFallback"
 import { PageShell } from "@/components/safecheck/layout/PageShell"
 import { TutorialCatalogView } from "@/features/tutorials/components/TutorialCatalogView"
 import { TutorialLevelView } from "@/features/tutorials/components/TutorialLevelView"
@@ -14,13 +15,7 @@ import type { Niveau, Tutoriel } from "@/features/tutorials/data/catalog"
 
 export default function TutorielsPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-[color:var(--sc-bg)]">
-          <div className="w-8 h-8 border-2 border-[color:var(--sc-blue)] border-t-transparent rounded-full animate-spin" />
-        </div>
-      }
-    >
+    <Suspense fallback={<PageSuspenseFallback />}>
       <TutorielsContent />
     </Suspense>
   )

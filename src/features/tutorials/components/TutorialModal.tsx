@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
 import { CATEGORY_LABEL } from "../data/catalog"
 import type { Tutoriel } from "../data/catalog"
@@ -64,9 +65,11 @@ export function TutorialModal({
   ) : null
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
-      onClick={onClose}
+    <AccessibleModal
+      open
+      onClose={onClose}
+      aria-labelledby="tutorial-modal-title"
+      className="bg-black/40 p-4"
     >
       <div
         className="w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl overflow-hidden bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[var(--sc-shadow-lg)]"
@@ -83,7 +86,12 @@ export function TutorialModal({
                 <BookOpen className="w-3 h-3" />
                 Tutoriel
               </ScBadge>
-              <h2 className="font-bold text-lg text-[color:var(--sc-text)] font-display">{tuto.title}</h2>
+              <h2
+                id="tutorial-modal-title"
+                className="font-bold text-lg text-[color:var(--sc-text)] font-display"
+              >
+                {tuto.title}
+              </h2>
               <div className="flex items-center gap-3 mt-2 flex-wrap">
                 <span className="flex items-center gap-1 text-xs text-[color:var(--sc-text-muted)]">
                   <Clock className="w-3 h-3" /> {tuto.duration}
@@ -203,6 +211,6 @@ export function TutorialModal({
           )}
         </div>
       </div>
-    </div>
+    </AccessibleModal>
   )
 }

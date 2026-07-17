@@ -11,6 +11,7 @@ import { AuditTopBar } from "@/features/audit/components/AuditTopBar"
 import { auditQuestions } from "@/features/audit/data"
 import { calculateAuditScore } from "@/features/audit/scoring"
 import type { AuditAnswers, AuditAnswerValue } from "@/features/audit/types"
+import { serializeAuditAnswers } from "@/features/audit/url-payload"
 
 export default function AuditPage() {
   const router = useRouter()
@@ -41,7 +42,7 @@ export default function AuditPage() {
     if (isLast) {
       const score = calculateAuditScore(auditQuestions, answers)
       router.push(
-        `/personalisation?score=${score}&answers=${encodeURIComponent(JSON.stringify(answers))}`,
+        `/personalisation?score=${score}&answers=${encodeURIComponent(serializeAuditAnswers(answers))}`,
       )
       return
     }

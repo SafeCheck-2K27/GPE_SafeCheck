@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Navbar from "@/components/safecheck/Navbar"
 import { ScButton, ScBadge } from "@/components/safecheck/primitives"
 import Footer from "@/components/safecheck/Footer"
+import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
+import { PageSuspenseFallback } from "@/components/safecheck/layout/PageSuspenseFallback"
 import { PageShell } from "@/components/safecheck/layout/PageShell"
 import {
   Search,
@@ -230,13 +232,7 @@ function LexiqueContent() {
 
 export default function LexiquePage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-[color:var(--sc-bg)]">
-          <div className="w-8 h-8 border-2 border-[color:var(--sc-blue)] border-t-transparent rounded-full animate-spin" />
-        </div>
-      }
-    >
+    <Suspense fallback={<PageSuspenseFallback />}>
       <LexiqueContent />
     </Suspense>
   )
@@ -364,13 +360,16 @@ function TermDetailPanel({
 }) {
   const domainMeta = DOMAINS.find((d) => d.id === term.domain)
   return (
-    <div className="fixed inset-0 z-[60] flex justify-end bg-black/40 sc-fade-in" onClick={onClose}>
+    <AccessibleModal
+      open
+      onClose={onClose}
+      zIndex={60}
+      aria-label={`Définition de ${term.nom}`}
+      className="items-stretch justify-end bg-black/40 px-0 backdrop-blur-none sc-fade-in"
+    >
       <div
         className="w-full max-w-md h-full bg-[color:var(--sc-surface)] overflow-y-auto shadow-[var(--sc-shadow-lg)] border-l border-[color:var(--sc-border)] sc-fade-in"
         onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-label={`Définition de ${term.nom}`}
       >
         {/* En-tête sticky */}
         <div className="sticky top-0 z-10 bg-[color:var(--sc-surface)]/95 backdrop-blur border-b border-[color:var(--sc-border)] px-6 py-4 flex items-start justify-between gap-3">
@@ -478,7 +477,7 @@ function TermDetailPanel({
           </div>
         </div>
       </div>
-    </div>
+    </AccessibleModal>
   )
 }
 

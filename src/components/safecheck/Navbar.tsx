@@ -212,7 +212,7 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
                 variant="destructive"
                 size="sm"
                 onClick={handleLogout}
-                ariaLabel={t("nav.deconnexion")}
+                aria-label={t("nav.deconnexion")}
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">{t("nav.deconnexion")}</span>
@@ -231,7 +231,7 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
                 variant="primary"
                 size="sm"
                 onClick={handleSignupClick}
-                ariaLabel={t("nav.creerCompte")}
+                aria-label={t("nav.creerCompte")}
               >
                 <UserPlus className="w-3.5 h-3.5 sm:hidden" />
                 <span className="hidden sm:inline whitespace-nowrap">{t("nav.creerCompte")}</span>

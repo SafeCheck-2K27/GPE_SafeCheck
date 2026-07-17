@@ -15,13 +15,16 @@ import { AccountPreferences } from "@/features/account/components/AccountPrefere
 import { AccountProfile } from "@/features/account/components/AccountProfile"
 import { AccountTabSynchronizer } from "@/features/account/components/AccountTabSynchronizer"
 import { AccountTabs } from "@/features/account/components/AccountTabs"
+import {
+  createInitialAccountForm,
+  mergeUserIntoAccountForm,
+} from "@/features/account/profile-form"
 import { getAccountTabHref } from "@/features/account/tabs"
 import type {
   AccountForm,
   AccountTabId,
   NotificationPreferences,
 } from "@/features/account/types"
-import { mockUser } from "@/lib/account-data"
 
 export default function MonComptePage() {
   const router = useRouter()
@@ -30,19 +33,7 @@ export default function MonComptePage() {
 
   const [activeTab, setActiveTab] = useState<AccountTabId>("dashboard")
   const [editMode, setEditMode] = useState(false)
-  const [form, setForm] = useState<AccountForm>({
-    ...mockUser,
-    ...(auth.user
-      ? {
-          pseudo: auth.user.pseudo || mockUser.pseudo,
-          email: auth.user.email || mockUser.email,
-          prenom: auth.user.prenom || mockUser.prenom,
-          nom: auth.user.nom || mockUser.nom,
-          pays: auth.user.pays || mockUser.pays,
-          age: auth.user.age || mockUser.age,
-        }
-      : {}),
-  })
+  const [form, setForm] = useState<AccountForm>(createInitialAccountForm)
   const [showPasswordChange, setShowPasswordChange] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [notifs, setNotifs] = useState<NotificationPreferences>({
@@ -64,15 +55,7 @@ export default function MonComptePage() {
     const user = auth.user
 
     queueMicrotask(() => {
-      setForm((previousForm) => ({
-        ...previousForm,
-        pseudo: user.pseudo || previousForm.pseudo,
-        email: user.email || previousForm.email,
-        prenom: user.prenom || previousForm.prenom,
-        nom: user.nom || previousForm.nom,
-        pays: user.pays || previousForm.pays,
-        age: user.age || previousForm.age,
-      }))
+      setForm((previousForm) => mergeUserIntoAccountForm(previousForm, user))
     })
   }, [auth.user])
 

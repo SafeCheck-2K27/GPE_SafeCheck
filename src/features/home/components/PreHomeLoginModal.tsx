@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { SafeCheckMark, ScButton } from "@/components/safecheck/primitives"
-import { ModalBackdrop } from "@/components/safecheck/layout/ModalBackdrop"
+import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 
 const loginCardClassName =
   "w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgba(15,23,42,0.30)]"
@@ -33,11 +33,18 @@ export function PreHomeLoginModal({
   }
 
   return (
-    <ModalBackdrop onClick={onClose}>
+    <AccessibleModal
+      open
+      onClose={onClose}
+      aria-labelledby="prehome-login-title"
+    >
       <div className={loginCardClassName} onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center gap-2 mb-1">
           <SafeCheckMark />
-          <h2 className="font-display text-xl font-semibold text-[color:var(--sc-text)]">
+          <h2
+            id="prehome-login-title"
+            className="font-display text-xl font-semibold text-[color:var(--sc-text)]"
+          >
             Connexion
           </h2>
         </div>
@@ -88,6 +95,6 @@ export function PreHomeLoginModal({
           </button>
         </div>
       </div>
-    </ModalBackdrop>
+    </AccessibleModal>
   )
 }

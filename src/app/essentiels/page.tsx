@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Navbar from "@/components/safecheck/Navbar"
 import { ScButton, ScBadge } from "@/components/safecheck/primitives"
 import Footer from "@/components/safecheck/Footer"
+import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
+import { PageSuspenseFallback } from "@/components/safecheck/layout/PageSuspenseFallback"
 import {
   Search,
   X,
@@ -254,7 +256,7 @@ function EssentielsContent() {
   const router = useRouter()
   const params = useSearchParams()
 
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState(() => params.get("q") ?? "")
   const [priority, setPriority] = useState("all")
   const [os, setOs] = useState("all")
   const [difficulty, setDifficulty] = useState("all")
@@ -414,13 +416,7 @@ function EssentielsContent() {
 
 export default function EssentielsPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-[#FFFFFF]">
-          <div className="w-8 h-8 border-2 border-[#157FE2] border-t-transparent rounded-full animate-spin" />
-        </div>
-      }
-    >
+    <Suspense fallback={<PageSuspenseFallback />}>
       <EssentielsContent />
     </Suspense>
   )
@@ -500,7 +496,12 @@ function EssentielCard({ e, delay, onClick }: { e: Essentiel; delay: number; onC
 function EssentielDetail({ e, onClose }: { e: Essentiel; onClose: () => void }) {
   const Icon = e.icon
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4" onClick={onClose}>
+    <AccessibleModal
+      open
+      onClose={onClose}
+      aria-labelledby="essential-detail-title"
+      className="bg-black/40 px-4 backdrop-blur-none"
+    >
       <div
         className="w-full max-w-xl rounded-xl bg-[#FFFFFF] sc-fade-in max-h-[90vh] overflow-y-auto"
         style={{ border: "1px solid #B3DBEF", boxShadow: "5px 5px 0px #C0DDF8" }}
@@ -513,7 +514,12 @@ function EssentielDetail({ e, onClose }: { e: Essentiel; onClose: () => void }) 
                 <Icon className="w-5 h-5 text-[#157FE2]" />
               </div>
               <div>
-                <h3 className="font-extrabold text-lg text-[#000]">{e.title}</h3>
+                <h3
+                  id="essential-detail-title"
+                  className="font-extrabold text-lg text-[#000]"
+                >
+                  {e.title}
+                </h3>
                 <div className="flex flex-wrap items-center gap-1.5 mt-1">
                   <ScBadge tone={e.importance === "Critique" ? "warn" : "info"}>{e.importance}</ScBadge>
                   <ScBadge tone="muted">{e.type}</ScBadge>
@@ -532,6 +538,6 @@ function EssentielDetail({ e, onClose }: { e: Essentiel; onClose: () => void }) 
           </div>
         </div>
       </div>
-    </div>
+    </AccessibleModal>
   )
 }

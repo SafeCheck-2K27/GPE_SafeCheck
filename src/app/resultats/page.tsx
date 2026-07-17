@@ -7,6 +7,7 @@ import Footer from "@/components/safecheck/Footer"
 import { SignupModal } from "@/components/safecheck/SignupModal"
 import { useAuth } from "@/components/safecheck/AuthProvider"
 import { useI18n } from "@/components/safecheck/I18nProvider"
+import { PageSuspenseFallback } from "@/components/safecheck/layout/PageSuspenseFallback"
 import { PageShell } from "@/components/safecheck/layout/PageShell"
 import { ResultsAssessment } from "@/features/results/components/ResultsAssessment"
 import { ResultsAuditInfo } from "@/features/results/components/ResultsAuditInfo"
@@ -104,17 +105,9 @@ function ResultatsContent() {
   )
 }
 
-function ResultatsLoading() {
-  return (
-    <div className="flex items-center justify-center min-h-screen text-[color:var(--sc-blue)] font-bold bg-[color:var(--sc-bg)]">
-      Chargement…
-    </div>
-  )
-}
-
 export default function ResultatsPage() {
   return (
-    <Suspense fallback={<ResultatsLoading />}>
+    <Suspense fallback={<PageSuspenseFallback label="Chargement des résultats" />}>
       <ResultatsContent />
     </Suspense>
   )

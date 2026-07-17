@@ -1,15 +1,10 @@
 import { Suspense } from "react"
+import { PageSuspenseFallback } from "@/components/safecheck/layout/PageSuspenseFallback"
 import { RecommendationsContent } from "@/features/recommendations/components/RecommendationsContent"
 
 export default function RecommandationsPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-[#FFFFFF]">
-          <div className="w-8 h-8 border-2 border-[#157FE2] border-t-transparent rounded-full animate-spin" />
-        </div>
-      }
-    >
+    <Suspense fallback={<PageSuspenseFallback />}>
       <RecommendationsContent />
     </Suspense>
   )

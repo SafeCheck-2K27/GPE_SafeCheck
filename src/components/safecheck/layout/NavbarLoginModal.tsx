@@ -1,12 +1,12 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 import { ScButton, SafeCheckMark, GoogleAuthButton, AuthDivider } from "@/components/safecheck/primitives"
 import { useAuth } from "@/components/safecheck/AuthProvider"
 import { useI18n } from "@/components/safecheck/I18nProvider"
-import { ModalBackdrop } from "./ModalBackdrop"
+import { AccessibleModal } from "./AccessibleModal"
 
 /* Built-in login modal used by the Navbar */
 export function NavbarLoginModal({
@@ -24,15 +24,6 @@ export function NavbarLoginModal({
   const [showPw, setShowPw] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
-
-  // Close on Escape.
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose()
-    }
-    window.addEventListener("keydown", onKey)
-    return () => window.removeEventListener("keydown", onKey)
-  }, [onClose])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -72,11 +63,10 @@ export function NavbarLoginModal({
   }
 
   return (
-    <ModalBackdrop
-      className="z-[60]"
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
+    <AccessibleModal
+      open
+      onClose={onClose}
+      zIndex={60}
       aria-labelledby="navbar-login-title"
     >
       <form
@@ -182,6 +172,6 @@ export function NavbarLoginModal({
           </button>
         </div>
       </form>
-    </ModalBackdrop>
+    </AccessibleModal>
   )
 }

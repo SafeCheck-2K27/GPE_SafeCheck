@@ -37,7 +37,7 @@ export default function AccueilPage() {
           <AccueilAccountBanner
             isLoggedIn={isLoggedIn}
             firstName={user?.prenom}
-            onDashboard={() => router.push("/accueil")}
+            onDashboard={() => router.push("/compte")}
             onProfile={() => router.push("/compte")}
             onSignup={() => router.push("/compte/creer")}
           />
