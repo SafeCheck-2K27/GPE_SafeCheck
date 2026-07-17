@@ -1,8 +1,9 @@
-import { Shield, AlertTriangle, Lock, Wifi, Save, HardDrive } from "lucide-react"
-import type { ReactNode } from "react"
-import type { Recommendation } from "./types"
+import type {
+  ScoreRecommendation,
+  ScoreRecommendationIconKey,
+} from "./types"
 
-export const allRecommendations: Recommendation[] = [
+export const scoreRecommendations: ScoreRecommendation[] = [
   {
     id: 1,
     key: "double-auth",
@@ -10,7 +11,7 @@ export const allRecommendations: Recommendation[] = [
     urgency: "Haute",
     impact: "Fort",
     tutorielLink: "/tutoriels/double-authentification",
-    icon: <Lock className="w-5 h-5" />,
+    icon: "lock",
   },
   {
     id: 2,
@@ -19,7 +20,7 @@ export const allRecommendations: Recommendation[] = [
     urgency: "Haute",
     impact: "Fort",
     tutorielLink: "/tutoriels/gestionnaire-mdp",
-    icon: <Shield className="w-5 h-5" />,
+    icon: "shield",
   },
   {
     id: 3,
@@ -28,7 +29,7 @@ export const allRecommendations: Recommendation[] = [
     urgency: "Haute",
     impact: "Fort",
     tutorielLink: "/tutoriels/sauvegardes",
-    icon: <Save className="w-5 h-5" />,
+    icon: "save",
   },
   {
     id: 4,
@@ -37,7 +38,7 @@ export const allRecommendations: Recommendation[] = [
     urgency: "Moyenne",
     impact: "Fort",
     tutorielLink: "/tutoriels/mises-a-jour",
-    icon: <HardDrive className="w-5 h-5" />,
+    icon: "hard-drive",
   },
   {
     id: 5,
@@ -46,7 +47,7 @@ export const allRecommendations: Recommendation[] = [
     urgency: "Moyenne",
     impact: "Moyen",
     tutorielLink: "/tutoriels/securiser-wifi",
-    icon: <Wifi className="w-5 h-5" />,
+    icon: "wifi",
   },
   {
     id: 6,
@@ -55,12 +56,12 @@ export const allRecommendations: Recommendation[] = [
     urgency: "Moyenne",
     impact: "Fort",
     tutorielLink: "/tutoriels/phishing",
-    icon: <AlertTriangle className="w-5 h-5" />,
+    icon: "alert-triangle",
   },
 ]
 
-export const recoCopy: Record<
-  Recommendation["key"],
+export const scoreRecommendationCopy: Record<
+  ScoreRecommendation["key"],
   { fr: { title: string; desc: string }; en: { title: string; desc: string } }
 > = {
   "double-auth": {
@@ -125,33 +126,48 @@ export const recoCopy: Record<
   },
 }
 
-export const categoryLabels: Record<Recommendation["category"], { fr: string; en: string; icon: ReactNode }> = {
-  comptes: { fr: "Comptes & mots de passe", en: "Accounts & passwords", icon: <Lock className="w-3.5 h-3.5" /> },
-  appareils: { fr: "Appareils & mises à jour", en: "Devices & updates", icon: <HardDrive className="w-3.5 h-3.5" /> },
-  sauvegardes: { fr: "Sauvegardes", en: "Backups", icon: <Save className="w-3.5 h-3.5" /> },
-  reseau: { fr: "Réseau Wi-Fi", en: "Wi-Fi network", icon: <Wifi className="w-3.5 h-3.5" /> },
-  phishing: { fr: "Phishing & arnaques", en: "Phishing & scams", icon: <AlertTriangle className="w-3.5 h-3.5" /> },
+export const scoreRecommendationCategoryLabels: Record<
+  ScoreRecommendation["category"],
+  { fr: string; en: string; icon: ScoreRecommendationIconKey }
+> = {
+  comptes: {
+    fr: "Comptes & mots de passe",
+    en: "Accounts & passwords",
+    icon: "lock",
+  },
+  appareils: {
+    fr: "Appareils & mises à jour",
+    en: "Devices & updates",
+    icon: "hard-drive",
+  },
+  sauvegardes: { fr: "Sauvegardes", en: "Backups", icon: "save" },
+  reseau: { fr: "Réseau Wi-Fi", en: "Wi-Fi network", icon: "wifi" },
+  phishing: {
+    fr: "Phishing & arnaques",
+    en: "Phishing & scams",
+    icon: "alert-triangle",
+  },
 }
 
-export const urgencyColors: Record<Recommendation["urgency"], string> = {
+export const scoreRecommendationUrgencyColors: Record<ScoreRecommendation["urgency"], string> = {
   Haute: "#DC2626",
   Moyenne: "#EA580C",
   Faible: "#16A34A",
 }
 
-export const impactColors: Record<Recommendation["impact"], string> = {
+export const scoreRecommendationImpactColors: Record<ScoreRecommendation["impact"], string> = {
   Fort: "var(--sc-blue)",
   Moyen: "var(--sc-blue-soft)",
   Faible: "var(--sc-text-muted)",
 }
 
-export const urgencyTranslationKeys: Record<Recommendation["urgency"], string> = {
+export const scoreRecommendationUrgencyTranslationKeys: Record<ScoreRecommendation["urgency"], string> = {
   Haute: "value.haute",
   Moyenne: "value.moyenne",
   Faible: "value.faible",
 }
 
-export const impactTranslationKeys: Record<Recommendation["impact"], string> = {
+export const scoreRecommendationImpactTranslationKeys: Record<ScoreRecommendation["impact"], string> = {
   Fort: "value.fort",
   Moyen: "value.moyen",
   Faible: "value.faible",

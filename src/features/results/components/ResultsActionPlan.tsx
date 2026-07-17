@@ -2,25 +2,26 @@
 
 import { useState } from "react"
 import { ChevronDown } from "lucide-react"
-import { RecommendationCard } from "../RecommendationCard"
-import { categoryLabels } from "../data"
-import { groupRecommendationsByCategory } from "../utils"
+import { ScoreRecommendationCard } from "../ScoreRecommendationCard"
+import { ScoreRecommendationIcon } from "../ScoreRecommendationIcon"
+import { scoreRecommendationCategoryLabels } from "../data"
+import { groupScoreRecommendationsByCategory } from "../utils"
 import type {
-  Recommendation,
   ResultLanguage,
   ResultTranslator,
+  ScoreRecommendation,
 } from "../types"
 
 const recosToggleButtonClassName =
   "w-full flex items-center justify-between px-4 py-3 bg-[color:var(--sc-surface-2)] hover:bg-[color:var(--sc-bg-soft)] text-sm font-semibold text-[color:var(--sc-text)] transition-colors cursor-pointer"
 
-export function ResultsRecommendations({
+export function ResultsActionPlan({
   recommendations,
   lang,
   t,
   onTutorialClick,
 }: {
-  recommendations: Recommendation[]
+  recommendations: ScoreRecommendation[]
   lang: ResultLanguage
   t: ResultTranslator
   onTutorialClick: (href: string) => void
@@ -28,7 +29,8 @@ export function ResultsRecommendations({
   const [expanded, setExpanded] = useState(false)
   const topRecommendations = recommendations.slice(0, 3)
   const extraRecommendations = recommendations.slice(3)
-  const extraByCategory = groupRecommendationsByCategory(extraRecommendations)
+  const extraByCategory =
+    groupScoreRecommendationsByCategory(extraRecommendations)
 
   return (
     <section>
@@ -44,9 +46,9 @@ export function ResultsRecommendations({
 
       <div className="flex flex-col gap-3 mb-3">
         {topRecommendations.map((recommendation, index) => (
-          <RecommendationCard
+          <ScoreRecommendationCard
             key={recommendation.id}
-            reco={recommendation}
+            recommendation={recommendation}
             index={index}
             lang={lang}
             t={t}
@@ -81,13 +83,18 @@ export function ResultsRecommendations({
                 ([category, categoryRecommendations]) => {
                   if (!categoryRecommendations) return null
                   const categoryInfo =
-                    categoryLabels[category as Recommendation["category"]]
+                    scoreRecommendationCategoryLabels[
+                      category as ScoreRecommendation["category"]
+                    ]
 
                   return (
                     <div key={category} className="bg-[color:var(--sc-surface)]">
                       <div className="px-4 py-2 flex items-center gap-2 bg-[color:var(--sc-surface-2)]/50">
                         <span className="text-[color:var(--sc-text-muted)]">
-                          {categoryInfo.icon}
+                          <ScoreRecommendationIcon
+                            icon={categoryInfo.icon}
+                            className="w-3.5 h-3.5"
+                          />
                         </span>
                         <span className="text-xs font-semibold uppercase tracking-wider text-[color:var(--sc-text-muted)]">
                           {lang === "fr" ? categoryInfo.fr : categoryInfo.en}
@@ -95,9 +102,9 @@ export function ResultsRecommendations({
                       </div>
                       <div className="p-3 flex flex-col gap-3">
                         {categoryRecommendations.map((recommendation, index) => (
-                          <RecommendationCard
+                          <ScoreRecommendationCard
                             key={recommendation.id}
-                            reco={recommendation}
+                            recommendation={recommendation}
                             index={topRecommendations.length + index}
                             lang={lang}
                             t={t}

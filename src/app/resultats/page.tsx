@@ -12,13 +12,13 @@ import { ResultsAssessment } from "@/features/results/components/ResultsAssessme
 import { ResultsAuditInfo } from "@/features/results/components/ResultsAuditInfo"
 import { ResultsComparison } from "@/features/results/components/ResultsComparison"
 import { ResultsNextSteps } from "@/features/results/components/ResultsNextSteps"
-import { ResultsRecommendations } from "@/features/results/components/ResultsRecommendations"
+import { ResultsActionPlan } from "@/features/results/components/ResultsActionPlan"
 import { ResultsScoreHero } from "@/features/results/components/ResultsScoreHero"
 import { ResultsStats } from "@/features/results/components/ResultsStats"
 import { ResultsSummary } from "@/features/results/components/ResultsSummary"
 import { getResultLevel } from "@/features/results/logic"
 import {
-  getDisplayedRecommendations,
+  getScoreRecommendationsForLevel,
   getResultMetrics,
   getResultScore,
 } from "@/features/results/utils"
@@ -31,7 +31,7 @@ function ResultatsContent() {
 
   const score = getResultScore(searchParams.get("score"))
   const level = getResultLevel(score)
-  const displayedRecommendations = getDisplayedRecommendations(level)
+  const scoreRecommendations = getScoreRecommendationsForLevel(level)
   const metrics = getResultMetrics(score, level)
 
   const [signupOpen, setSignupOpen] = useState(false)
@@ -66,8 +66,8 @@ function ResultatsContent() {
         <ResultsSummary score={score} level={level} />
         <ResultsStats metrics={metrics} />
         <ResultsAssessment score={score} level={level} t={t} />
-        <ResultsRecommendations
-          recommendations={displayedRecommendations}
+        <ResultsActionPlan
+          recommendations={scoreRecommendations}
           lang={lang}
           t={t}
           onTutorialClick={handleTutorialClick}
@@ -81,7 +81,7 @@ function ResultatsContent() {
         <ResultsNextSteps
           isLoggedIn={auth.isLoggedIn}
           firstTutorialHref={
-            displayedRecommendations[0]?.tutorielLink ?? "/tutoriels"
+            scoreRecommendations[0]?.tutorielLink ?? "/tutoriels"
           }
           t={t}
           onOpenSignup={handleOpenSignup}

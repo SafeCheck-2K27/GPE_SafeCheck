@@ -1,7 +1,16 @@
-import type { ReactNode } from "react"
+export type ScoreRecommendationId = 1 | 2 | 3 | 4 | 5 | 6
 
-export interface Recommendation {
-  id: number
+export type ScoreRecommendationIconKey =
+  | "lock"
+  | "shield"
+  | "save"
+  | "hard-drive"
+  | "wifi"
+  | "alert-triangle"
+
+/** A prioritized action selected from an audit score, not a catalog entry. */
+export interface ScoreRecommendation {
+  id: ScoreRecommendationId
   key:
     | "double-auth"
     | "password-manager"
@@ -13,7 +22,7 @@ export interface Recommendation {
   urgency: "Haute" | "Moyenne" | "Faible"
   impact: "Fort" | "Moyen" | "Faible"
   tutorielLink: string
-  icon: ReactNode
+  icon: ScoreRecommendationIconKey
 }
 
 export type ResultLanguage = "fr" | "en"
@@ -22,8 +31,6 @@ export type ResultTranslator = (
   key: string,
   params?: Record<string, string | number>,
 ) => string
-
-export type ResultRiskLevel = "low" | "medium" | "high" | "critical"
 
 export interface ResultRiskStyle {
   text: string
@@ -34,12 +41,6 @@ export interface ResultRiskStyle {
 
 export type ResultLevelId = "novice" | "scarabee" | "gardien" | "sentinelle"
 
-export type ResultLevelIcon =
-  | "alert-triangle"
-  | "bug"
-  | "trending-up"
-  | "shield"
-
 export type ResultStrengthProfile = "low" | "high"
 
 export interface ResultLevelConfig {
@@ -49,16 +50,10 @@ export interface ResultLevelConfig {
   readonly labelKey: string
   readonly descKey: string
   readonly colorVar: string
-  readonly bgClass: string
-  readonly icon: ResultLevelIcon
-  readonly riskLevel: ResultRiskLevel
   readonly riskLabel: string
   readonly riskStyle: ResultRiskStyle
   readonly summary: string
-  readonly recommendationSlice: {
-    readonly start: number
-    readonly end?: number
-  }
+  readonly scoreRecommendationIds: readonly ScoreRecommendationId[]
   readonly metrics: {
     readonly gainPoints: string
     readonly gainActions: number
@@ -78,6 +73,6 @@ export interface ResultMetrics {
   gainAfterTutorials: string
 }
 
-export type RecommendationsByCategory = Partial<
-  Record<Recommendation["category"], Recommendation[]>
+export type ScoreRecommendationsByCategory = Partial<
+  Record<ScoreRecommendation["category"], ScoreRecommendation[]>
 >

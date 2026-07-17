@@ -8,9 +8,6 @@ export const RESULT_LEVELS: readonly ResultLevelConfig[] = [
     labelKey: "level.novice",
     descKey: "level.novice.desc",
     colorVar: "var(--sc-danger)",
-    bgClass: "bg-[rgba(239,68,68,0.08)] border-[rgba(239,68,68,0.20)]",
-    icon: "alert-triangle",
-    riskLevel: "critical",
     riskLabel: "Critique",
     riskStyle: {
       text: "text-[color:var(--sc-danger)]",
@@ -20,7 +17,7 @@ export const RESULT_LEVELS: readonly ResultLevelConfig[] = [
     },
     summary:
       " indique une exposition significative aux risques numériques. Pas d'inquiétude : chaque action compte, et les premières étapes sont simples à mettre en place. Commence par sécuriser ton email principal.",
-    recommendationSlice: { start: 0 },
+    scoreRecommendationIds: [1, 2, 3, 4, 5, 6],
     metrics: {
       gainPoints: "30 à 40",
       gainActions: 3,
@@ -37,9 +34,6 @@ export const RESULT_LEVELS: readonly ResultLevelConfig[] = [
     labelKey: "level.scarabee",
     descKey: "level.scarabee.desc",
     colorVar: "var(--sc-warn)",
-    bgClass: "bg-[rgba(245,158,11,0.08)] border-[rgba(245,158,11,0.20)]",
-    icon: "bug",
-    riskLevel: "high",
     riskLabel: "Élevé",
     riskStyle: {
       text: "text-[color:var(--sc-warn)]",
@@ -49,7 +43,7 @@ export const RESULT_LEVELS: readonly ResultLevelConfig[] = [
     },
     summary:
       " révèle plusieurs lacunes dans ta sécurité numérique. Tes risques principaux concernent tes comptes, tes sauvegardes et ta protection contre le phishing. Commence par les 3 premières recommandations ci-dessous.",
-    recommendationSlice: { start: 0 },
+    scoreRecommendationIds: [1, 2, 3, 4, 5, 6],
     metrics: {
       gainPoints: "20 à 30",
       gainActions: 3,
@@ -66,9 +60,6 @@ export const RESULT_LEVELS: readonly ResultLevelConfig[] = [
     labelKey: "level.gardien",
     descKey: "level.gardien.desc",
     colorVar: "var(--sc-blue-soft)",
-    bgClass: "bg-[rgba(59,130,246,0.08)] border-[rgba(59,130,246,0.20)]",
-    icon: "trending-up",
-    riskLevel: "medium",
     riskLabel: "Modéré",
     riskStyle: {
       text: "text-[color:var(--sc-blue)]",
@@ -78,7 +69,7 @@ export const RESULT_LEVELS: readonly ResultLevelConfig[] = [
     },
     summary:
       " indique un niveau de sécurité correct, mais avec des axes d'amélioration importants. Tes priorités immédiates : la double authentification et la gestion des mots de passe.",
-    recommendationSlice: { start: 0, end: 4 },
+    scoreRecommendationIds: [1, 2, 3, 4],
     metrics: {
       gainPoints: "15 à 20",
       gainActions: 2,
@@ -95,9 +86,6 @@ export const RESULT_LEVELS: readonly ResultLevelConfig[] = [
     labelKey: "level.sentinelle",
     descKey: "level.sentinelle.desc",
     colorVar: "var(--sc-blue)",
-    bgClass: "bg-[rgba(37,99,235,0.08)] border-[rgba(37,99,235,0.20)]",
-    icon: "shield",
-    riskLevel: "low",
     riskLabel: "Faible",
     riskStyle: {
       text: "text-[color:var(--sc-success)]",
@@ -107,7 +95,7 @@ export const RESULT_LEVELS: readonly ResultLevelConfig[] = [
     },
     summary:
       " place ton niveau de sécurité parmi les meilleurs. Tu appliques déjà les pratiques essentielles. Quelques optimisations supplémentaires te permettront d'atteindre un niveau expert.",
-    recommendationSlice: { start: 3 },
+    scoreRecommendationIds: [4, 5, 6],
     metrics: {
       gainPoints: "15 à 20",
       gainActions: 2,

@@ -1,7 +1,7 @@
 "use client"
 
 import { Suspense, useEffect, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
 import { useAuth } from "@/components/safecheck/AuthProvider"
 import Footer from "@/components/safecheck/Footer"
@@ -13,41 +13,15 @@ import { AccountHero } from "@/features/account/components/AccountHero"
 import { AccountHistory } from "@/features/account/components/AccountHistory"
 import { AccountPreferences } from "@/features/account/components/AccountPreferences"
 import { AccountProfile } from "@/features/account/components/AccountProfile"
+import { AccountTabSynchronizer } from "@/features/account/components/AccountTabSynchronizer"
 import { AccountTabs } from "@/features/account/components/AccountTabs"
+import { getAccountTabHref } from "@/features/account/tabs"
 import type {
   AccountForm,
   AccountTabId,
   NotificationPreferences,
 } from "@/features/account/types"
 import { mockUser } from "@/lib/account-data"
-
-const accountTabIds: AccountTabId[] = [
-  "dashboard",
-  "historique",
-  "profil",
-  "preferences",
-]
-
-function getAccountTab(tab: string | null): AccountTabId {
-  return accountTabIds.includes(tab as AccountTabId)
-    ? (tab as AccountTabId)
-    : "dashboard"
-}
-
-function AccountTabSynchronizer({
-  onTabChange,
-}: {
-  onTabChange: (tab: AccountTabId) => void
-}) {
-  const searchParams = useSearchParams()
-
-  useEffect(() => {
-    const requestedTab = getAccountTab(searchParams.get("tab"))
-    queueMicrotask(() => onTabChange(requestedTab))
-  }, [onTabChange, searchParams])
-
-  return null
-}
 
 export default function MonComptePage() {
   const router = useRouter()
@@ -107,10 +81,27 @@ export default function MonComptePage() {
     router.push("/")
   }
 
+  const handleTabChange = (tab: AccountTabId) => {
+    if (tab === activeTab) return
+
+    const queryString = window.location.search.slice(1)
+    const href = getAccountTabHref(
+      window.location.pathname,
+      queryString,
+      tab,
+    )
+
+    window.history.pushState(null, "", href)
+    setActiveTab(tab)
+  }
+
   return (
     <PageShell>
       <Suspense fallback={null}>
-        <AccountTabSynchronizer onTabChange={setActiveTab} />
+        <AccountTabSynchronizer
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
       </Suspense>
 
       <Navbar />
@@ -121,7 +112,7 @@ export default function MonComptePage() {
           onAvatarClick={() => router.push("/wip?feature=avatar")}
         />
 
-        <AccountTabs activeTab={activeTab} onTabChange={setActiveTab} />
+        <AccountTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
         {activeTab === "dashboard" && <AccountDashboard form={form} />}
 
