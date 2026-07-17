@@ -22,8 +22,8 @@ export function TutorialDetailSidebar({
             </span>
           </div>
           <ul className="space-y-2">
-            {tutorial.prerequisites.map((requirement, index) => (
-              <li key={index} className="flex items-start gap-2">
+            {tutorial.prerequisites.map((requirement) => (
+              <li key={requirement} className="flex items-start gap-2">
                 <ArrowRight className="w-3 h-3 text-[color:var(--sc-blue)] mt-0.5 shrink-0" />
                 <span className="text-xs text-[color:var(--sc-text-2)] leading-relaxed">
                   {requirement}

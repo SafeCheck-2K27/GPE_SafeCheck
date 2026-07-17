@@ -10,7 +10,7 @@ import { TutorialLevelView } from "@/features/tutorials/components/TutorialLevel
 import { TutorialModal } from "@/features/tutorials/components/TutorialModal"
 import { TutorialPersonalizedView } from "@/features/tutorials/components/TutorialPersonalizedView"
 import { TutorialPrecisionModal } from "@/features/tutorials/components/TutorialPrecisionModal"
-import type { Category, Niveau, Tutoriel } from "@/features/tutorials/data/catalog"
+import type { Niveau, Tutoriel } from "@/features/tutorials/data/catalog"
 
 export default function TutorielsPage() {
   return (
@@ -45,9 +45,6 @@ function TutorielsContent() {
   const [precisionStepTitle, setPrecisionStepTitle] = useState<
     string | undefined
   >(undefined)
-
-  const [catFilter, setCatFilter] = useState<"all" | Category>("all")
-  const [levelFilter, setLevelFilter] = useState<"all" | Niveau>("all")
 
   const openPrecision = (stepTitle?: string) => {
     setPrecisionStepTitle(stepTitle)
@@ -90,13 +87,7 @@ function TutorielsContent() {
         )}
 
         {view === "all" && (
-          <TutorialCatalogView
-            catFilter={catFilter}
-            setCatFilter={setCatFilter}
-            levelFilter={levelFilter}
-            setLevelFilter={setLevelFilter}
-            openTuto={openTuto}
-          />
+          <TutorialCatalogView openTuto={openTuto} />
         )}
       </main>
 

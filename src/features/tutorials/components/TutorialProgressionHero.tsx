@@ -42,9 +42,9 @@ export function TutorialProgressionHero({
               </h2>
             </div>
             <div className="flex gap-2">
-              {userProgress.badges.map((badge, i) => (
+              {userProgress.badges.map((badge) => (
                 <span
-                  key={i}
+                  key={badge}
                   className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[color:var(--sc-bg-soft)] border border-[color:var(--sc-border)] text-[color:var(--sc-text)]"
                 >
                   <Award className="w-3 h-3 text-[color:var(--sc-blue)]" />

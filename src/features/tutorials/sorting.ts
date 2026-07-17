@@ -2,9 +2,12 @@ import type { Niveau, Tutoriel } from "./data/catalog"
 import { POPULAR_IDS } from "./data"
 import type { SortOption } from "./types"
 
-export function parseDuration(duration: string): number {
-  const match = duration.match(/(\d+)/)
-  return match ? parseInt(match[1]) : 10
+export function parseDuration(duration: string): number | null {
+  const match = duration.trim().match(/^(\d+)\s*min(?:ute)?s?$/i)
+  if (!match) return null
+
+  const minutes = Number.parseInt(match[1], 10)
+  return Number.isSafeInteger(minutes) && minutes > 0 ? minutes : null
 }
 
 export function sortTutorials(
@@ -26,9 +29,14 @@ export function sortTutorials(
   }
 
   if (mode === "fastest") {
-    return [...tutorials].sort(
-      (a, b) => parseDuration(a.duration) - parseDuration(b.duration),
-    )
+    return [...tutorials].sort((a, b) => {
+      const aDuration = parseDuration(a.duration)
+      const bDuration = parseDuration(b.duration)
+
+      if (aDuration === null) return bDuration === null ? 0 : 1
+      if (bDuration === null) return -1
+      return aDuration - bDuration
+    })
   }
 
   if (mode === "popular") {

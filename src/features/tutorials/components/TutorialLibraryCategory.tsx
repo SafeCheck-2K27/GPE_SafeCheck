@@ -54,15 +54,17 @@ export function TutorialLibraryCategory({
   const levelsPresent = (
     ["Debutant", "Intermediaire", "Avance"] as Niveau[]
   ).filter((level) => tutorials.some((tutorial) => tutorial.level === level))
-  const durations = tutorials.map((tutorial) =>
-    parseDuration(tutorial.duration),
-  )
+  const durations = tutorials
+    .map((tutorial) => parseDuration(tutorial.duration))
+    .filter((duration): duration is number => duration !== null)
   const minimumDuration = Math.min(...durations)
   const maximumDuration = Math.max(...durations)
   const durationLabel =
-    minimumDuration === maximumDuration
-      ? `${minimumDuration} min`
-      : `${minimumDuration}-${maximumDuration} min`
+    durations.length === 0
+      ? "Duree indisponible"
+      : minimumDuration === maximumDuration
+        ? `${minimumDuration} min`
+        : `${minimumDuration}-${maximumDuration} min`
   const doneCount = tutorials.filter(
     (tutorial) => (mockTutoStatus[tutorial.id] || "todo") === "done",
   ).length

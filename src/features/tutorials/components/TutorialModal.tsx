@@ -180,9 +180,9 @@ export function TutorialModal({
           </ScButton>
 
           <div className="flex gap-1">
-            {tuto.steps.map((_, i) => (
+            {tuto.steps.map((step, i) => (
               <button
-                key={i}
+                key={step.title}
                 onClick={() => onStepChange(i)}
                 className={`w-2 h-2 rounded-full transition-all ${ i === currentStep ? "bg-[color:var(--sc-blue)] w-6" : completedSteps.has(i) ? "bg-[color:var(--sc-success)]" : "bg-[color:var(--sc-border-strong)]" }`}
                 aria-label={`Aller a l'etape ${i + 1}`}

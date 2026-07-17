@@ -26,8 +26,8 @@ export function TutorialDetailOverview({
             </h2>
           </div>
           <ul className="space-y-2.5">
-            {tutorial.learns.map((item, index) => (
-              <li key={index} className="flex items-start gap-3">
+            {tutorial.learns.map((item) => (
+              <li key={item} className="flex items-start gap-3">
                 <span className="shrink-0 w-5 h-5 rounded-full bg-[color:var(--sc-blue)]/10 border border-[color:var(--sc-blue)]/25 flex items-center justify-center mt-0.5">
                   <Check className="w-3 h-3 text-[color:var(--sc-blue)]" />
                 </span>
@@ -53,7 +53,7 @@ export function TutorialDetailOverview({
         <ol className="space-y-2">
           {tutorial.steps.map((step, index) => (
             <li
-              key={index}
+              key={step.title}
               className={`flex items-start gap-3 rounded-xl p-3 border transition-all ${completedSteps.has(index) ? "bg-[color:var(--sc-success)]/6 border-[color:var(--sc-success)]/25" : "bg-[color:var(--sc-bg-soft)] border-[color:var(--sc-border)] hover:border-[color:var(--sc-blue)]/25"}`}
             >
               <span

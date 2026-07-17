@@ -43,6 +43,7 @@ export function matchesTutorialFilters(
 
   if (durationFilter !== "all") {
     const minutes = parseDuration(tutorial.duration)
+    if (minutes === null) return false
     if (durationFilter === "quick" && minutes > 7) return false
     if (durationFilter === "medium" && (minutes <= 7 || minutes > 20)) return false
     if (durationFilter === "long" && minutes <= 20) return false

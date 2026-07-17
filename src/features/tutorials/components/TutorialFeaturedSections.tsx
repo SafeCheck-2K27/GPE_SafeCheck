@@ -17,18 +17,14 @@ import {
 import { TutorialCard } from "./TutorialCards"
 
 export function TutorialFeaturedSections({
-  visible,
   recommendedTutorials,
   inProgressTutorials,
   onOpenTutorial,
 }: {
-  visible: boolean
   recommendedTutorials: Tutoriel[]
   inProgressTutorials: Tutoriel[]
   onOpenTutorial: (tutorial: Tutoriel) => void
 }) {
-  if (!visible) return null
-
   return (
     <>
       <section className="mb-8" aria-label="Recommande pour vous">

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { tutoriels } from "../data/catalog"
-import type { Category, Niveau, Tutoriel } from "../data/catalog"
+import type { Tutoriel } from "../data/catalog"
 import { mockTutoStatus, RECOMMENDED_IDS } from "../data"
 import {
   DEFAULT_TUTORIAL_FILTERS,
@@ -12,11 +12,8 @@ import {
 import { normalizeSearch, searchTutorials } from "../search"
 import { sortTutorials } from "../sorting"
 import type {
-  DurationFilter,
   SortOption,
-  StatusFilter,
   TutorialFilters,
-  TypeFilter,
 } from "../types"
 import { TutorialCatalogToolbar } from "./TutorialCatalogToolbar"
 import { TutorialFeaturedSections } from "./TutorialFeaturedSections"
@@ -24,41 +21,15 @@ import { TutorialLibrarySection } from "./TutorialLibrarySection"
 import { TutorialSearchResults } from "./TutorialSearchResults"
 
 export function TutorialCatalogView({
-  catFilter,
-  setCatFilter,
-  levelFilter,
-  setLevelFilter,
   openTuto,
 }: {
-  catFilter: "all" | Category
-  setCatFilter: (category: "all" | Category) => void
-  levelFilter: "all" | Niveau
-  setLevelFilter: (level: "all" | Niveau) => void
   openTuto: (tutorial: Tutoriel) => void
 }) {
   const [searchQuery, setSearchQuery] = useState("")
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all")
-  const [durationFilter, setDurationFilter] =
-    useState<DurationFilter>("all")
-  const [typeFilter, setTypeFilter] = useState<TypeFilter>("all")
+  const [filters, setFilters] = useState<TutorialFilters>(() => ({
+    ...DEFAULT_TUTORIAL_FILTERS,
+  }))
   const [sortBy, setSortBy] = useState<SortOption>("recommended")
-
-  const filters = useMemo<TutorialFilters>(
-    () => ({
-      catFilter,
-      levelFilter,
-      statusFilter,
-      durationFilter,
-      typeFilter,
-    }),
-    [
-      catFilter,
-      durationFilter,
-      levelFilter,
-      statusFilter,
-      typeFilter,
-    ],
-  )
 
   const isSearching = normalizeSearch(searchQuery).length > 0
   const hasActiveFilters = hasActiveTutorialFilters(filters)
@@ -90,15 +61,7 @@ export function TutorialCatalogView({
     [filters, isSearching, searchQuery],
   )
 
-  const applyFilters = (nextFilters: TutorialFilters) => {
-    setCatFilter(nextFilters.catFilter)
-    setLevelFilter(nextFilters.levelFilter)
-    setStatusFilter(nextFilters.statusFilter)
-    setDurationFilter(nextFilters.durationFilter)
-    setTypeFilter(nextFilters.typeFilter)
-  }
-
-  const resetFilters = () => applyFilters(DEFAULT_TUTORIAL_FILTERS)
+  const resetFilters = () => setFilters({ ...DEFAULT_TUTORIAL_FILTERS })
   const resetSearchAndFilters = () => {
     setSearchQuery("")
     resetFilters()
@@ -111,34 +74,37 @@ export function TutorialCatalogView({
         filters={filters}
         sortBy={sortBy}
         onSearchChange={setSearchQuery}
-        onFiltersChange={applyFilters}
+        onFiltersChange={setFilters}
         onSortChange={setSortBy}
       />
 
-      <TutorialSearchResults
-        visible={isSearching}
-        query={searchQuery}
-        results={searchResults}
-        hasActiveFilters={hasActiveFilters}
-        onOpenTutorial={openTuto}
-        onSearchChange={setSearchQuery}
-        onReset={resetSearchAndFilters}
-      />
+      {isSearching && (
+        <TutorialSearchResults
+          query={searchQuery}
+          results={searchResults}
+          hasActiveFilters={hasActiveFilters}
+          onOpenTutorial={openTuto}
+          onSearchChange={setSearchQuery}
+          onReset={resetSearchAndFilters}
+        />
+      )}
 
-      <TutorialFeaturedSections
-        visible={!isSearching && !hasActiveFilters}
-        recommendedTutorials={recommendedTutorials}
-        inProgressTutorials={inProgressTutorials}
-        onOpenTutorial={openTuto}
-      />
+      {!isSearching && !hasActiveFilters && (
+        <TutorialFeaturedSections
+          recommendedTutorials={recommendedTutorials}
+          inProgressTutorials={inProgressTutorials}
+          onOpenTutorial={openTuto}
+        />
+      )}
 
-      <TutorialLibrarySection
-        visible={!isSearching}
-        tutorials={catalogTutorials}
-        hasActiveFilters={hasActiveFilters}
-        onOpenTutorial={openTuto}
-        onResetFilters={resetFilters}
-      />
+      <div hidden={isSearching}>
+        <TutorialLibrarySection
+          tutorials={catalogTutorials}
+          hasActiveFilters={hasActiveFilters}
+          onOpenTutorial={openTuto}
+          onResetFilters={resetFilters}
+        />
+      </div>
     </>
   )
 }

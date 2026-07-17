@@ -4,7 +4,6 @@ import { POPULAR_IDS, SEARCH_SUGGESTIONS, mockTutoStatus } from "../data"
 import { TutorialCard } from "./TutorialCards"
 
 export function TutorialSearchResults({
-  visible,
   query,
   results,
   hasActiveFilters,
@@ -12,7 +11,6 @@ export function TutorialSearchResults({
   onSearchChange,
   onReset,
 }: {
-  visible: boolean
   query: string
   results: Tutoriel[]
   hasActiveFilters: boolean
@@ -20,8 +18,6 @@ export function TutorialSearchResults({
   onSearchChange: (query: string) => void
   onReset: () => void
 }) {
-  if (!visible) return null
-
   return (
     <section aria-label="Resultats de recherche">
       {results.length > 0 ? (

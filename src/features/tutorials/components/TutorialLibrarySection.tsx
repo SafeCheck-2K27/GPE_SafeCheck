@@ -9,13 +9,11 @@ import { TutorialCard } from "./TutorialCards"
 import { TutorialLibraryCategory } from "./TutorialLibraryCategory"
 
 export function TutorialLibrarySection({
-  visible,
   tutorials,
   hasActiveFilters,
   onOpenTutorial,
   onResetFilters,
 }: {
-  visible: boolean
   tutorials: Tutoriel[]
   hasActiveFilters: boolean
   onOpenTutorial: (tutorial: Tutoriel) => void
@@ -27,8 +25,6 @@ export function TutorialLibrarySection({
   const [openCategories, setOpenCategories] = useState<Set<string>>(
     () => new Set([LIBRARY_CATEGORIES[0].id]),
   )
-
-  if (!visible) return null
 
   const toggleCategory = (id: string) => {
     setOpenCategories((previousCategories) => {
