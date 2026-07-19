@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Navbar from "@/components/safecheck/Navbar"
 import Footer from "@/components/safecheck/Footer"
@@ -12,22 +12,14 @@ import { auditQuestions } from "@/features/audit/data"
 import { calculateAuditScore } from "@/features/audit/scoring"
 import type { AuditAnswers, AuditAnswerValue } from "@/features/audit/types"
 import { serializeAuditAnswers } from "@/features/audit/url-payload"
+import { useMediaQuery } from "@/lib/use-media-query"
 
 export default function AuditPage() {
   const router = useRouter()
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState<AuditAnswers>({})
   const [selectedOption, setSelectedOption] = useState<AuditAnswerValue | null>(null)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
-  useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 1024px)")
-    const syncSidebarWithViewport = () => setSidebarOpen(desktop.matches)
-
-    queueMicrotask(syncSidebarWithViewport)
-    desktop.addEventListener("change", syncSidebarWithViewport)
-    return () => desktop.removeEventListener("change", syncSidebarWithViewport)
-  }, [])
+  const isDesktop = useMediaQuery("(min-width: 1024px)")
 
   const question = auditQuestions[currentQuestionIndex]
   const isLast = currentQuestionIndex === auditQuestions.length - 1
@@ -69,13 +61,57 @@ export default function AuditPage() {
     <PageShell>
       <Navbar />
 
-      <main className="flex-1 flex relative">
+      <AuditContent
+        key={isDesktop ? "desktop" : "mobile"}
+        initialSidebarOpen={isDesktop}
+        currentQuestionIndex={currentQuestionIndex}
+        answers={answers}
+        selectedOption={selectedOption}
+        progress={progress}
+        onQuestionSelect={goToQuestion}
+        onSelect={handleSelect}
+        onPrevious={goPrevious}
+        onNext={goNext}
+      />
+
+      <Footer />
+    </PageShell>
+  )
+}
+
+function AuditContent({
+  initialSidebarOpen,
+  currentQuestionIndex,
+  answers,
+  selectedOption,
+  progress,
+  onQuestionSelect,
+  onSelect,
+  onPrevious,
+  onNext,
+}: {
+  initialSidebarOpen: boolean
+  currentQuestionIndex: number
+  answers: AuditAnswers
+  selectedOption: AuditAnswerValue | null
+  progress: number
+  onQuestionSelect: (index: number) => void
+  onSelect: (value: AuditAnswerValue) => void
+  onPrevious: () => void
+  onNext: () => void
+}) {
+  const [sidebarOpen, setSidebarOpen] = useState(initialSidebarOpen)
+  const question = auditQuestions[currentQuestionIndex]
+  const isLast = currentQuestionIndex === auditQuestions.length - 1
+
+  return (
+    <main className="flex-1 flex relative">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-60 dark:opacity-90"
           style={{
             backgroundImage:
-              "radial-gradient(at 18% 12%, rgba(37,99,235,0.10) 0px, transparent 45%), radial-gradient(at 82% 88%, rgba(99,102,241,0.10) 0px, transparent 45%)",
+              "radial-gradient(at 18% 12%, rgb(var(--sc-blue-rgb)/0.10) 0px, transparent 45%), radial-gradient(at 82% 88%, rgb(var(--sc-indigo-rgb)/0.10) 0px, transparent 45%)",
           }}
         />
         <div aria-hidden className="pointer-events-none absolute inset-0 sc-grid-overlay opacity-30" />
@@ -84,7 +120,7 @@ export default function AuditPage() {
           <button
             type="button"
             aria-label="Fermer la barre de progression"
-            className="fixed inset-x-0 bottom-0 top-16 z-30 bg-black/35 lg:hidden"
+            className="fixed inset-x-0 bottom-0 top-16 z-30 bg-[color:var(--sc-backdrop-soft)] lg:hidden"
             onClick={() => setSidebarOpen(false)}
           />
         )}
@@ -96,7 +132,7 @@ export default function AuditPage() {
           progress={progress}
           open={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
-          onQuestionSelect={goToQuestion}
+          onQuestionSelect={onQuestionSelect}
         />
 
         <div className="flex-1 flex flex-col relative z-10 min-w-0">
@@ -113,14 +149,11 @@ export default function AuditPage() {
             selectedOption={selectedOption}
             currentQuestionIndex={currentQuestionIndex}
             isLast={isLast}
-            onSelect={handleSelect}
-            onPrevious={goPrevious}
-            onNext={goNext}
+            onSelect={onSelect}
+            onPrevious={onPrevious}
+            onNext={onNext}
           />
         </div>
-      </main>
-
-      <Footer />
-    </PageShell>
+    </main>
   )
 }

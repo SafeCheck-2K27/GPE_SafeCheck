@@ -60,7 +60,7 @@ const mobileProfileLinkClassName =
   "text-sm font-medium text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-blue)]"
 
 const mobileLogoutClassName =
-  "text-sm font-medium text-[color:var(--sc-text-2)] hover:text-white hover:bg-[linear-gradient(180deg,#F87171_0%,#DC2626_100%)] px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+  "text-sm font-medium text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-text-on-strong)] hover:bg-[linear-gradient(180deg,var(--sc-danger-light)_0%,var(--sc-danger-deep)_100%)] px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
 
 
 export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSignupClick }: NavbarProps) {

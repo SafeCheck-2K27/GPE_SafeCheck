@@ -6,6 +6,7 @@ import Navbar from "@/components/safecheck/Navbar"
 import { ScButton, ScBadge } from "@/components/safecheck/primitives"
 import Footer from "@/components/safecheck/Footer"
 import { PageSuspenseFallback } from "@/components/safecheck/layout/PageSuspenseFallback"
+import { PageShell } from "@/components/safecheck/layout/PageShell"
 import { ArrowLeft, Bell, Hammer, HardHat, Wrench, Cone, CheckCircle2 } from "lucide-react"
 
 const FEATURE_LABELS: Record<string, { title: string; subtitle: string }> = {
@@ -59,7 +60,7 @@ function WipContent() {
   const [notified, setNotified] = useState(false)
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFFFFF] font-sans">
+    <PageShell className="bg-[color:var(--sc-surface)]">
       <Navbar onSignupClick={() => router.push("/compte/creer")} />
 
       <main className="flex-1 px-4 py-10 md:py-16">
@@ -112,31 +113,31 @@ function WipContent() {
           {/* Reassurance row */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
             <ReassureCard
-              icon={<HardHat className="w-5 h-5 text-[#157FE2]" />}
+              icon={<HardHat className="w-5 h-5 text-[color:var(--sc-blue)]" />}
               title="Conçu sérieusement"
               text="Cette fonctionnalité est priorisée sur la roadmap produit."
             />
             <ReassureCard
-              icon={<Hammer className="w-5 h-5 text-[#157FE2]" />}
+              icon={<Hammer className="w-5 h-5 text-[color:var(--sc-blue)]" />}
               title="Bientôt disponible"
               text="Une version beta sera ouverte aux comptes inscrits en premier."
             />
             <ReassureCard
-              icon={<Cone className="w-5 h-5 text-[#157FE2]" />}
+              icon={<Cone className="w-5 h-5 text-[color:var(--sc-blue)]" />}
               title="Pas de blocage"
               text="Vous pouvez continuer à utiliser tout le reste du site sans interruption."
             />
           </div>
 
-          <p className="text-center text-xs text-[#000]/60 mt-6">
-            Pendant que nous construisons, explorez l'<button onClick={() => router.push("/audit")} className="text-[#157FE2] underline hover:no-underline">audit de qualification</button>{" "}
-            ou les <button onClick={() => router.push("/essentiels")} className="text-[#157FE2] underline hover:no-underline">essentiels</button>.
+          <p className="text-center text-xs text-[color:var(--sc-text-muted)] mt-6">
+            Pendant que nous construisons, explorez l'<button onClick={() => router.push("/audit")} className="text-[color:var(--sc-blue)] underline hover:no-underline">audit de qualification</button>{" "}
+            ou les <button onClick={() => router.push("/essentiels")} className="text-[color:var(--sc-blue)] underline hover:no-underline">essentiels</button>.
           </p>
         </div>
       </main>
 
       <Footer />
-    </div>
+    </PageShell>
   )
 }
 
@@ -169,47 +170,47 @@ function ConstructionScene() {
       aria-hidden="true"
     >
       {/* Ground */}
-      <ellipse cx="120" cy="180" rx="100" ry="8" fill="#000" opacity="0.08" />
+      <ellipse cx="120" cy="180" rx="100" ry="8" fill="var(--sc-illustration-ink)" opacity="0.08" />
       {/* Worker body */}
       <g>
         {/* Helmet */}
-        <path d="M 90 70 Q 90 50, 120 50 Q 150 50, 150 70 L 150 78 L 90 78 Z" fill="#F59E0B" stroke="#000" strokeWidth="2" />
-        <rect x="88" y="76" width="64" height="4" fill="#000" />
-        <circle cx="120" cy="60" r="2.5" fill="#000" />
+        <path d="M 90 70 Q 90 50, 120 50 Q 150 50, 150 70 L 150 78 L 90 78 Z" fill="var(--sc-warn)" stroke="var(--sc-illustration-ink)" strokeWidth="2" />
+        <rect x="88" y="76" width="64" height="4" fill="var(--sc-illustration-ink)" />
+        <circle cx="120" cy="60" r="2.5" fill="var(--sc-illustration-ink)" />
         {/* Face */}
-        <circle cx="120" cy="92" r="14" fill="#FDE3CD" stroke="#000" strokeWidth="2" />
-        <circle cx="115" cy="90" r="1.5" fill="#000" />
-        <circle cx="125" cy="90" r="1.5" fill="#000" />
-        <path d="M 115 96 Q 120 99, 125 96" stroke="#000" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+        <circle cx="120" cy="92" r="14" fill="var(--sc-illustration-skin)" stroke="var(--sc-illustration-ink)" strokeWidth="2" />
+        <circle cx="115" cy="90" r="1.5" fill="var(--sc-illustration-ink)" />
+        <circle cx="125" cy="90" r="1.5" fill="var(--sc-illustration-ink)" />
+        <path d="M 115 96 Q 120 99, 125 96" stroke="var(--sc-illustration-ink)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
         {/* Body / vest */}
-        <path d="M 95 108 L 145 108 L 150 160 L 90 160 Z" fill="#157FE2" stroke="#000" strokeWidth="2" />
-        <rect x="100" y="124" width="40" height="3" fill="#FACC15" />
-        <rect x="100" y="135" width="40" height="3" fill="#FACC15" />
+        <path d="M 95 108 L 145 108 L 150 160 L 90 160 Z" fill="var(--sc-blue)" stroke="var(--sc-illustration-ink)" strokeWidth="2" />
+        <rect x="100" y="124" width="40" height="3" fill="var(--sc-illustration-yellow)" />
+        <rect x="100" y="135" width="40" height="3" fill="var(--sc-illustration-yellow)" />
         {/* Arms */}
-        <path d="M 95 110 L 70 140 L 76 148 L 100 122 Z" fill="#157FE2" stroke="#000" strokeWidth="2" />
-        <path d="M 145 110 L 175 138 L 168 145 L 142 122 Z" fill="#157FE2" stroke="#000" strokeWidth="2" />
+        <path d="M 95 110 L 70 140 L 76 148 L 100 122 Z" fill="var(--sc-blue)" stroke="var(--sc-illustration-ink)" strokeWidth="2" />
+        <path d="M 145 110 L 175 138 L 168 145 L 142 122 Z" fill="var(--sc-blue)" stroke="var(--sc-illustration-ink)" strokeWidth="2" />
         {/* Hands */}
-        <circle cx="73" cy="144" r="5" fill="#FDE3CD" stroke="#000" strokeWidth="1.5" />
-        <circle cx="172" cy="142" r="5" fill="#FDE3CD" stroke="#000" strokeWidth="1.5" />
+        <circle cx="73" cy="144" r="5" fill="var(--sc-illustration-skin)" stroke="var(--sc-illustration-ink)" strokeWidth="1.5" />
+        <circle cx="172" cy="142" r="5" fill="var(--sc-illustration-skin)" stroke="var(--sc-illustration-ink)" strokeWidth="1.5" />
         {/* Shovel */}
-        <line x1="172" y1="142" x2="200" y2="100" stroke="#000" strokeWidth="3" strokeLinecap="round" />
-        <path d="M 195 95 L 215 80 L 210 105 L 200 110 Z" fill="#9CBBD8" stroke="#000" strokeWidth="2" />
+        <line x1="172" y1="142" x2="200" y2="100" stroke="var(--sc-illustration-ink)" strokeWidth="3" strokeLinecap="round" />
+        <path d="M 195 95 L 215 80 L 210 105 L 200 110 Z" fill="var(--sc-illustration-shovel)" stroke="var(--sc-illustration-ink)" strokeWidth="2" />
         {/* Legs */}
-        <rect x="100" y="158" width="14" height="20" fill="#1E40AF" stroke="#000" strokeWidth="2" />
-        <rect x="126" y="158" width="14" height="20" fill="#1E40AF" stroke="#000" strokeWidth="2" />
-        <rect x="98" y="176" width="18" height="5" fill="#000" />
-        <rect x="124" y="176" width="18" height="5" fill="#000" />
+        <rect x="100" y="158" width="14" height="20" fill="var(--sc-blue-deep)" stroke="var(--sc-illustration-ink)" strokeWidth="2" />
+        <rect x="126" y="158" width="14" height="20" fill="var(--sc-blue-deep)" stroke="var(--sc-illustration-ink)" strokeWidth="2" />
+        <rect x="98" y="176" width="18" height="5" fill="var(--sc-illustration-ink)" />
+        <rect x="124" y="176" width="18" height="5" fill="var(--sc-illustration-ink)" />
       </g>
       {/* Bricks */}
       <g>
-        <rect x="20" y="170" width="20" height="10" fill="#DC2626" stroke="#000" strokeWidth="1.5" />
-        <rect x="42" y="170" width="20" height="10" fill="#B91C1C" stroke="#000" strokeWidth="1.5" />
-        <rect x="30" y="158" width="20" height="10" fill="#DC2626" stroke="#000" strokeWidth="1.5" />
+        <rect x="20" y="170" width="20" height="10" fill="var(--sc-danger-deep)" stroke="var(--sc-illustration-ink)" strokeWidth="1.5" />
+        <rect x="42" y="170" width="20" height="10" fill="var(--sc-danger-strong)" stroke="var(--sc-illustration-ink)" strokeWidth="1.5" />
+        <rect x="30" y="158" width="20" height="10" fill="var(--sc-danger-deep)" stroke="var(--sc-illustration-ink)" strokeWidth="1.5" />
       </g>
       {/* Tool box */}
       <g>
-        <rect x="195" y="160" width="32" height="20" fill="#157FE2" stroke="#000" strokeWidth="1.5" />
-        <rect x="200" y="155" width="22" height="6" fill="#1472CC" stroke="#000" strokeWidth="1.5" />
+        <rect x="195" y="160" width="32" height="20" fill="var(--sc-blue)" stroke="var(--sc-illustration-ink)" strokeWidth="1.5" />
+        <rect x="200" y="155" width="22" height="6" fill="var(--sc-illustration-toolbox)" stroke="var(--sc-illustration-ink)" strokeWidth="1.5" />
       </g>
     </svg>
   )

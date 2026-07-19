@@ -16,7 +16,7 @@ export type DomainId =
   | "hardware"
   | "data-ia"
 
-export interface RelatedTutoriel {
+interface RelatedTutoriel {
   /** id de la fiche tutoriel SafeCheck (route /tutoriels/[id]) */
   id: number
   title: string
@@ -49,7 +49,7 @@ export interface LexiqueTerm {
   tutoriels: RelatedTutoriel[]
 }
 
-export interface LexiqueDomain {
+interface LexiqueDomain {
   id: DomainId
   nom: string
   description: string

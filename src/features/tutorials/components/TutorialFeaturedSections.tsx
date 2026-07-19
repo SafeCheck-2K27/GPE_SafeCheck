@@ -30,7 +30,7 @@ export function TutorialFeaturedSections({
       <section className="mb-8" aria-label="Recommande pour vous">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-[linear-gradient(135deg,#3B82F6,#2563EB)] text-white shadow-[var(--sc-shadow-blue-sm)]">
+            <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] text-[color:var(--sc-text-on-strong)] shadow-[var(--sc-shadow-blue-sm)]">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
@@ -97,7 +97,7 @@ export function TutorialFeaturedSections({
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[color:var(--sc-blue)] text-white">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)]">
                         <Play className="w-2.5 h-2.5 fill-white" /> En cours
                       </span>
                       <span className="text-[10px] text-[color:var(--sc-text-muted)] flex items-center gap-1">
@@ -118,7 +118,7 @@ export function TutorialFeaturedSections({
                     <div className="flex items-center gap-2 mt-2">
                       <div className="flex-1 h-1.5 bg-[color:var(--sc-surface-2)] rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-[linear-gradient(90deg,#3B82F6,#2563EB)] rounded-full transition-all"
+                          className="h-full bg-[linear-gradient(90deg,var(--sc-blue-soft),var(--sc-blue))] rounded-full transition-all"
                           style={{ width: `${progressPercentage}%` }}
                         />
                       </div>

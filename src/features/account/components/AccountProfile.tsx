@@ -113,9 +113,9 @@ export function AccountProfile({
       </AccountSectionCard>
 
       <section className="rounded-2xl overflow-hidden border border-[color:var(--sc-danger)]/30 bg-[color:var(--sc-surface)] shadow-[var(--sc-shadow-sm)]">
-        <header className="flex items-start justify-between gap-4 px-5 md:px-6 py-4 bg-[rgba(239,68,68,0.06)] border-b border-[color:var(--sc-danger)]/20">
+        <header className="flex items-start justify-between gap-4 px-5 md:px-6 py-4 bg-[rgb(var(--sc-danger-rgb)/0.06)] border-b border-[color:var(--sc-danger)]/20">
           <div className="flex items-start gap-3">
-            <span className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg bg-[rgba(239,68,68,0.12)] text-[color:var(--sc-danger)] border border-[color:var(--sc-danger)]/25">
+            <span className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg bg-[rgb(var(--sc-danger-rgb)/0.12)] text-[color:var(--sc-danger)] border border-[color:var(--sc-danger)]/25">
               <AlertTriangle className="w-4 h-4" />
             </span>
             <div>

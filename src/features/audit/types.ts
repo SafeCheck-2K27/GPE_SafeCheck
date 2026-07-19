@@ -1,6 +1,6 @@
 export type AuditAnswerValue = "a" | "b" | "c" | "d"
 
-export interface AuditOption {
+interface AuditOption {
   label: string
   value: AuditAnswerValue
   score: number

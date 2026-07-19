@@ -150,9 +150,9 @@ export const scoreRecommendationCategoryLabels: Record<
 }
 
 export const scoreRecommendationUrgencyColors: Record<ScoreRecommendation["urgency"], string> = {
-  Haute: "#DC2626",
-  Moyenne: "#EA580C",
-  Faible: "#16A34A",
+  Haute: "var(--sc-danger-deep)",
+  Moyenne: "var(--sc-warn-vivid)",
+  Faible: "var(--sc-success-vivid)",
 }
 
 export const scoreRecommendationImpactColors: Record<ScoreRecommendation["impact"], string> = {

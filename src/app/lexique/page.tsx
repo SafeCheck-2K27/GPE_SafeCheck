@@ -365,7 +365,7 @@ function TermDetailPanel({
       onClose={onClose}
       zIndex={60}
       aria-label={`Définition de ${term.nom}`}
-      className="items-stretch justify-end bg-black/40 px-0 backdrop-blur-none sc-fade-in"
+      className="items-stretch justify-end px-0 backdrop-blur-none sc-fade-in"
     >
       <div
         className="w-full max-w-md h-full bg-[color:var(--sc-surface)] overflow-y-auto shadow-[var(--sc-shadow-lg)] border-l border-[color:var(--sc-border)] sc-fade-in"

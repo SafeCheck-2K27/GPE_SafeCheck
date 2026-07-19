@@ -160,8 +160,8 @@ function SummaryTile({
 }) {
   const palette: Record<string, string> = {
     success:
-      "bg-[rgba(16,185,129,0.08)] border-[rgba(16,185,129,0.25)] text-[color:var(--sc-success)] " +
-      "dark:bg-[rgba(16,185,129,0.12)] dark:border-[rgba(16,185,129,0.30)] dark:text-[#6EE7B7]",
+      "bg-[rgb(var(--sc-success-rgb)/0.08)] border-[rgb(var(--sc-success-rgb)/0.25)] text-[color:var(--sc-success)] " +
+      "dark:bg-[rgb(var(--sc-success-rgb)/0.12)] dark:border-[rgb(var(--sc-success-rgb)/0.30)] dark:text-[color:var(--sc-success-text)]",
     info:
       "bg-[color:var(--sc-bg-soft)] border-[color:var(--sc-border)] text-[color:var(--sc-blue)]",
     muted:
@@ -196,9 +196,9 @@ function AuditRow({ audit }: { audit: typeof mockAudits[number] }) {
   const StatusIcon = meta.icon
 
   return (
-    <div className="flex items-center justify-between gap-4 rounded-xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] p-3.5 hover:border-[color:var(--sc-border-strong)] hover:shadow-[var(--sc-shadow-sm)] transition-all">
+    <ScCard className="flex items-center justify-between gap-4 p-3.5 shadow-none hover:border-[color:var(--sc-border-strong)] hover:shadow-[var(--sc-shadow-sm)] transition-all">
       <div className="flex items-start gap-3 min-w-0">
-        <span className={`shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg ${audit.status === "termine" ? "bg-[rgba(16,185,129,0.10)] text-[color:var(--sc-success)] border border-[rgba(16,185,129,0.25)] dark:bg-[rgba(16,185,129,0.14)] dark:text-[#6EE7B7] dark:border-[rgba(16,185,129,0.32)]" : audit.status === "en-cours" ? "bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue)] border border-[color:var(--sc-border)]" : "bg-[color:var(--sc-surface-2)] text-[color:var(--sc-text-muted)] border border-[color:var(--sc-border)]" }`}
+        <span className={`shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg ${audit.status === "termine" ? "bg-[rgb(var(--sc-success-rgb)/0.10)] text-[color:var(--sc-success)] border border-[rgb(var(--sc-success-rgb)/0.25)] dark:bg-[rgb(var(--sc-success-rgb)/0.14)] dark:text-[color:var(--sc-success-text)] dark:border-[rgb(var(--sc-success-rgb)/0.32)]" : audit.status === "en-cours" ? "bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue)] border border-[color:var(--sc-border)]" : "bg-[color:var(--sc-surface-2)] text-[color:var(--sc-text-muted)] border border-[color:var(--sc-border)]" }`}
         >
           <StatusIcon className="w-4 h-4" />
         </span>
@@ -261,7 +261,7 @@ function AuditRow({ audit }: { audit: typeof mockAudits[number] }) {
           </ScButton>
         )}
       </div>
-    </div>
+    </ScCard>
   )
 }
 
@@ -270,7 +270,7 @@ function TutoRow({ tuto }: { tuto: typeof mockTutos[number] }) {
   const Icon = tuto.icon
   const isDone = tuto.status === "termine"
   return (
-    <div className="flex items-center justify-between gap-4 rounded-xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] p-3.5 hover:border-[color:var(--sc-border-strong)] hover:shadow-[var(--sc-shadow-sm)] transition-all">
+    <ScCard className="flex items-center justify-between gap-4 p-3.5 shadow-none hover:border-[color:var(--sc-border-strong)] hover:shadow-[var(--sc-shadow-sm)] transition-all">
       <div className="flex items-start gap-3 min-w-0">
         <span className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue)] border border-[color:var(--sc-border)]">
           <Icon className="w-4 h-4" />
@@ -325,6 +325,6 @@ function TutoRow({ tuto }: { tuto: typeof mockTutos[number] }) {
           </ScButton>
         )}
       </div>
-    </div>
+    </ScCard>
   )
 }

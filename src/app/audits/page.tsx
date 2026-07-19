@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import Navbar from "@/components/safecheck/Navbar"
 import { ScButton, ScBadge } from "@/components/safecheck/primitives"
 import Footer from "@/components/safecheck/Footer"
+import { PageShell } from "@/components/safecheck/layout/PageShell"
 import {
   Clock,
   Target,
@@ -54,7 +55,7 @@ const AUDIT_LEVELS: AuditLevel[] = [
     status: "available",
     href: "/audit",
     icon: Zap,
-    accent: "#157FE2",
+    accent: "var(--sc-blue)",
   },
   {
     id: "standard",
@@ -74,7 +75,7 @@ const AUDIT_LEVELS: AuditLevel[] = [
     status: "coming",
     href: "/wip?feature=audit-standard",
     icon: ShieldCheck,
-    accent: "#0EA5E9",
+    accent: "var(--sc-info)",
   },
   {
     id: "complet",
@@ -94,7 +95,7 @@ const AUDIT_LEVELS: AuditLevel[] = [
     status: "coming",
     href: "/wip?feature=audit-complet",
     icon: Microscope,
-    accent: "#0F766E",
+    accent: "var(--sc-teal)",
   },
   {
     id: "expert",
@@ -114,7 +115,7 @@ const AUDIT_LEVELS: AuditLevel[] = [
     status: "premium",
     href: "/wip?feature=audit-expert",
     icon: Crown,
-    accent: "#9A3412",
+    accent: "var(--sc-orange)",
   },
 ]
 
@@ -123,21 +124,21 @@ export default function AuditsPage() {
   const [hovered, setHovered] = useState<string | null>(null)
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFFFFF] font-sans">
+    <PageShell className="bg-[color:var(--sc-surface)]">
       <Navbar onSignupClick={() => router.push("/compte/creer")} />
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="bg-[#C3E8FF] border-b border-[#B3DBEF]">
+        <section className="bg-[color:var(--sc-bg-soft)] border-b border-[color:var(--sc-border)]">
           <div className="max-w-5xl mx-auto px-4 py-12 md:py-16">
             <ScBadge tone="info" className="mb-4">
               <ShieldCheck className="w-3 h-3" />
               Choisissez votre niveau d'audit
             </ScBadge>
-            <h1 className="text-3xl md:text-5xl font-extrabold text-[#000] mb-4 text-balance">
+            <h1 className="text-3xl md:text-5xl font-extrabold text-[color:var(--sc-text)] mb-4 text-balance">
               Quatre niveaux d'audit, un seul objectif&nbsp;: vous protéger.
             </h1>
-            <p className="text-base md:text-lg text-[#000]/80 max-w-3xl leading-relaxed text-pretty">
+            <p className="text-base md:text-lg text-[color:var(--sc-text)] max-w-3xl leading-relaxed text-pretty">
               Chaque niveau d'audit SafeCheck explore en profondeur un aspect différent de votre sécurité numérique.
               Commencez par l'audit de qualification pour obtenir votre profil en quelques minutes, puis montez en
               puissance à votre rythme.
@@ -145,21 +146,21 @@ export default function AuditsPage() {
 
             {/* Pause/save banner */}
             <div
-              className="mt-6 flex items-start gap-3 p-4 rounded-lg bg-[#FFFFFF]"
-              style={{ border: "1px solid #B3DBEF", boxShadow: "2px 2px 0px #C0DDF8" }}
+              className="mt-6 flex items-start gap-3 p-4 rounded-lg bg-[color:var(--sc-surface)]"
+              style={{ border: "1px solid var(--sc-border)", boxShadow: "var(--sc-shadow-sm)" }}
             >
-              <div className="shrink-0 w-9 h-9 rounded-full bg-[#C3E8FF] flex items-center justify-center">
-                <Save className="w-4 h-4 text-[#157FE2]" />
+              <div className="shrink-0 w-9 h-9 rounded-full bg-[color:var(--sc-bg-soft)] flex items-center justify-center">
+                <Save className="w-4 h-4 text-[color:var(--sc-blue)]" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-semibold text-[#000]">
+                <p className="text-sm font-semibold text-[color:var(--sc-text)]">
                   Tous les audits peuvent être interrompus, sauvegardés et repris plus tard.
                 </p>
-                <p className="text-xs text-[#000]/70 mt-0.5">
+                <p className="text-xs text-[color:var(--sc-text-2)] mt-0.5">
                   Vous reprenez exactement à la même question, sans rien perdre.
                 </p>
               </div>
-              <Pause className="w-4 h-4 text-[#157FE2] mt-2 hidden md:block" />
+              <Pause className="w-4 h-4 text-[color:var(--sc-blue)] mt-2 hidden md:block" />
             </div>
           </div>
         </section>
@@ -183,17 +184,17 @@ export default function AuditsPage() {
           {/* Footer info */}
           <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
             <InfoCard
-              icon={<Clock className="w-5 h-5 text-[#157FE2]" />}
+              icon={<Clock className="w-5 h-5 text-[color:var(--sc-blue)]" />}
               title="À votre rythme"
               text="Chaque audit s'adapte à votre disponibilité. Lancez, mettez en pause, reprenez."
             />
             <InfoCard
-              icon={<Target className="w-5 h-5 text-[#157FE2]" />}
+              icon={<Target className="w-5 h-5 text-[color:var(--sc-blue)]" />}
               title="Un plan d'action"
               text="Chaque audit débouche sur des recommandations concrètes et priorisées."
             />
             <InfoCard
-              icon={<Layers className="w-5 h-5 text-[#157FE2]" />}
+              icon={<Layers className="w-5 h-5 text-[color:var(--sc-blue)]" />}
               title="Évolutif"
               text="Refaites un audit régulièrement pour suivre vos progrès."
             />
@@ -202,7 +203,7 @@ export default function AuditsPage() {
       </main>
 
       <Footer />
-    </div>
+    </PageShell>
   )
 }
 
@@ -233,11 +234,11 @@ function AuditCard({
     <article
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
-      className="rounded-xl bg-[#FFFFFF] sc-fade-in cursor-pointer group transition-all duration-200"
+      className="rounded-xl bg-[color:var(--sc-surface)] sc-fade-in cursor-pointer group transition-all duration-200"
       style={{
         animationDelay: `${index * 60}ms`,
-        border: "1px solid #B3DBEF",
-        boxShadow: hovered ? "6px 6px 0px #C0DDF8" : "3px 3px 0px #C0DDF8",
+        border: "1px solid var(--sc-border)",
+        boxShadow: hovered ? "var(--sc-shadow-lg)" : "var(--sc-shadow)",
         transform: hovered ? "translateY(-2px)" : "translateY(0)",
       }}
       onClick={onClick}
@@ -255,31 +256,31 @@ function AuditCard({
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-2">
             <LevelTag level={audit.level} />
-            <span className="inline-flex items-center gap-1 text-xs font-medium text-[#000]/70">
+            <span className="inline-flex items-center gap-1 text-xs font-medium text-[color:var(--sc-text-2)]">
               <Clock className="w-3 h-3" />
               {audit.durationShort}
             </span>
             <span className="ml-auto md:hidden">{statusBadge}</span>
           </div>
-          <h2 className="text-lg md:text-xl font-extrabold text-[#000] mb-1.5 text-balance">
+          <h2 className="text-lg md:text-xl font-extrabold text-[color:var(--sc-text)] mb-1.5 text-balance">
             {audit.title}
           </h2>
-          <p className="text-sm text-[#000]/75 leading-relaxed mb-3 text-pretty">{audit.goal}</p>
+          <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed mb-3 text-pretty">{audit.goal}</p>
 
           {/* Outputs */}
           <div className="flex flex-wrap gap-1.5">
             {audit.outputs.map((out) => (
               <span
                 key={out}
-                className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded bg-[#F6F6F6] border border-[#AEAEAE]/40 text-[#000]/80"
+                className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded bg-[color:var(--sc-surface-2)] border border-[color:var(--sc-border)] text-[color:var(--sc-text)]"
               >
-                <CheckCircle2 className="w-3 h-3 text-[#157FE2]" />
+                <CheckCircle2 className="w-3 h-3 text-[color:var(--sc-blue)]" />
                 {out}
               </span>
             ))}
           </div>
 
-          <p className="text-xs text-[#000]/60 mt-3 italic">{audit.audience}</p>
+          <p className="text-xs text-[color:var(--sc-text-muted)] mt-3 italic">{audit.audience}</p>
         </div>
 
         {/* CTA + status */}
@@ -310,7 +311,7 @@ function AuditCard({
 function LevelTag({ level }: { level: string }) {
   return (
     <span
-      className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider text-[#157FE2] bg-[#157FE2]/10 border border-[#157FE2]/25"
+      className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider text-[color:var(--sc-blue)] bg-[color:var(--sc-blue)]/10 border border-[color:var(--sc-blue)]/25"
     >
       {level}
     </span>
@@ -320,14 +321,14 @@ function LevelTag({ level }: { level: string }) {
 function InfoCard({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
   return (
     <div
-      className="rounded-lg p-4 bg-[#FFFFFF]"
-      style={{ border: "1px solid #B3DBEF", boxShadow: "2px 2px 0px #C0DDF8" }}
+      className="rounded-lg p-4 bg-[color:var(--sc-surface)]"
+      style={{ border: "1px solid var(--sc-border)", boxShadow: "var(--sc-shadow-sm)" }}
     >
       <div className="flex items-center gap-2 mb-1.5">
         {icon}
-        <span className="font-semibold text-sm text-[#000]">{title}</span>
+        <span className="font-semibold text-sm text-[color:var(--sc-text)]">{title}</span>
       </div>
-      <p className="text-xs text-[#000]/70 leading-relaxed">{text}</p>
+      <p className="text-xs text-[color:var(--sc-text-2)] leading-relaxed">{text}</p>
     </div>
   )
 }

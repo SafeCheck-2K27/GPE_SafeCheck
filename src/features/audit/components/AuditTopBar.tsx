@@ -50,7 +50,7 @@ export function AuditTopBar({
         </div>
         <div className="h-1.5 rounded-full overflow-hidden bg-[color:var(--sc-surface-2)] border border-[color:var(--sc-border)]">
           <div
-            className="h-full rounded-full transition-all duration-500 bg-[linear-gradient(90deg,var(--sc-blue-soft),var(--sc-blue),var(--sc-indigo))] shadow-[0_0_10px_rgba(37,99,235,0.40)]"
+            className="h-full rounded-full transition-all duration-500 bg-[linear-gradient(90deg,var(--sc-blue-soft),var(--sc-blue),var(--sc-indigo))] shadow-[0_0_10px_rgb(var(--sc-blue-rgb)/0.40)]"
             style={{ width: `${progress}%` }}
           />
         </div>

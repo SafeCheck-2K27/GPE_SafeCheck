@@ -10,13 +10,12 @@ import {
   X,
   Zap,
 } from "lucide-react"
-import { ScBadge } from "@/components/safecheck/primitives"
+import { ScBadge, ScChip } from "@/components/safecheck/primitives"
 import { tutoriels } from "../data/catalog"
 import { SEARCH_SUGGESTIONS } from "../data"
 import { normalizeSearch } from "../search"
 import type { SortOption, TutorialFilters } from "../types"
 import { TutorialCatalogFilters } from "./TutorialCatalogFilters"
-import { TutorialViewChip } from "./TutorialViewChip"
 
 export function TutorialCatalogToolbar({
   searchQuery,
@@ -41,7 +40,7 @@ export function TutorialCatalogToolbar({
         className="pointer-events-none absolute inset-0 opacity-80"
         style={{
           background:
-            "radial-gradient(at 0% 0%, rgba(37,99,235,0.12), transparent 50%), radial-gradient(at 100% 50%, rgba(99,102,241,0.10), transparent 50%)",
+            "radial-gradient(at 0% 0%, rgb(var(--sc-blue-rgb)/0.12), transparent 50%), radial-gradient(at 100% 50%, rgb(var(--sc-indigo-rgb)/0.10), transparent 50%)",
         }}
         aria-hidden
       />
@@ -104,27 +103,27 @@ export function TutorialCatalogToolbar({
         </div>
 
         <div className="flex flex-wrap items-center gap-2 mb-4">
-          <TutorialViewChip onClick={() => router.push("/tutoriels")}>
+          <ScChip onClick={() => router.push("/tutoriels")}>
             <Sparkles className="w-3.5 h-3.5" /> Mes tutoriels
-          </TutorialViewChip>
-          <TutorialViewChip active>
+          </ScChip>
+          <ScChip active>
             <BookOpen className="w-3.5 h-3.5" /> Tous
-          </TutorialViewChip>
-          <TutorialViewChip
+          </ScChip>
+          <ScChip
             onClick={() => router.push("/tutoriels?niveau=debutant")}
           >
             <GraduationCap className="w-3.5 h-3.5" /> Debutant
-          </TutorialViewChip>
-          <TutorialViewChip
+          </ScChip>
+          <ScChip
             onClick={() => router.push("/tutoriels?niveau=intermediaire")}
           >
             <Flame className="w-3.5 h-3.5" /> Intermediaire
-          </TutorialViewChip>
-          <TutorialViewChip
+          </ScChip>
+          <ScChip
             onClick={() => router.push("/tutoriels?niveau=avance")}
           >
             <Zap className="w-3.5 h-3.5" /> Avance
-          </TutorialViewChip>
+          </ScChip>
         </div>
 
         <TutorialCatalogFilters

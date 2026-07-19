@@ -17,7 +17,7 @@ export function TutorialProgressionHero({
         className="pointer-events-none absolute inset-0 opacity-80"
         style={{
           background:
-            "radial-gradient(at 0% 0%, rgba(37,99,235,0.12), transparent 50%), radial-gradient(at 100% 50%, rgba(6,182,212,0.10), transparent 50%), radial-gradient(at 50% 100%, rgba(99,102,241,0.08), transparent 50%)",
+            "radial-gradient(at 0% 0%, rgb(var(--sc-blue-rgb)/0.12), transparent 50%), radial-gradient(at 100% 50%, rgb(var(--sc-cyan-rgb)/0.10), transparent 50%), radial-gradient(at 50% 100%, rgb(var(--sc-indigo-rgb)/0.08), transparent 50%)",
         }}
         aria-hidden
       />
@@ -26,11 +26,11 @@ export function TutorialProgressionHero({
           {/* LEFT */}
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
             <div className="relative mb-4">
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center text-white text-3xl md:text-4xl font-bold font-display bg-[linear-gradient(135deg,#3B82F6,#2563EB_60%,#6366F1)] shadow-[0_12px_28px_-10px_rgba(37,99,235,0.55)]">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center text-[color:var(--sc-text-on-strong)] text-3xl md:text-4xl font-bold font-display bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue)_60%,var(--sc-indigo))] shadow-[0_12px_28px_-10px_rgb(var(--sc-blue-rgb)/0.55)]">
                 P
               </div>
-              <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-[#F59E0B] border-3 border-[color:var(--sc-surface)] flex items-center justify-center">
-                <Star className="w-4 h-4 text-white fill-white" />
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-[color:var(--sc-warn)] border-3 border-[color:var(--sc-surface)] flex items-center justify-center">
+                <Star className="w-4 h-4 text-[color:var(--sc-text-on-strong)] fill-white" />
               </div>
             </div>
             <div className="mb-2">
@@ -65,7 +65,7 @@ export function TutorialProgressionHero({
               </div>
               <div className="relative h-3 bg-[color:var(--sc-surface-2)] rounded-full overflow-hidden mb-3">
                 <div
-                  className="absolute inset-y-0 left-0 bg-[linear-gradient(90deg,#3B82F6,#2563EB,#6366F1)] rounded-full transition-all duration-700"
+                  className="absolute inset-y-0 left-0 bg-[linear-gradient(90deg,var(--sc-blue-soft),var(--sc-blue),var(--sc-indigo))] rounded-full transition-all duration-700"
                   style={{ width: `${userProgress.progressPercent}%` }}
                 />
               </div>
@@ -80,7 +80,7 @@ export function TutorialProgressionHero({
                   >
                     <div
                       className={cn(
-                        "w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white mb-1 transition-transform",
+                        "w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-[color:var(--sc-text-on-strong)] mb-1 transition-transform",
                         i === userProgress.levelIndex &&
                           "scale-125 ring-2 ring-offset-2 ring-[color:var(--sc-blue)]",
                       )}
@@ -160,8 +160,8 @@ export function TutorialProgressionHero({
               </div>
               <div className="flex items-center gap-3 mb-3">
                 <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold"
-                  style={{ backgroundColor: levels[userProgress.levelIndex + 1]?.color || "#06B6D4" }}
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-[color:var(--sc-text-on-strong)] text-sm font-bold"
+                  style={{ backgroundColor: levels[userProgress.levelIndex + 1]?.color || "var(--sc-cyan)" }}
                 >
                   {levels[userProgress.levelIndex + 1]?.icon || "L"}
                 </div>
@@ -183,7 +183,7 @@ export function TutorialProgressionHero({
               </div>
             </ScCard>
 
-            <div className="rounded-xl border-2 border-[color:var(--sc-blue)]/30 bg-[linear-gradient(135deg,rgba(37,99,235,0.06)_0%,rgba(99,102,241,0.06)_100%)] p-4">
+            <div className="rounded-xl border-2 border-[color:var(--sc-blue)]/30 bg-[linear-gradient(135deg,rgb(var(--sc-blue-rgb)/0.06)_0%,rgb(var(--sc-indigo-rgb)/0.06)_100%)] p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="w-4 h-4 text-[color:var(--sc-blue)]" />
                 <span className="text-xs font-bold text-[color:var(--sc-blue)]">Recommande pour toi</span>

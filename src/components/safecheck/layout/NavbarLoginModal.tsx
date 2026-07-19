@@ -72,7 +72,7 @@ export function NavbarLoginModal({
       <form
         onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgba(15,23,42,0.30)]"
+        className="w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgb(var(--sc-ink-rgb)/0.30)]"
       >
         <div className="flex items-center gap-2 mb-1">
           <SafeCheckMark />
@@ -138,7 +138,7 @@ export function NavbarLoginModal({
           {error && (
             <p
               role="alert"
-              className="text-xs font-medium text-[color:var(--sc-danger,#DC2626)]"
+              className="text-xs font-medium text-[color:var(--sc-danger)]"
             >
               {error}
             </p>

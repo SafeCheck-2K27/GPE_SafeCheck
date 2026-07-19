@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import Navbar from "@/components/safecheck/Navbar"
 import { ScButton, ScBadge } from "@/components/safecheck/primitives"
 import Footer from "@/components/safecheck/Footer"
+import { PageShell } from "@/components/safecheck/layout/PageShell"
 import {
   ShieldAlert,
   Activity,
@@ -34,7 +35,7 @@ const EXAMPLES = [
     quote:
       "Un utilisateur de plus de 50 ans peut avoir un risque plus élevé d'être ciblé par des attaques de phishing ciblées sur des services bancaires et administratifs.",
     risk: "Phishing ciblé",
-    accent: "#0EA5E9",
+    accent: "var(--sc-info)",
   },
   {
     icon: Stethoscope,
@@ -42,7 +43,7 @@ const EXAMPLES = [
     quote:
       "Une personne travaillant dans un environnement sensible - médical, industriel, énergétique - peut être davantage exposée aux tentatives d'intrusion ou d'ingénierie sociale.",
     risk: "Ingénierie sociale",
-    accent: "#0F766E",
+    accent: "var(--sc-teal)",
   },
   {
     icon: Cpu,
@@ -50,7 +51,7 @@ const EXAMPLES = [
     quote:
       "Un poste qui n'est pas à jour augmente significativement le risque d'être touché par une exploitation de vulnérabilité connue.",
     risk: "Exploits CVE",
-    accent: "#9A3412",
+    accent: "var(--sc-orange)",
   },
 ]
 
@@ -58,22 +59,22 @@ export default function VulnerabilitePage() {
   const router = useRouter()
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFFFFF] font-sans">
+    <PageShell className="bg-[color:var(--sc-surface)]">
       <Navbar onSignupClick={() => router.push("/compte/creer")} />
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="bg-[#C3E8FF] border-b border-[#B3DBEF]">
+        <section className="bg-[color:var(--sc-bg-soft)] border-b border-[color:var(--sc-border)]">
           <div className="max-w-5xl mx-auto px-4 py-12 md:py-16">
             <ScBadge tone="warn" className="mb-4">
               <ShieldAlert className="w-3 h-3" />
               Test pédagogique d'exposition
             </ScBadge>
 
-            <h1 className="text-3xl md:text-5xl font-extrabold text-[#000] mb-4 text-balance">
+            <h1 className="text-3xl md:text-5xl font-extrabold text-[color:var(--sc-text)] mb-4 text-balance">
               Tester ma vulnérabilité&nbsp;: comprendre votre niveau d'exposition.
             </h1>
-            <p className="text-base md:text-lg text-[#000]/80 max-w-3xl leading-relaxed text-pretty">
+            <p className="text-base md:text-lg text-[color:var(--sc-text)] max-w-3xl leading-relaxed text-pretty">
               Ce test s'appuie sur des rapports officiels, des statistiques publiques et plusieurs critères pour
               estimer votre niveau d'exposition potentiel à différents types d'attaques numériques. Il ne s'agit pas
               d'un diagnostic technique, mais d'un repère personnalisé&nbsp;: comprendre où vous vous situez et
@@ -95,8 +96,8 @@ export default function VulnerabilitePage() {
         {/* Comment ça marche */}
         <section className="max-w-5xl mx-auto px-4 py-10 md:py-14">
           <div className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-[#000] mb-2">Comment fonctionne ce test ?</h2>
-            <p className="text-sm text-[#000]/70 max-w-2xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-[color:var(--sc-text)] mb-2">Comment fonctionne ce test ?</h2>
+            <p className="text-sm text-[color:var(--sc-text-2)] max-w-2xl mx-auto">
               Le calcul d'exposition combine plusieurs critères, croisés avec des rapports publics et des données
               sectorielles, pour produire une estimation lisible de votre profil de risque.
             </p>
@@ -107,19 +108,19 @@ export default function VulnerabilitePage() {
             {FACTORS.map(({ icon: Icon, label }) => (
               <div
                 key={label}
-                className="rounded-lg p-4 bg-[#FFFFFF] flex items-start gap-3 transition-all hover:scale-[1.02]"
-                style={{ border: "1px solid #B3DBEF", boxShadow: "2px 2px 0px #C0DDF8" }}
+                className="rounded-lg p-4 bg-[color:var(--sc-surface)] flex items-start gap-3 transition-all hover:scale-[1.02]"
+                style={{ border: "1px solid var(--sc-border)", boxShadow: "var(--sc-shadow-sm)" }}
               >
-                <Icon className="w-5 h-5 text-[#157FE2] mt-0.5 shrink-0" />
-                <span className="text-sm font-medium text-[#000]">{label}</span>
+                <Icon className="w-5 h-5 text-[color:var(--sc-blue)] mt-0.5 shrink-0" />
+                <span className="text-sm font-medium text-[color:var(--sc-text)]">{label}</span>
               </div>
             ))}
           </div>
 
           {/* Real examples */}
           <div className="text-center mb-6">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-[#000] mb-2">Quelques exemples concrets</h2>
-            <p className="text-sm text-[#000]/70 max-w-2xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-[color:var(--sc-text)] mb-2">Quelques exemples concrets</h2>
+            <p className="text-sm text-[color:var(--sc-text-2)] max-w-2xl mx-auto">
               Pour vous donner une idée, voici quelques profils types et le type de risques qui peuvent les concerner.
             </p>
           </div>
@@ -130,8 +131,8 @@ export default function VulnerabilitePage() {
               return (
                 <div
                   key={ex.title}
-                  className="rounded-xl p-5 bg-[#FFFFFF] flex flex-col"
-                  style={{ border: "1px solid #B3DBEF", boxShadow: "3px 3px 0px #C0DDF8" }}
+                  className="rounded-xl p-5 bg-[color:var(--sc-surface)] flex flex-col"
+                  style={{ border: "1px solid var(--sc-border)", boxShadow: "var(--sc-shadow)" }}
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <div
@@ -140,9 +141,9 @@ export default function VulnerabilitePage() {
                     >
                       <Icon className="w-4 h-4" style={{ color: ex.accent }} />
                     </div>
-                    <span className="font-bold text-sm text-[#000]">{ex.title}</span>
+                    <span className="font-bold text-sm text-[color:var(--sc-text)]">{ex.title}</span>
                   </div>
-                  <p className="text-sm text-[#000]/80 leading-relaxed mb-4 italic">«&nbsp;{ex.quote}&nbsp;»</p>
+                  <p className="text-sm text-[color:var(--sc-text)] leading-relaxed mb-4 italic">«&nbsp;{ex.quote}&nbsp;»</p>
                   <div className="mt-auto">
                     <ScBadge tone="warn">{ex.risk}</ScBadge>
                   </div>
@@ -155,14 +156,14 @@ export default function VulnerabilitePage() {
         {/* Disclaimer */}
         <section className="max-w-5xl mx-auto px-4 pb-12">
           <div
-            className="rounded-xl p-6 bg-[#F6F6F6]"
-            style={{ border: "1px solid #AEAEAE", boxShadow: "3px 3px 0px #C0DDF8" }}
+            className="rounded-xl p-6 bg-[color:var(--sc-surface-2)]"
+            style={{ border: "1px solid var(--sc-border)", boxShadow: "var(--sc-shadow)" }}
           >
             <div className="flex items-start gap-3">
-              <FileText className="w-5 h-5 text-[#157FE2] mt-0.5 shrink-0" />
+              <FileText className="w-5 h-5 text-[color:var(--sc-blue)] mt-0.5 shrink-0" />
               <div>
-                <h3 className="font-bold text-[#000] mb-1">Sources & méthodologie</h3>
-                <p className="text-sm text-[#000]/75 leading-relaxed">
+                <h3 className="font-bold text-[color:var(--sc-text)] mb-1">Sources & méthodologie</h3>
+                <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed">
                   Le test s'appuie notamment sur des rapports publics&nbsp;:
                   ANSSI (panorama de la menace), ENISA (Threat Landscape), Verizon (Data Breach Investigations Report),
                   CERT-FR. Les estimations sont fournies à titre pédagogique pour vous aider à mieux vous protéger.
@@ -185,6 +186,6 @@ export default function VulnerabilitePage() {
       </main>
 
       <Footer />
-    </div>
+    </PageShell>
   )
 }

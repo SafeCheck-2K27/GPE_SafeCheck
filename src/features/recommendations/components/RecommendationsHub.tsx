@@ -27,15 +27,15 @@ export function RecommendationsHub({ onSelect }: { onSelect: (view: Exclude<Reco
   return (
     <>
       {/* Hero */}
-      <section className="bg-[#C3E8FF] border-b border-[#B3DBEF]">
+      <section className="bg-[color:var(--sc-bg-soft)] border-b border-[color:var(--sc-border)]">
         <div className="max-w-5xl mx-auto px-4 py-12 md:py-16 text-center">
           <ScBadge tone="info" className="mb-4">
             Centre d&apos;action SafeCheck
           </ScBadge>
-          <h1 className="text-3xl md:text-5xl font-extrabold text-[#000] mb-4 text-balance">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-[color:var(--sc-text)] mb-4 text-balance">
             Des recommandations concrètes, priorisées selon votre profil.
           </h1>
-          <p className="text-base md:text-lg text-[#000]/80 max-w-3xl mx-auto leading-relaxed text-pretty">
+          <p className="text-base md:text-lg text-[color:var(--sc-text)] max-w-3xl mx-auto leading-relaxed text-pretty">
             Ces recommandations sont utiles à tous. Mais c&apos;est l&apos;audit SafeCheck qui vous indique lesquelles
             appliquer en priorité, selon votre situation réelle.
           </p>
@@ -102,11 +102,11 @@ export function RecommendationsHub({ onSelect }: { onSelect: (view: Exclude<Reco
                 style={{ border: "1px solid var(--sc-border)", boxShadow: "var(--sc-shadow-sm)" }}
               >
                 <div className="flex items-center gap-3">
-                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[color:var(--sc-blue)] text-white text-sm font-extrabold flex items-center justify-center">
+                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)] text-sm font-extrabold flex items-center justify-center">
                     {step}
                   </span>
-                  <div className="w-9 h-9 rounded-lg bg-[#C3E8FF] flex items-center justify-center">
-                    <Icon className="w-4.5 h-4.5 text-[#157FE2]" />
+                  <div className="w-9 h-9 rounded-lg bg-[color:var(--sc-bg-soft)] flex items-center justify-center">
+                    <Icon className="w-4.5 h-4.5 text-[color:var(--sc-blue)]" />
                   </div>
                 </div>
                 <h3 className="font-bold text-[color:var(--sc-text)] text-sm leading-snug">{title}</h3>
@@ -122,19 +122,19 @@ export function RecommendationsHub({ onSelect }: { onSelect: (view: Exclude<Reco
       <section className="max-w-5xl mx-auto px-4 py-10 md:py-14 grid grid-cols-1 md:grid-cols-2 gap-5">
         <button
           onClick={() => onSelect("habitudes")}
-          className="text-left rounded-xl p-6 md:p-8 bg-[#FFFFFF] flex flex-col gap-3 transition-all hover:-translate-y-1 cursor-pointer group"
-          style={{ border: "1px solid #B3DBEF", boxShadow: "4px 4px 0px #C0DDF8" }}
+          className="text-left rounded-xl p-6 md:p-8 bg-[color:var(--sc-surface)] flex flex-col gap-3 transition-all hover:-translate-y-1 cursor-pointer group"
+          style={{ border: "1px solid var(--sc-border)", boxShadow: "var(--sc-shadow-md)" }}
         >
-          <div className="w-14 h-14 rounded-lg bg-[#C3E8FF] flex items-center justify-center transition-transform group-hover:scale-110">
-            <Brain className="w-7 h-7 text-[#157FE2]" />
+          <div className="w-14 h-14 rounded-lg bg-[color:var(--sc-bg-soft)] flex items-center justify-center transition-transform group-hover:scale-110">
+            <Brain className="w-7 h-7 text-[color:var(--sc-blue)]" />
           </div>
           <ScBadge tone="success" className="self-start">
             Bonnes habitudes &amp; réflexes
           </ScBadge>
-          <h2 className="text-xl md:text-2xl font-extrabold text-[#000] text-balance">
+          <h2 className="text-xl md:text-2xl font-extrabold text-[color:var(--sc-text)] text-balance">
             Les réflexes qui changent tout, sans jargon.
           </h2>
-          <p className="text-sm text-[#000]/75 leading-relaxed">
+          <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed">
             Adoptez les bons gestes au quotidien. Pas besoin d&apos;être technique, juste les bonnes attitudes au bon
             moment.
           </p>
@@ -147,33 +147,33 @@ export function RecommendationsHub({ onSelect }: { onSelect: (view: Exclude<Reco
               { icon: Clock, label: "5 min pour commencer" },
               { icon: Star, label: "Idéal pour débuter" },
             ].map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-1.5 text-xs text-[#000]/65">
-                <Icon className="w-3.5 h-3.5 text-[#157FE2] shrink-0" />
+              <div key={label} className="flex items-center gap-1.5 text-xs text-[color:var(--sc-text-2)]">
+                <Icon className="w-3.5 h-3.5 text-[color:var(--sc-blue)] shrink-0" />
                 {label}
               </div>
             ))}
           </div>
 
-          <div className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-[#157FE2]">
+          <div className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-[color:var(--sc-blue)]">
             Voir les bonnes habitudes <ArrowRight className="w-4 h-4" />
           </div>
         </button>
 
         <button
           onClick={() => onSelect("techniques")}
-          className="text-left rounded-xl p-6 md:p-8 bg-[#FFFFFF] flex flex-col gap-3 transition-all hover:-translate-y-1 cursor-pointer group"
-          style={{ border: "1px solid #B3DBEF", boxShadow: "4px 4px 0px #C0DDF8" }}
+          className="text-left rounded-xl p-6 md:p-8 bg-[color:var(--sc-surface)] flex flex-col gap-3 transition-all hover:-translate-y-1 cursor-pointer group"
+          style={{ border: "1px solid var(--sc-border)", boxShadow: "var(--sc-shadow-md)" }}
         >
-          <div className="w-14 h-14 rounded-lg bg-[#C3E8FF] flex items-center justify-center transition-transform group-hover:scale-110">
-            <Cog className="w-7 h-7 text-[#157FE2]" />
+          <div className="w-14 h-14 rounded-lg bg-[color:var(--sc-bg-soft)] flex items-center justify-center transition-transform group-hover:scale-110">
+            <Cog className="w-7 h-7 text-[color:var(--sc-blue)]" />
           </div>
           <ScBadge tone="info" className="self-start">
             Recommandations techniques
           </ScBadge>
-          <h2 className="text-xl md:text-2xl font-extrabold text-[#000] text-balance">
+          <h2 className="text-xl md:text-2xl font-extrabold text-[color:var(--sc-text)] text-balance">
             Les configurations qui renforcent durablement votre posture.
           </h2>
-          <p className="text-sm text-[#000]/75 leading-relaxed">
+          <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed">
             Logiciels, OS, hardware, navigateurs, confidentialité, sauvegarde, réseau\u00a0: les actions concrètes à
             appliquer pour un impact durable.
           </p>
@@ -186,14 +186,14 @@ export function RecommendationsHub({ onSelect }: { onSelect: (view: Exclude<Reco
               { icon: BarChart2, label: "Débutant à avancé" },
               { icon: TrendingUp, label: "Impact durable" },
             ].map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-1.5 text-xs text-[#000]/65">
-                <Icon className="w-3.5 h-3.5 text-[#157FE2] shrink-0" />
+              <div key={label} className="flex items-center gap-1.5 text-xs text-[color:var(--sc-text-2)]">
+                <Icon className="w-3.5 h-3.5 text-[color:var(--sc-blue)] shrink-0" />
                 {label}
               </div>
             ))}
           </div>
 
-          <div className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-[#157FE2]">
+          <div className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-[color:var(--sc-blue)]">
             Voir les recommandations techniques <ArrowRight className="w-4 h-4" />
           </div>
         </button>

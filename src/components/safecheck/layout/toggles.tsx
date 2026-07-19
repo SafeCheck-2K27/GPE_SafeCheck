@@ -1,18 +1,15 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
 import { Sun, Moon } from "lucide-react"
 import { useI18n } from "@/components/safecheck/I18nProvider"
+import { useClientHydrated } from "@/lib/use-client-hydrated"
 
 /* Theme toggle (light/dark) */
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
   const { t } = useI18n()
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => {
-    queueMicrotask(() => setMounted(true))
-  }, [])
+  const mounted = useClientHydrated()
   const baseCls =
     "p-2 rounded-lg text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-blue)] hover:bg-[color:var(--sc-bg-soft)] transition-colors cursor-pointer"
   if (!mounted) {
@@ -49,7 +46,7 @@ export function LanguageToggle() {
   const pillBase =
     "px-2 py-1 text-[11px] font-bold leading-none rounded-md transition-colors cursor-pointer"
   const activeCls =
-    "bg-[color:var(--sc-blue)] text-white shadow-[0_2px_6px_-2px_rgba(37,99,235,0.45)]"
+    "bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)] shadow-[0_2px_6px_-2px_rgb(var(--sc-blue-rgb)/0.45)]"
   const inactiveCls =
     "text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-blue)]"
 

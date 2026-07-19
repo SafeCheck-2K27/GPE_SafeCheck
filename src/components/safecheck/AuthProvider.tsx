@@ -1,6 +1,12 @@
 "use client"
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react"
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useSyncExternalStore,
+} from "react"
 
 /*
    SafeCheck - Auth context (frontend mockup)
@@ -27,7 +33,7 @@ export interface SafeCheckUser {
 interface AuthContextValue {
   user: SafeCheckUser | null
   isLoggedIn: boolean
-  /** True until we've read localStorage on first mount (avoids a flash). */
+  /** True after the first client snapshot has been read from localStorage. */
   isHydrated: boolean
   login: (email: string, password: string) => Promise<SafeCheckUser>
   signup: (data: Partial<SafeCheckUser> & { email: string; password: string }) => Promise<SafeCheckUser>
@@ -37,12 +43,28 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
-function readFromStorage(): SafeCheckUser | null {
-  if (typeof window === "undefined") return null
+type AuthSnapshot = string | null | undefined
+
+const authListeners = new Set<() => void>()
+let memorySnapshot: string | null = null
+
+function getAuthSnapshot(): AuthSnapshot {
+  if (typeof window === "undefined") return undefined
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY)
-    if (!raw) return null
-    const parsed = JSON.parse(raw)
+    return window.localStorage.getItem(STORAGE_KEY)
+  } catch {
+    return memorySnapshot
+  }
+}
+
+function getServerAuthSnapshot(): AuthSnapshot {
+  return undefined
+}
+
+function parseAuthSnapshot(snapshot: AuthSnapshot): SafeCheckUser | null {
+  if (!snapshot) return null
+  try {
+    const parsed = JSON.parse(snapshot)
     if (parsed && typeof parsed === "object" && typeof parsed.email === "string") {
       return parsed as SafeCheckUser
     }
@@ -52,40 +74,50 @@ function readFromStorage(): SafeCheckUser | null {
   }
 }
 
+function subscribeToAuth(listener: () => void) {
+  authListeners.add(listener)
+
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === STORAGE_KEY) listener()
+  }
+  window.addEventListener("storage", onStorage)
+
+  return () => {
+    authListeners.delete(listener)
+    window.removeEventListener("storage", onStorage)
+  }
+}
+
+function emitAuthChange() {
+  authListeners.forEach((listener) => listener())
+}
+
 function writeToStorage(user: SafeCheckUser | null) {
   if (typeof window === "undefined") return
+  const nextSnapshot = user ? JSON.stringify(user) : null
+  memorySnapshot = nextSnapshot
+
   try {
-    if (user) {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(user))
+    if (nextSnapshot) {
+      window.localStorage.setItem(STORAGE_KEY, nextSnapshot)
     } else {
       window.localStorage.removeItem(STORAGE_KEY)
     }
   } catch {
     /* ignore quota / privacy mode errors */
   }
+
+  emitAuthChange()
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<SafeCheckUser | null>(null)
-  const [isHydrated, setIsHydrated] = useState(false)
-
-  // Hydrate from localStorage on mount.
-  useEffect(() => {
-    queueMicrotask(() => {
-      setUser(readFromStorage())
-      setIsHydrated(true)
-    })
-  }, [])
-
-  // Sync session across tabs.
-  useEffect(() => {
-    const onStorage = (e: StorageEvent) => {
-      if (e.key !== STORAGE_KEY) return
-      setUser(readFromStorage())
-    }
-    window.addEventListener("storage", onStorage)
-    return () => window.removeEventListener("storage", onStorage)
-  }, [])
+  const snapshot = useSyncExternalStore(
+    subscribeToAuth,
+    getAuthSnapshot,
+    getServerAuthSnapshot,
+  )
+  const user = useMemo(() => parseAuthSnapshot(snapshot), [snapshot])
+  const isHydrated = snapshot !== undefined
 
   const login = useCallback(async (email: string, password: string) => {
     void password
@@ -101,7 +133,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const next: SafeCheckUser = { email, pseudo }
     writeToStorage(next)
-    setUser(next)
     return next
   }, [])
 
@@ -116,7 +147,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         age: data.age,
       }
       writeToStorage(next)
-      setUser(next)
       return next
     },
     []
@@ -124,27 +154,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = useCallback(() => {
     writeToStorage(null)
-    setUser(null)
   }, [])
 
   const updateUser = useCallback((patch: Partial<SafeCheckUser>) => {
-    setUser((current) => {
-      if (!current) return current
-      const next = { ...current, ...patch }
-      writeToStorage(next)
-      return next
-    })
-  }, [])
+    if (!user) return
+    writeToStorage({ ...user, ...patch })
+  }, [user])
 
-  const value: AuthContextValue = {
-    user,
-    isLoggedIn: !!user,
-    isHydrated,
-    login,
-    signup,
-    logout,
-    updateUser,
-  }
+  const value = useMemo<AuthContextValue>(
+    () => ({
+      user,
+      isLoggedIn: !!user,
+      isHydrated,
+      login,
+      signup,
+      logout,
+      updateUser,
+    }),
+    [isHydrated, login, logout, signup, updateUser, user],
+  )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

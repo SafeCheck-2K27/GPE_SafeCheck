@@ -86,7 +86,7 @@ export function TutorialSearchResults({
           <button
             type="button"
             onClick={onReset}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-lg bg-[color:var(--sc-blue)] text-white hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-lg bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)] hover:opacity-90 transition-opacity"
           >
             <Layers className="w-3.5 h-3.5" />
             Voir les categories principales

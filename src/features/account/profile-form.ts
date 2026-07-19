@@ -2,8 +2,11 @@ import type { SafeCheckUser } from "@/components/safecheck/AuthProvider"
 import { mockUser } from "@/lib/account-data"
 import type { AccountForm } from "./types"
 
-export function createInitialAccountForm(): AccountForm {
-  return { ...mockUser }
+export function createInitialAccountForm(
+  user?: SafeCheckUser | null,
+): AccountForm {
+  const form = { ...mockUser }
+  return user ? mergeUserIntoAccountForm(form, user) : form
 }
 
 export function mergeUserIntoAccountForm(

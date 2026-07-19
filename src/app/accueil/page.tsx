@@ -9,13 +9,14 @@ import { AccueilJourney } from "@/features/home/components/AccueilJourney"
 import { AccueilDiscovery } from "@/features/home/components/AccueilDiscovery"
 import { AccueilAccountBanner } from "@/features/home/components/AccueilAccountBanner"
 import { AccueilTestimonials } from "@/features/home/components/AccueilTestimonials"
+import { PageShell } from "@/components/safecheck/layout/PageShell"
 
 export default function AccueilPage() {
   const router = useRouter()
   const { isLoggedIn, user, isHydrated } = useAuth()
 
   return (
-    <div className="min-h-screen flex flex-col font-sans bg-[color:var(--sc-bg)]">
+    <PageShell>
       <Navbar />
 
       <main className="flex-1">
@@ -46,6 +47,6 @@ export default function AccueilPage() {
       </main>
 
       <Footer />
-    </div>
+    </PageShell>
   )
 }

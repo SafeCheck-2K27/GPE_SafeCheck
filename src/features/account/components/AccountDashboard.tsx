@@ -37,7 +37,7 @@ export function AccountDashboard({ form }: { form: AccountForm }) {
               <div className="relative">
                 <div className="h-2 rounded-full overflow-hidden bg-[color:var(--sc-surface-2)] border border-[color:var(--sc-border)]">
                   <div
-                    className="h-full rounded-full transition-all duration-500 bg-[linear-gradient(90deg,var(--sc-blue-soft),var(--sc-blue),var(--sc-indigo))] shadow-[0_0_12px_rgba(37,99,235,0.45)]"
+                    className="h-full rounded-full transition-all duration-500 bg-[linear-gradient(90deg,var(--sc-blue-soft),var(--sc-blue),var(--sc-indigo))] shadow-[0_0_12px_rgb(var(--sc-blue-rgb)/0.45)]"
                     style={{ width: `${form.score}%` }}
                   />
                 </div>
@@ -48,8 +48,8 @@ export function AccountDashboard({ form }: { form: AccountForm }) {
                     { label: "Renard", reached: false, current: false },
                     { label: "Hibou", reached: false, current: false },
                     { label: "Dragon", reached: false, current: false },
-                  ].map((lv, i) => (
-                    <div key={i} className="flex flex-col items-center gap-1">
+                  ].map((lv) => (
+                    <div key={lv.label} className="flex flex-col items-center gap-1">
                       <span
                         className={`w-2 h-2 rounded-full ${lv.current ? "bg-[color:var(--sc-blue)] ring-4 ring-[color:var(--sc-blue)]/20" : lv.reached ? "bg-[color:var(--sc-success)]" : "bg-[color:var(--sc-border-strong)]" }`}
                       />
@@ -144,14 +144,14 @@ export function AccountDashboard({ form }: { form: AccountForm }) {
         <div className="flex gap-5 flex-wrap">
           {form.badges.map((badge, idx) => {
             const tones = [
-              "bg-[linear-gradient(135deg,#3B82F6,#2563EB)]",
-              "bg-[linear-gradient(135deg,#06B6D4,#0891B2)]",
-              "bg-[linear-gradient(135deg,#6366F1,#4F46E5)]",
+              "bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))]",
+              "bg-[linear-gradient(135deg,var(--sc-cyan),var(--sc-cyan-strong))]",
+              "bg-[linear-gradient(135deg,var(--sc-indigo),var(--sc-indigo-strong))]",
             ]
             return (
               <div key={badge.id} className="flex items-center gap-3 px-3 py-2 rounded-xl bg-[color:var(--sc-bg-soft)]/60 border border-[color:var(--sc-border)]">
                 <div
-                  className={`w-11 h-11 rounded-full flex items-center justify-center text-white text-sm font-bold ring-2 ring-[color:var(--sc-surface)] shadow-[0_8px_18px_-6px_rgba(15,23,42,0.20)] ${tones[idx % tones.length]}`}
+                  className={`w-11 h-11 rounded-full flex items-center justify-center text-[color:var(--sc-text-on-strong)] text-sm font-bold ring-2 ring-[color:var(--sc-surface)] shadow-[0_8px_18px_-6px_rgb(var(--sc-ink-rgb)/0.20)] ${tones[idx % tones.length]}`}
                   title={badge.desc}
                 >
                   {badge.id}
@@ -184,7 +184,7 @@ export function AccountDashboard({ form }: { form: AccountForm }) {
 function ComparePill({ tone, text }: { tone: "info" | "success"; text: string }) {
   const palette =
     tone === "success"
-      ? "bg-[rgba(16,185,129,0.08)] border-[rgba(16,185,129,0.30)] text-[color:var(--sc-text)] dark:bg-[rgba(16,185,129,0.12)] dark:border-[rgba(16,185,129,0.32)]"
+      ? "bg-[rgb(var(--sc-success-rgb)/0.08)] border-[rgb(var(--sc-success-rgb)/0.30)] text-[color:var(--sc-text)] dark:bg-[rgb(var(--sc-success-rgb)/0.12)] dark:border-[rgb(var(--sc-success-rgb)/0.32)]"
       : "bg-[color:var(--sc-bg-soft)] border-[color:var(--sc-border)] text-[color:var(--sc-text)]"
   const dot = tone === "success" ? "bg-[color:var(--sc-success)]" : "bg-[color:var(--sc-blue)]"
   return (

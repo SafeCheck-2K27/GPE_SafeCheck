@@ -42,16 +42,16 @@ const shieldGlassCardClassName =
   "relative w-[200px] h-[200px] md:w-[220px] md:h-[220px] rounded-[28px] sc-glass flex items-center justify-center"
 
 const shieldCoreClassName =
-  "w-[110px] h-[110px] md:w-[120px] md:h-[120px] rounded-2xl flex items-center justify-center shadow-[0_20px_40px_-12px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.35)]"
+  "w-[110px] h-[110px] md:w-[120px] md:h-[120px] rounded-2xl flex items-center justify-center shadow-[0_20px_40px_-12px_rgb(var(--sc-blue-rgb)/0.55),inset_0_1px_0_rgb(var(--sc-white-rgb)/0.35)]"
 
 const verifiedPillClassName =
-  "absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-semibold text-white bg-[linear-gradient(135deg,#10B981,#059669)] shadow-[0_8px_18px_-6px_rgba(16,185,129,0.55)]"
+  "absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-semibold text-[color:var(--sc-text-on-strong)] bg-[linear-gradient(135deg,var(--sc-success),var(--sc-success-strong))] shadow-[0_8px_18px_-6px_rgb(var(--sc-success-rgb)/0.55)]"
 
 const floatingIconShellClassName =
-  "flex items-center gap-2 pl-2 pr-3 py-2 rounded-full sc-glass border border-white/60 text-[11.5px] font-semibold text-[color:var(--sc-text)]"
+  "flex items-center gap-2 pl-2 pr-3 py-2 rounded-full sc-glass border border-[rgb(var(--sc-white-rgb)/0.60)] text-[11.5px] font-semibold text-[color:var(--sc-text)]"
 
 const floatingIconBaseClassName =
-  "inline-flex items-center justify-center w-7 h-7 rounded-full text-white bg-gradient-to-br"
+  "inline-flex items-center justify-center w-7 h-7 rounded-full text-[color:var(--sc-text-on-strong)] bg-gradient-to-br"
 
 export function PreHomeHero({
   onStartAudit,
@@ -70,7 +70,7 @@ export function PreHomeHero({
         className={heroLeftGlowClassName}
         style={{
           background:
-            "radial-gradient(circle, rgba(37,99,235,0.30) 0%, rgba(99,102,241,0.18) 40%, transparent 70%)",
+            "radial-gradient(circle, rgb(var(--sc-blue-rgb)/0.30) 0%, rgb(var(--sc-indigo-rgb)/0.18) 40%, transparent 70%)",
           filter: "blur(40px)",
         }}
         aria-hidden
@@ -79,7 +79,7 @@ export function PreHomeHero({
         className={heroRightGlowClassName}
         style={{
           background:
-            "radial-gradient(circle, rgba(6,182,212,0.22) 0%, rgba(37,99,235,0.14) 45%, transparent 70%)",
+            "radial-gradient(circle, rgb(var(--sc-cyan-rgb)/0.22) 0%, rgb(var(--sc-blue-rgb)/0.14) 45%, transparent 70%)",
           filter: "blur(50px)",
           animationDelay: "1.5s",
         }}
@@ -159,7 +159,7 @@ function HeroShieldComposition() {
             className="absolute -inset-3 rounded-[28px]"
             style={{
               background:
-                "linear-gradient(135deg, rgba(37,99,235,0.40), rgba(99,102,241,0.30) 50%, rgba(6,182,212,0.30))",
+                "linear-gradient(135deg, rgb(var(--sc-blue-rgb)/0.40), rgb(var(--sc-indigo-rgb)/0.30) 50%, rgb(var(--sc-cyan-rgb)/0.30))",
               filter: "blur(18px)",
               opacity: 0.7,
             }}
@@ -169,16 +169,16 @@ function HeroShieldComposition() {
             className={shieldGlassCardClassName}
             style={{
               boxShadow:
-                "0 30px 60px -20px rgba(37,99,235,0.45), 0 12px 28px -10px rgba(99,102,241,0.35), inset 0 1px 0 rgba(255,255,255,0.6)",
+                "0 30px 60px -20px rgb(var(--sc-blue-rgb)/0.45), 0 12px 28px -10px rgb(var(--sc-indigo-rgb)/0.35), inset 0 1px 0 rgb(var(--sc-white-rgb)/0.6)",
             }}
           >
             <div
               className={shieldCoreClassName}
               style={{
-                background: "linear-gradient(140deg, #3B82F6 0%, #2563EB 45%, #6366F1 100%)",
+                background: "linear-gradient(140deg, var(--sc-blue-soft) 0%, var(--sc-blue) 45%, var(--sc-indigo) 100%)",
               }}
             >
-              <Shield className="w-12 h-12 md:w-14 md:h-14 text-white" strokeWidth={2.2} />
+              <Shield className="w-12 h-12 md:w-14 md:h-14 text-[color:var(--sc-text-on-strong)]" strokeWidth={2.2} />
             </div>
 
             <span className={verifiedPillClassName}>
@@ -235,9 +235,9 @@ function FloatingIcon({
   tone: "blue" | "cyan" | "indigo"
 }) {
   const toneMap = {
-    blue: "from-[#3B82F6] to-[#2563EB] shadow-[0_10px_24px_-8px_rgba(37,99,235,0.55)]",
-    cyan: "from-[#06B6D4] to-[#0891B2] shadow-[0_10px_24px_-8px_rgba(6,182,212,0.55)]",
-    indigo: "from-[#6366F1] to-[#4F46E5] shadow-[0_10px_24px_-8px_rgba(99,102,241,0.55)]",
+    blue: "from-[var(--sc-blue-soft)] to-[var(--sc-blue)] shadow-[0_10px_24px_-8px_rgb(var(--sc-blue-rgb)/0.55)]",
+    cyan: "from-[var(--sc-cyan)] to-[var(--sc-cyan-strong)] shadow-[0_10px_24px_-8px_rgb(var(--sc-cyan-rgb)/0.55)]",
+    indigo: "from-[var(--sc-indigo)] to-[var(--sc-indigo-strong)] shadow-[0_10px_24px_-8px_rgb(var(--sc-indigo-rgb)/0.55)]",
   } as const
 
   return (

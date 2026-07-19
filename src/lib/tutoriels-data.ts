@@ -1105,9 +1105,9 @@ export const userProgress = {
 }
 
 export const levels = [
-  { name: "Petit Scarabee", icon: "S", color: "#F59E0B", key: "Debutant" as Niveau },
-  { name: "Luciole", icon: "L", color: "#06B6D4", key: "Debutant" as Niveau },
-  { name: "Renard", icon: "R", color: "#8B5CF6", key: "Intermediaire" as Niveau },
-  { name: "Hibou", icon: "H", color: "#2563EB", key: "Intermediaire" as Niveau },
-  { name: "Dragon", icon: "D", color: "#10B981", key: "Avance" as Niveau },
+  { name: "Petit Scarabee", icon: "S", color: "var(--sc-warn)", key: "Debutant" as Niveau },
+  { name: "Luciole", icon: "L", color: "var(--sc-cyan)", key: "Debutant" as Niveau },
+  { name: "Renard", icon: "R", color: "var(--sc-violet-soft)", key: "Intermediaire" as Niveau },
+  { name: "Hibou", icon: "H", color: "var(--sc-blue)", key: "Intermediaire" as Niveau },
+  { name: "Dragon", icon: "D", color: "var(--sc-success)", key: "Avance" as Niveau },
 ]

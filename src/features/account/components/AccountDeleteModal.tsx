@@ -21,7 +21,7 @@ export function AccountDeleteModal({
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex items-center gap-2 mb-3">
-          <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[rgba(239,68,68,0.12)] text-[color:var(--sc-danger)]">
+          <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[rgb(var(--sc-danger-rgb)/0.12)] text-[color:var(--sc-danger)]">
             <AlertTriangle className="w-5 h-5" />
           </span>
           <h2

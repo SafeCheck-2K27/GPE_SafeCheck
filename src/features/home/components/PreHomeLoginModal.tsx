@@ -5,7 +5,7 @@ import { SafeCheckMark, ScButton } from "@/components/safecheck/primitives"
 import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 
 const loginCardClassName =
-  "w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgba(15,23,42,0.30)]"
+  "w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgb(var(--sc-ink-rgb)/0.30)]"
 
 const loginInputClassName =
   "sc-focus w-full px-3 py-2.5 rounded-lg text-sm bg-[color:var(--sc-surface)] text-[color:var(--sc-text)] border border-[color:var(--sc-border-strong)] focus:border-[color:var(--sc-blue)] outline-none transition-colors"

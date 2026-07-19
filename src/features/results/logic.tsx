@@ -11,9 +11,9 @@ export const RESULT_LEVELS: readonly ResultLevelConfig[] = [
     riskLabel: "Critique",
     riskStyle: {
       text: "text-[color:var(--sc-danger)]",
-      bg: "bg-[rgba(239,68,68,0.10)]",
-      border: "border-[rgba(239,68,68,0.20)]",
-      dot: "#EF4444",
+      bg: "bg-[rgb(var(--sc-danger-rgb)/0.10)]",
+      border: "border-[rgb(var(--sc-danger-rgb)/0.20)]",
+      dot: "var(--sc-danger)",
     },
     summary:
       " indique une exposition significative aux risques numériques. Pas d'inquiétude : chaque action compte, et les premières étapes sont simples à mettre en place. Commence par sécuriser ton email principal.",
@@ -37,9 +37,9 @@ export const RESULT_LEVELS: readonly ResultLevelConfig[] = [
     riskLabel: "Élevé",
     riskStyle: {
       text: "text-[color:var(--sc-warn)]",
-      bg: "bg-[rgba(245,158,11,0.10)]",
-      border: "border-[rgba(245,158,11,0.25)]",
-      dot: "#F59E0B",
+      bg: "bg-[rgb(var(--sc-warn-rgb)/0.10)]",
+      border: "border-[rgb(var(--sc-warn-rgb)/0.25)]",
+      dot: "var(--sc-warn)",
     },
     summary:
       " révèle plusieurs lacunes dans ta sécurité numérique. Tes risques principaux concernent tes comptes, tes sauvegardes et ta protection contre le phishing. Commence par les 3 premières recommandations ci-dessous.",
@@ -63,9 +63,9 @@ export const RESULT_LEVELS: readonly ResultLevelConfig[] = [
     riskLabel: "Modéré",
     riskStyle: {
       text: "text-[color:var(--sc-blue)]",
-      bg: "bg-[rgba(37,99,235,0.08)]",
-      border: "border-[rgba(37,99,235,0.20)]",
-      dot: "#2563EB",
+      bg: "bg-[rgb(var(--sc-blue-rgb)/0.08)]",
+      border: "border-[rgb(var(--sc-blue-rgb)/0.20)]",
+      dot: "var(--sc-blue)",
     },
     summary:
       " indique un niveau de sécurité correct, mais avec des axes d'amélioration importants. Tes priorités immédiates : la double authentification et la gestion des mots de passe.",
@@ -89,9 +89,9 @@ export const RESULT_LEVELS: readonly ResultLevelConfig[] = [
     riskLabel: "Faible",
     riskStyle: {
       text: "text-[color:var(--sc-success)]",
-      bg: "bg-[rgba(16,185,129,0.10)]",
-      border: "border-[rgba(16,185,129,0.25)]",
-      dot: "#10B981",
+      bg: "bg-[rgb(var(--sc-success-rgb)/0.10)]",
+      border: "border-[rgb(var(--sc-success-rgb)/0.25)]",
+      dot: "var(--sc-success)",
     },
     summary:
       " place ton niveau de sécurité parmi les meilleurs. Tu appliques déjà les pratiques essentielles. Quelques optimisations supplémentaires te permettront d'atteindre un niveau expert.",

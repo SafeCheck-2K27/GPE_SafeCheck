@@ -31,9 +31,9 @@ export function TutorialRow({
   showPopularBadge?: boolean
 }) {
   const levelStyles: Record<Niveau, { bg: string; label: string }> = {
-    Debutant: { bg: "#10B981", label: "Debutant" },
-    Intermediaire: { bg: "#F59E0B", label: "Intermediaire" },
-    Avance: { bg: "#8B5CF6", label: "Avance" },
+    Debutant: { bg: "var(--sc-success)", label: "Debutant" },
+    Intermediaire: { bg: "var(--sc-warn)", label: "Intermediaire" },
+    Avance: { bg: "var(--sc-violet-soft)", label: "Avance" },
   }
   const style = levelStyles[tuto.level]
   const isDone = status === "done"
@@ -71,27 +71,27 @@ export function TutorialRow({
             {tuto.title}
           </h4>
           {isDone && (
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[color:var(--sc-success)] text-white">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[color:var(--sc-success)] text-[color:var(--sc-text-on-strong)]">
               <Check className="w-2.5 h-2.5" /> Termine
             </span>
           )}
           {isInProgress && !isDone && (
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[color:var(--sc-blue)] text-white">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)]">
               <Play className="w-2.5 h-2.5 fill-white" /> En cours
             </span>
           )}
           {!isDone && tuto.isEssential && (
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[#F59E0B] text-white">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[color:var(--sc-warn)] text-[color:var(--sc-text-on-strong)]">
               <Star className="w-2.5 h-2.5 fill-white" /> Essentiel
             </span>
           )}
           {!isDone && !tuto.isEssential && tuto.isRecommended && (
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[color:var(--sc-blue)] text-white">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)]">
               <Sparkles className="w-2.5 h-2.5" /> Recommande
             </span>
           )}
           {!isDone && showPopularBadge && !tuto.isEssential && !tuto.isRecommended && (
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[#8B5CF6] text-white">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[color:var(--sc-violet-soft)] text-[color:var(--sc-text-on-strong)]">
               <TrendingUp className="w-2.5 h-2.5" /> Populaire
             </span>
           )}
@@ -106,7 +106,7 @@ export function TutorialRow({
             <Clock className="w-3 h-3" /> {tuto.duration}
           </span>
           <span
-            className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
+            className="text-[10px] font-bold px-2 py-0.5 rounded-full text-[color:var(--sc-text-on-strong)]"
             style={{ background: style.bg }}
           >
             {style.label}
@@ -163,9 +163,9 @@ export function TutorialCard({
   showPopularBadge?: boolean
 }) {
   const levelStyles: Record<Niveau, { bg: string; label: string }> = {
-    Debutant: { bg: "#10B981", label: "Debutant" },
-    Intermediaire: { bg: "#F59E0B", label: "Intermediaire" },
-    Avance: { bg: "#8B5CF6", label: "Avance" },
+    Debutant: { bg: "var(--sc-success)", label: "Debutant" },
+    Intermediaire: { bg: "var(--sc-warn)", label: "Intermediaire" },
+    Avance: { bg: "var(--sc-violet-soft)", label: "Avance" },
   }
   const style = levelStyles[tuto.level]
   const isDone = status === "done"
@@ -193,37 +193,37 @@ export function TutorialCard({
       {/* Badges top-right */}
       <div className="absolute top-3 right-3 z-10 flex flex-col gap-1.5 items-end">
         {isDone && (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[color:var(--sc-success)] text-white shadow-sm">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[color:var(--sc-success)] text-[color:var(--sc-text-on-strong)] shadow-sm">
             <Check className="w-2.5 h-2.5" />
             Termine
           </span>
         )}
         {isInProgress && !isDone && (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[color:var(--sc-blue)] text-white shadow-sm">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)] shadow-sm">
             <Play className="w-2.5 h-2.5 fill-white" />
             En cours
           </span>
         )}
         {!isDone && !isInProgress && tuto.isRecommended && (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[color:var(--sc-blue)] text-white shadow-sm">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)] shadow-sm">
             <Sparkles className="w-2.5 h-2.5" />
             Recommande
           </span>
         )}
         {!isDone && tuto.isEssential && (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#F59E0B] text-white shadow-sm">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[color:var(--sc-warn)] text-[color:var(--sc-text-on-strong)] shadow-sm">
             <Star className="w-2.5 h-2.5 fill-white" />
             Essentiel
           </span>
         )}
         {!isDone && showPopularBadge && !tuto.isRecommended && !tuto.isEssential && (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#8B5CF6] text-white shadow-sm">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[color:var(--sc-violet-soft)] text-[color:var(--sc-text-on-strong)] shadow-sm">
             <TrendingUp className="w-2.5 h-2.5" />
             Populaire
           </span>
         )}
         {!isDone && tuto.isNextStep && (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#8B5CF6] text-white shadow-sm">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[color:var(--sc-violet-soft)] text-[color:var(--sc-text-on-strong)] shadow-sm">
             <ArrowRight className="w-2.5 h-2.5" />
             Prochaine etape
           </span>
@@ -242,8 +242,8 @@ export function TutorialCard({
           className="absolute inset-0 opacity-30"
           style={{
             background: isDone
-              ? "radial-gradient(circle at 50% 120%, rgba(16,185,129,0.20), transparent 60%)"
-              : "radial-gradient(circle at 50% 120%, rgba(37,99,235,0.25), transparent 60%)",
+              ? "radial-gradient(circle at 50% 120%, rgb(var(--sc-success-rgb)/0.20), transparent 60%)"
+              : "radial-gradient(circle at 50% 120%, rgb(var(--sc-blue-rgb)/0.25), transparent 60%)",
           }}
         />
         <div
@@ -275,7 +275,7 @@ export function TutorialCard({
             <Clock className="w-3 h-3" /> {tuto.duration}
           </span>
           <span
-            className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
+            className="text-[10px] font-bold px-2 py-0.5 rounded-full text-[color:var(--sc-text-on-strong)]"
             style={{ background: style.bg }}
           >
             {style.label}

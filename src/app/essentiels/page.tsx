@@ -3,10 +3,11 @@
 import { Suspense, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Navbar from "@/components/safecheck/Navbar"
-import { ScButton, ScBadge } from "@/components/safecheck/primitives"
+import { ScBadge, ScButton, ScChip } from "@/components/safecheck/primitives"
 import Footer from "@/components/safecheck/Footer"
 import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 import { PageSuspenseFallback } from "@/components/safecheck/layout/PageSuspenseFallback"
+import { PageShell } from "@/components/safecheck/layout/PageShell"
 import {
   Search,
   X,
@@ -287,7 +288,7 @@ function EssentielsContent() {
   }, [search, priority, os, difficulty, type, category, sortBy])
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFFFFF] font-sans">
+    <PageShell className="bg-[color:var(--sc-surface)]">
       <Navbar onSignupClick={() => router.push("/compte/creer")} />
 
       <main className="flex-1">
@@ -321,10 +322,10 @@ function EssentielsContent() {
             <div className="relative hidden md:flex items-center justify-center w-52 h-52">
               <div className="absolute inset-0 sc-halo opacity-70 sc-pulse-soft" aria-hidden />
               <div
-                className="relative w-44 h-44 rounded-full flex items-center justify-center bg-[color:var(--sc-surface)] shadow-[0_22px_50px_-18px_rgba(37,99,235,0.45),inset_0_1px_0_rgba(255,255,255,0.8)]"
+                className="relative w-44 h-44 rounded-full flex items-center justify-center bg-[color:var(--sc-surface)] shadow-[0_22px_50px_-18px_rgb(var(--sc-blue-rgb)/0.45),inset_0_1px_0_rgb(var(--sc-white-rgb)/0.8)]"
                 style={{
                   background:
-                    "conic-gradient(from 220deg, #2563EB 0deg, #6366F1 90deg, #06B6D4 180deg, transparent 220deg, transparent 360deg)",
+                    "conic-gradient(from 220deg, var(--sc-blue) 0deg, var(--sc-indigo) 90deg, var(--sc-cyan) 180deg, transparent 220deg, transparent 360deg)",
                 }}
                 aria-hidden
               >
@@ -380,13 +381,14 @@ function EssentielsContent() {
             {/* Categories */}
             <div className="flex flex-wrap gap-2 mt-5">
               {Object.entries(CATEGORIES_LABEL).map(([k, label]) => (
-                <button
+                <ScChip
                   key={k}
                   onClick={() => setCategory(k)}
-                  className={`text-xs px-3.5 py-1.5 rounded-full font-semibold transition-all ${ category === k ? "text-white border border-transparent bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] shadow-[0_4px_12px_-3px_rgba(37,99,235,0.40)]" : "bg-[color:var(--sc-surface)] text-[color:var(--sc-text-2)] border border-[color:var(--sc-border)] hover:border-[color:var(--sc-blue)]/45 hover:text-[color:var(--sc-blue)]" }`}
+                  active={category === k}
+                  className="px-3.5"
                 >
                   {label}
-                </button>
+                </ScChip>
               ))}
             </div>
           </div>
@@ -395,7 +397,7 @@ function EssentielsContent() {
         {/* Cards grid */}
         <section className="max-w-6xl mx-auto px-4 py-10">
           {filtered.length === 0 ? (
-            <div className="text-center py-16 text-[#000]/60">
+            <div className="text-center py-16 text-[color:var(--sc-text-muted)]">
               <p className="text-sm">Aucun essentiel ne correspond à vos critères.</p>
             </div>
           ) : (
@@ -410,7 +412,7 @@ function EssentielsContent() {
 
       <Footer />
       {selected && <EssentielDetail e={selected} onClose={() => setSelected(null)} />}
-    </div>
+    </PageShell>
   )
 }
 
@@ -467,25 +469,25 @@ function EssentielCard({ e, delay, onClick }: { e: Essentiel; delay: number; onC
   return (
     <button
       onClick={onClick}
-      className="text-left rounded-xl p-5 bg-[#FFFFFF] flex flex-col gap-3 sc-fade-in transition-all hover:-translate-y-1"
-      style={{ animationDelay: `${delay}ms`, border: "1px solid #B3DBEF", boxShadow: "3px 3px 0px #C0DDF8" }}
+      className="text-left rounded-xl p-5 bg-[color:var(--sc-surface)] flex flex-col gap-3 sc-fade-in transition-all hover:-translate-y-1"
+      style={{ animationDelay: `${delay}ms`, border: "1px solid var(--sc-border)", boxShadow: "var(--sc-shadow)" }}
     >
       <div className="flex items-center gap-2">
-        <div className="w-10 h-10 rounded-lg bg-[#C3E8FF] flex items-center justify-center">
-          <Icon className="w-5 h-5 text-[#157FE2]" />
+        <div className="w-10 h-10 rounded-lg bg-[color:var(--sc-bg-soft)] flex items-center justify-center">
+          <Icon className="w-5 h-5 text-[color:var(--sc-blue)]" />
         </div>
         <ScBadge tone={e.importance === "Critique" ? "warn" : e.importance === "Important" ? "info" : "muted"}>
           {e.importance}
         </ScBadge>
         <ScBadge tone="muted">{e.type}</ScBadge>
       </div>
-      <h3 className="font-bold text-base text-[#000]">{e.title}</h3>
-      <p className="text-sm text-[#000]/75 leading-relaxed flex-1">{e.description}</p>
-      <div className="flex items-center justify-between text-xs text-[#000]/60 pt-2 border-t border-[#AEAEAE]/30">
+      <h3 className="font-bold text-base text-[color:var(--sc-text)]">{e.title}</h3>
+      <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed flex-1">{e.description}</p>
+      <div className="flex items-center justify-between text-xs text-[color:var(--sc-text-muted)] pt-2 border-t border-[color:var(--sc-border)]">
         <span className="inline-flex items-center gap-1">
           <TrendingUp className="w-3 h-3" /> {e.popularity}% utile
         </span>
-        <span className="inline-flex items-center gap-1 text-[#157FE2] font-semibold">
+        <span className="inline-flex items-center gap-1 text-[color:var(--sc-blue)] font-semibold">
           Lire <ArrowRight className="w-3 h-3" />
         </span>
       </div>
@@ -500,23 +502,23 @@ function EssentielDetail({ e, onClose }: { e: Essentiel; onClose: () => void }) 
       open
       onClose={onClose}
       aria-labelledby="essential-detail-title"
-      className="bg-black/40 px-4 backdrop-blur-none"
+      className="px-4 backdrop-blur-none"
     >
       <div
-        className="w-full max-w-xl rounded-xl bg-[#FFFFFF] sc-fade-in max-h-[90vh] overflow-y-auto"
-        style={{ border: "1px solid #B3DBEF", boxShadow: "5px 5px 0px #C0DDF8" }}
+        className="w-full max-w-xl rounded-xl bg-[color:var(--sc-surface)] sc-fade-in max-h-[90vh] overflow-y-auto"
+        style={{ border: "1px solid var(--sc-border)", boxShadow: "var(--sc-shadow-md)" }}
         onClick={(ev) => ev.stopPropagation()}
       >
         <div className="p-6">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-lg bg-[#C3E8FF] flex items-center justify-center">
-                <Icon className="w-5 h-5 text-[#157FE2]" />
+              <div className="w-11 h-11 rounded-lg bg-[color:var(--sc-bg-soft)] flex items-center justify-center">
+                <Icon className="w-5 h-5 text-[color:var(--sc-blue)]" />
               </div>
               <div>
                 <h3
                   id="essential-detail-title"
-                  className="font-extrabold text-lg text-[#000]"
+                  className="font-extrabold text-lg text-[color:var(--sc-text)]"
                 >
                   {e.title}
                 </h3>
@@ -527,12 +529,12 @@ function EssentielDetail({ e, onClose }: { e: Essentiel; onClose: () => void }) 
                 </div>
               </div>
             </div>
-            <button onClick={onClose} className="p-1 hover:bg-[#F6F6F6] rounded" aria-label="Fermer">
+            <button onClick={onClose} className="p-1 hover:bg-[color:var(--sc-surface-2)] rounded" aria-label="Fermer">
               <X className="w-4 h-4" />
             </button>
           </div>
-          <p className="text-sm text-[#000]/85 leading-relaxed mb-3">{e.description}</p>
-          <p className="text-sm text-[#000]/75 leading-relaxed">{e.details}</p>
+          <p className="text-sm text-[color:var(--sc-text)] leading-relaxed mb-3">{e.description}</p>
+          <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed">{e.details}</p>
           <div className="mt-6 flex justify-end">
             <ScButton variant="primary" onClick={onClose}>Compris</ScButton>
           </div>

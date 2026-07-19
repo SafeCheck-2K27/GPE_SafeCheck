@@ -44,7 +44,7 @@ export function TutorialDetailHero({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(at 0% 0%, rgba(37,99,235,0.10), transparent 50%), radial-gradient(at 100% 100%, rgba(99,102,241,0.08), transparent 50%)",
+            "radial-gradient(at 0% 0%, rgb(var(--sc-blue-rgb)/0.10), transparent 50%), radial-gradient(at 100% 100%, rgb(var(--sc-indigo-rgb)/0.08), transparent 50%)",
         }}
         aria-hidden
       />
@@ -137,7 +137,7 @@ export function TutorialDetailHero({
             </div>
             <div className="relative h-1.5 bg-[color:var(--sc-surface-2)] rounded-full overflow-hidden">
               <div
-                className="absolute inset-y-0 left-0 bg-[linear-gradient(90deg,#3B82F6,#2563EB)] rounded-full transition-all duration-500"
+                className="absolute inset-y-0 left-0 bg-[linear-gradient(90deg,var(--sc-blue-soft),var(--sc-blue))] rounded-full transition-all duration-500"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>

@@ -856,14 +856,14 @@ export const STATUS_LABELS: Record<
   },
   "en-cours": {
     label: "En cours",
-    color: "text-amber-700 bg-amber-50 border-amber-200",
+    color: "text-[color:var(--sc-warn-text)] bg-[color:var(--sc-warn-soft)] border-[color:var(--sc-warn-border)]",
   },
   fait: {
     label: "Fait",
-    color: "text-emerald-700 bg-emerald-50 border-emerald-200",
+    color: "text-[color:var(--sc-success-text)] bg-[color:var(--sc-success-soft)] border-[color:var(--sc-success-border)]",
   },
   sauvegarde: {
     label: "Sauvegardé",
-    color: "text-[color:var(--sc-blue)] bg-[#EEF4FF] border-[#C3DAFD]",
+    color: "text-[color:var(--sc-blue)] bg-[color:var(--sc-bg-soft)] border-[color:var(--sc-info-border)]",
   },
 }

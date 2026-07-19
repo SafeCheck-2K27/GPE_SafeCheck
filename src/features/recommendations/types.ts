@@ -12,7 +12,7 @@ export type HabitTag =
   | "réflexes"
 export type RecommendationStatus = "todo" | "en-cours" | "fait" | "sauvegarde"
 
-export interface LinkedTutorial {
+interface LinkedTutorial {
   id: number
   title: string
 }

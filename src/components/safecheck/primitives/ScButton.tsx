@@ -33,41 +33,41 @@ export function ScButton({
   // No more skeuomorphic 3px 3px offset shadows.
   const variantClass: Record<string, string> = {
     primary:
-      "text-white border border-[color:var(--sc-blue-hover)] " +
+      "text-[color:var(--sc-text-on-strong)] border border-[color:var(--sc-blue-hover)] " +
       "bg-[linear-gradient(180deg,var(--sc-blue-soft)_0%,var(--sc-blue)_100%)] " +
       "hover:bg-[linear-gradient(180deg,var(--sc-blue)_0%,var(--sc-blue-hover)_100%)] " +
-      "shadow-[0_6px_18px_-6px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.20)] " +
-      "hover:shadow-[0_12px_28px_-8px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.25)] " +
+      "shadow-[0_6px_18px_-6px_rgb(var(--sc-blue-rgb)/0.55),inset_0_1px_0_rgb(var(--sc-white-rgb)/0.20)] " +
+      "hover:shadow-[0_12px_28px_-8px_rgb(var(--sc-blue-rgb)/0.55),inset_0_1px_0_rgb(var(--sc-white-rgb)/0.25)] " +
       "hover:-translate-y-0.5",
     secondary:
       "text-[color:var(--sc-text)] border border-[color:var(--sc-border-strong)] " +
       "bg-[color:var(--sc-surface)] " +
       "hover:border-[color:var(--sc-blue)] hover:text-[color:var(--sc-blue)] " +
-      "shadow-[0_2px_6px_-2px_rgba(15,23,42,0.08)] " +
-      "hover:shadow-[0_8px_22px_-8px_rgba(37,99,235,0.30)] " +
+      "shadow-[0_2px_6px_-2px_rgb(var(--sc-ink-rgb)/0.08)] " +
+      "hover:shadow-[0_8px_22px_-8px_rgb(var(--sc-blue-rgb)/0.30)] " +
       "hover:-translate-y-0.5",
     ghost:
       "text-[color:var(--sc-blue)] " +
       "border border-[color:var(--sc-blue)]/25 " +
       "bg-[color:var(--sc-bg-soft)]/60 " +
       "hover:bg-[color:var(--sc-bg-soft)] hover:border-[color:var(--sc-blue)]/45 " +
-      "shadow-[0_2px_6px_-2px_rgba(37,99,235,0.18)] " +
-      "hover:shadow-[0_8px_22px_-8px_rgba(37,99,235,0.30)] " +
+      "shadow-[0_2px_6px_-2px_rgb(var(--sc-blue-rgb)/0.18)] " +
+      "hover:shadow-[0_8px_22px_-8px_rgb(var(--sc-blue-rgb)/0.30)] " +
       "hover:-translate-y-0.5",
     danger:
-      "text-white border border-[#B91C1C] " +
-      "bg-[linear-gradient(180deg,#F87171_0%,#DC2626_100%)] " +
-      "hover:bg-[linear-gradient(180deg,#EF4444_0%,#B91C1C_100%)] " +
-      "shadow-[0_6px_18px_-6px_rgba(220,38,38,0.55)] " +
-      "hover:shadow-[0_12px_28px_-8px_rgba(220,38,38,0.55)] " +
+      "text-[color:var(--sc-text-on-strong)] border border-[color:var(--sc-danger-strong)] " +
+      "bg-[linear-gradient(180deg,var(--sc-danger-light)_0%,var(--sc-danger-deep)_100%)] " +
+      "hover:bg-[linear-gradient(180deg,var(--sc-danger)_0%,var(--sc-danger-strong)_100%)] " +
+      "shadow-[0_6px_18px_-6px_rgb(var(--sc-danger-strong-rgb)/0.55)] " +
+      "hover:shadow-[0_12px_28px_-8px_rgb(var(--sc-danger-strong-rgb)/0.55)] " +
       "hover:-translate-y-0.5",
     destructive:
       "text-[color:var(--sc-text)] border border-[color:var(--sc-border-strong)] " +
       "bg-[color:var(--sc-surface)] " +
-      "hover:border-[#DC2626] hover:text-white hover:bg-[linear-gradient(180deg,#F87171_0%,#DC2626_100%)] " +
-      "focus-visible:ring-[#DC2626]/45 " +
-      "shadow-[0_2px_6px_-2px_rgba(15,23,42,0.08)] " +
-      "hover:shadow-[0_8px_22px_-8px_rgba(220,38,38,0.55)] " +
+      "hover:border-[color:var(--sc-danger-deep)] hover:text-[color:var(--sc-text-on-strong)] hover:bg-[linear-gradient(180deg,var(--sc-danger-light)_0%,var(--sc-danger-deep)_100%)] " +
+      "focus-visible:ring-[color:var(--sc-danger-deep)]/45 " +
+      "shadow-[0_2px_6px_-2px_rgb(var(--sc-ink-rgb)/0.08)] " +
+      "hover:shadow-[0_8px_22px_-8px_rgb(var(--sc-danger-strong-rgb)/0.55)] " +
       "hover:-translate-y-0.5",
   }
 

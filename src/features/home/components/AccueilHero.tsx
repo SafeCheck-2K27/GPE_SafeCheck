@@ -11,12 +11,12 @@ export function AccueilHero({
   return (
     <section className="relative">
       <div className="max-w-7xl mx-auto px-4 pt-8 md:pt-12">
-        <div className="relative overflow-hidden rounded-2xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] shadow-[0_2px_6px_-2px_rgba(15,23,42,0.06),0_10px_30px_-12px_rgba(15,23,42,0.10)]">
+        <div className="relative overflow-hidden rounded-2xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] shadow-[0_2px_6px_-2px_rgb(var(--sc-ink-rgb)/0.06),0_10px_30px_-12px_rgb(var(--sc-ink-rgb)/0.10)]">
           <div
             className="pointer-events-none absolute inset-0 opacity-90"
             style={{
               background:
-                "radial-gradient(at 0% 0%, rgba(37,99,235,0.10), transparent 50%), radial-gradient(at 100% 100%, rgba(99,102,241,0.10), transparent 50%)",
+                "radial-gradient(at 0% 0%, rgb(var(--sc-blue-rgb)/0.10), transparent 50%), radial-gradient(at 100% 100%, rgb(var(--sc-indigo-rgb)/0.10), transparent 50%)",
             }}
             aria-hidden
           />
@@ -62,18 +62,18 @@ function DiagnosticCard() {
 
   return (
     <div
-      className="lg:w-64 shrink-0 rounded-2xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] shadow-[0_4px_16px_-6px_rgba(37,99,235,0.14),0_2px_6px_-2px_rgba(15,23,42,0.06)] overflow-hidden"
+      className="lg:w-64 shrink-0 rounded-2xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] shadow-[0_4px_16px_-6px_rgb(var(--sc-blue-rgb)/0.14),0_2px_6px_-2px_rgb(var(--sc-ink-rgb)/0.06)] overflow-hidden"
       aria-label="Aperçu d'un diagnostic SafeCheck"
     >
       <div
         className="px-4 py-3 flex items-center justify-between"
-        style={{ background: "linear-gradient(135deg, #2563EB 0%, #4F46E5 100%)" }}
+        style={{ background: "linear-gradient(135deg, var(--sc-blue) 0%, var(--sc-indigo-strong) 100%)" }}
       >
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-white/90" />
-          <span className="text-xs font-semibold text-white">Diagnostic SafeCheck</span>
+          <ShieldCheck className="w-4 h-4 text-[rgb(var(--sc-white-rgb)/0.90)]" />
+          <span className="text-xs font-semibold text-[color:var(--sc-text-on-strong)]">Diagnostic SafeCheck</span>
         </div>
-        <span className="text-[10px] text-white/70 font-medium">Exemple</span>
+        <span className="text-[10px] text-[rgb(var(--sc-white-rgb)/0.70)] font-medium">Exemple</span>
       </div>
 
       <div className="p-4">
@@ -89,16 +89,16 @@ function DiagnosticCard() {
             <div className="mt-1.5 h-1.5 w-28 rounded-full bg-[color:var(--sc-border)] overflow-hidden">
               <div
                 className="h-full rounded-full"
-                style={{ width: "62%", background: "linear-gradient(90deg, #3B82F6, #6366F1)" }}
+                style={{ width: "62%", background: "linear-gradient(90deg, var(--sc-blue-soft), var(--sc-indigo))" }}
               />
             </div>
           </div>
         </div>
 
         <ul className="space-y-2 mb-4">
-          {priorities.map((priority, index) => (
+          {priorities.map((priority) => (
             <li
-              key={index}
+              key={priority.label}
               className="flex items-center gap-2 text-[11px] text-[color:var(--sc-text-2)]"
             >
               <span className="shrink-0 flex items-center justify-center w-6 h-6 rounded-lg text-[color:var(--sc-blue)] bg-[color:var(--sc-blue)]/10">
@@ -106,7 +106,7 @@ function DiagnosticCard() {
               </span>
               <span className="flex-1 leading-tight">{priority.label}</span>
               <span
-                className={`shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-md ${priority.level === "Critique" ? "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400" : priority.level === "Moyen" ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400" : "bg-[color:var(--sc-border)] text-[color:var(--sc-text-muted)]"}`}
+                className={`shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-md ${priority.level === "Critique" ? "bg-[color:var(--sc-danger-soft)] text-[color:var(--sc-danger-text)] dark:bg-[color:var(--sc-danger-soft)] dark:text-[color:var(--sc-danger-text)]" : priority.level === "Moyen" ? "bg-[color:var(--sc-warn-soft)] text-[color:var(--sc-warn-text)] dark:bg-[color:var(--sc-warn-soft)] dark:text-[color:var(--sc-warn-text)]" : "bg-[color:var(--sc-border)] text-[color:var(--sc-text-muted)]"}`}
               >
                 {priority.level}
               </span>

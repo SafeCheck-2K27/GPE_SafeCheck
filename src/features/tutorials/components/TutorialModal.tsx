@@ -69,7 +69,7 @@ export function TutorialModal({
       open
       onClose={onClose}
       aria-labelledby="tutorial-modal-title"
-      className="bg-black/40 p-4"
+      className="p-4"
     >
       <div
         className="w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl overflow-hidden bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[var(--sc-shadow-lg)]"
@@ -78,7 +78,7 @@ export function TutorialModal({
         <div className="relative p-5 border-b border-[color:var(--sc-border)] bg-[color:var(--sc-bg-soft)]">
           <div
             className="absolute inset-0 opacity-60"
-            style={{ background: "radial-gradient(at 0% 0%, rgba(37,99,235,0.15), transparent 50%)" }}
+            style={{ background: "radial-gradient(at 0% 0%, rgb(var(--sc-blue-rgb)/0.15), transparent 50%)" }}
           />
           <div className="relative flex items-start justify-between">
             <div>
@@ -123,7 +123,7 @@ export function TutorialModal({
           </div>
           <div className="relative h-2 bg-[color:var(--sc-surface-2)] rounded-full overflow-hidden">
             <div
-              className="absolute inset-y-0 left-0 bg-[linear-gradient(90deg,#3B82F6,#2563EB)] rounded-full transition-all duration-500"
+              className="absolute inset-y-0 left-0 bg-[linear-gradient(90deg,var(--sc-blue-soft),var(--sc-blue))] rounded-full transition-all duration-500"
               style={{ width: `${((currentStep + 1) / tuto.steps.length) * 100}%` }}
             />
           </div>
@@ -131,7 +131,7 @@ export function TutorialModal({
 
         <div className="flex-1 overflow-y-auto p-5">
           <div className="flex items-start gap-3 mb-4">
-            <div className="shrink-0 w-9 h-9 rounded-xl bg-[linear-gradient(135deg,#3B82F6,#2563EB)] text-white flex items-center justify-center font-bold text-sm shadow-[var(--sc-shadow-blue-sm)]">
+            <div className="shrink-0 w-9 h-9 rounded-xl bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] text-[color:var(--sc-text-on-strong)] flex items-center justify-center font-bold text-sm shadow-[var(--sc-shadow-blue-sm)]">
               {currentStep + 1}
             </div>
             <div className="flex-1">

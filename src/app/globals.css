@@ -16,6 +16,9 @@
   /* Surfaces (clear hierarchy: page -> section -> card -> accent) */
   --sc-bg: #F8FAFC;          /* page background */
   --sc-bg-soft: #EEF4FF;     /* accent / hero surface */
+  --sc-bg-soft-faint: color-mix(in srgb, var(--sc-bg-soft) 50%, transparent);
+  --sc-bg-soft-subtle: color-mix(in srgb, var(--sc-bg-soft) 65%, transparent);
+  --sc-bg-soft-strong: color-mix(in srgb, var(--sc-bg-soft) 75%, transparent);
   --sc-surface: #FFFFFF;     /* card */
   --sc-surface-2: #F1F5F9;   /* section / subtle band */
   --sc-surface-3: #FAFCFF;   /* very light wash */
@@ -35,6 +38,67 @@
   --sc-warn: #F59E0B;
   --sc-danger: #EF4444;
   --sc-info: #0EA5E9;
+
+  /* Semantic state ramps */
+  --sc-success-soft: #ECFDF5;
+  --sc-success-border: #A7F3D0;
+  --sc-success-text: #047857;
+  --sc-success-strong: #059669;
+  --sc-success-vivid: #16A34A;
+  --sc-warn-soft: #FEF3C7;
+  --sc-warn-border: #FDE68A;
+  --sc-warn-text: #92400E;
+  --sc-warn-strong: #B45309;
+  --sc-warn-vivid: #EA580C;
+  --sc-danger-soft: #FEF2F2;
+  --sc-danger-border: #FECACA;
+  --sc-danger-border-strong: #FCA5A5;
+  --sc-danger-text: #991B1B;
+  --sc-danger-strong: #B91C1C;
+  --sc-danger-deep: #DC2626;
+  --sc-danger-light: #F87171;
+  --sc-info-soft: #DBEAFE;
+  --sc-info-border: #C3DAFD;
+  --sc-info-text: #1E40AF;
+
+  /* Supporting accents */
+  --sc-indigo-strong: #4F46E5;
+  --sc-cyan-strong: #0891B2;
+  --sc-teal: #0F766E;
+  --sc-orange: #9A3412;
+  --sc-violet: #7C3AED;
+  --sc-violet-soft: #8B5CF6;
+  --sc-blue-deep: #1E40AF;
+  --sc-blue-ink: #0F4F8F;
+  --sc-blue-pale: #6BB7FF;
+  --sc-control-disabled: #E8E8E8;
+  --sc-text-on-strong: #FFFFFF;
+  --sc-backdrop: rgb(0 0 0 / 0.40);
+  --sc-backdrop-soft: rgb(0 0 0 / 0.35);
+
+  /* RGB channels for semantic alpha colors */
+  --sc-blue-rgb: 37 99 235;
+  --sc-blue-soft-rgb: 59 130 246;
+  --sc-indigo-rgb: 99 102 241;
+  --sc-violet-rgb: 139 92 246;
+  --sc-cyan-rgb: 6 182 212;
+  --sc-success-rgb: 16 185 129;
+  --sc-warn-rgb: 245 158 11;
+  --sc-danger-rgb: 239 68 68;
+  --sc-danger-strong-rgb: 220 38 38;
+  --sc-ink-rgb: 15 23 42;
+  --sc-white-rgb: 255 255 255;
+
+  /* Third-party and illustration colors are intentionally stable */
+  --sc-google-blue: #4285F4;
+  --sc-google-red: #EA4335;
+  --sc-google-yellow: #FBBC05;
+  --sc-google-green: #34A853;
+  --sc-illustration-ink: #000000;
+  --sc-illustration-skin: #FDE3CD;
+  --sc-illustration-yellow: #FACC15;
+  --sc-illustration-shovel: #9CBBD8;
+  --sc-illustration-toolbox: #1472CC;
 
   /* Shadows (soft, premium) */
   --sc-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
@@ -114,6 +178,9 @@
   /* SafeCheck dark palette */
   --sc-bg: #0B1220;
   --sc-bg-soft: rgba(96, 165, 250, 0.08);
+  --sc-bg-soft-faint: rgba(96, 165, 250, 0.05);
+  --sc-bg-soft-subtle: rgba(96, 165, 250, 0.06);
+  --sc-bg-soft-strong: rgba(96, 165, 250, 0.08);
   --sc-surface: #111827;
   --sc-surface-2: #1E293B;
   --sc-surface-3: #131C30;
@@ -125,7 +192,50 @@
   --sc-blue: #60A5FA;
   --sc-blue-hover: #93C5FD;
   --sc-blue-soft: #3B82F6;
+  --sc-cyan: #22D3EE;
+  --sc-indigo: #818CF8;
+  --sc-text-on-strong: #0B1220;
   --sc-ring: rgba(96, 165, 250, 0.50);
+
+  /* Dark semantic state ramps */
+  --sc-success-soft: rgb(var(--sc-success-rgb) / 0.12);
+  --sc-success-border: rgb(var(--sc-success-rgb) / 0.30);
+  --sc-success-text: #6EE7B7;
+  --sc-success-strong: #6EE7B7;
+  --sc-success-vivid: #6EE7B7;
+  --sc-warn-soft: rgb(var(--sc-warn-rgb) / 0.14);
+  --sc-warn-border: rgb(var(--sc-warn-rgb) / 0.30);
+  --sc-warn-text: #FCD34D;
+  --sc-warn-strong: #FCD34D;
+  --sc-warn-vivid: #FCD34D;
+  --sc-danger-soft: rgb(var(--sc-danger-rgb) / 0.14);
+  --sc-danger-border: rgb(var(--sc-danger-rgb) / 0.30);
+  --sc-danger-border-strong: rgb(var(--sc-danger-rgb) / 0.42);
+  --sc-danger-text: #FCA5A5;
+  --sc-danger-strong: #F87171;
+  --sc-danger-deep: #F87171;
+  --sc-danger-light: #FCA5A5;
+  --sc-info-soft: rgb(var(--sc-blue-rgb) / 0.14);
+  --sc-info-border: rgb(var(--sc-blue-rgb) / 0.30);
+  --sc-info-text: #93C5FD;
+  --sc-indigo-strong: #A5B4FC;
+  --sc-cyan-strong: #67E8F9;
+  --sc-teal: #5EEAD4;
+  --sc-orange: #FDBA74;
+  --sc-violet: #C4B5FD;
+  --sc-violet-soft: #A78BFA;
+  --sc-blue-deep: #93C5FD;
+  --sc-blue-ink: #93C5FD;
+  --sc-blue-pale: #60A5FA;
+  --sc-control-disabled: #334155;
+
+  /* Dark RGB channels */
+  --sc-blue-rgb: 96 165 250;
+  --sc-blue-soft-rgb: 59 130 246;
+  --sc-indigo-rgb: 129 140 248;
+  --sc-violet-rgb: 167 139 250;
+  --sc-cyan-rgb: 34 211 238;
+  --sc-ink-rgb: 0 0 0;
 
   /* Shadows tuned for dark surfaces (deeper, more diffuse) */
   --sc-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
@@ -222,131 +332,6 @@
   :root { --font-barlow: var(--font-inter); }
   .font-display { font-family: var(--font-display); letter-spacing: -0.02em; }
 }
-
-/*
-   V2 - Re-skin legacy inline hex codes used across the site
-   so every existing page picks up the new palette.
- */
-body { background-color: var(--sc-bg); color: var(--sc-text); }
-
-/* Backgrounds (light) */
-.bg-\[\#FFFFFF\]                      { background-color: var(--sc-surface) !important; }
-.bg-\[\#F6F6F6\]                      { background-color: var(--sc-surface-2) !important; }
-.bg-\[\#C3E8FF\]                      { background-color: var(--sc-bg-soft) !important; }
-.bg-\[\#C3E8FF\]\/50                  { background-color: color-mix(in srgb, var(--sc-bg-soft) 65%, transparent) !important; }
-.bg-\[\#C3E8FF\]\/40                  { background-color: color-mix(in srgb, var(--sc-bg-soft) 50%, transparent) !important; }
-.bg-\[\#C3E8FF\]\/60                  { background-color: color-mix(in srgb, var(--sc-bg-soft) 75%, transparent) !important; }
-.bg-\[\#E5F4FF\],
-.bg-\[\#EAF5FF\]                      { background-color: var(--sc-bg-soft) !important; }
-.bg-\[\#FFDDDD\]                      { background-color: rgba(239, 68, 68, 0.10) !important; }
-.bg-\[\#AEAEAE\]                      { background: linear-gradient(135deg, var(--sc-blue-soft), var(--sc-indigo)) !important; }
-
-/* Text (light) */
-.text-\[\#000\],
-.text-\[\#000000\]                    { color: var(--sc-text) !important; }
-.text-\[\#157FE2\]                    { color: var(--sc-blue) !important; }
-.text-\[\#157FE2\]\/80                { color: var(--sc-blue) !important; opacity: 0.85; }
-.text-\[\#AEAEAE\]                    { color: var(--sc-text-muted) !important; }
-.text-\[\#C0392B\]                    { color: var(--sc-danger) !important; }
-
-/* Borders (light) */
-.border-\[\#AEAEAE\]                  { border-color: var(--sc-border) !important; }
-.border-\[\#B3DBEF\]                  { border-color: var(--sc-border) !important; }
-.border-\[\#9CBBD8\]                  { border-color: var(--sc-border-strong) !important; }
-.border-\[\#AEAEAE\]\/30              { border-color: color-mix(in srgb, var(--sc-border) 60%, transparent) !important; }
-.border-\[\#AEAEAE\]\/40              { border-color: color-mix(in srgb, var(--sc-border) 80%, transparent) !important; }
-.border-\[\#AEAEAE\]\/50              { border-color: var(--sc-border) !important; }
-.border-\[\#C0392B\]                  { border-color: var(--sc-danger) !important; }
-
-/* Hover variants */
-.hover\:bg-\[\#C3E8FF\]:hover         { background-color: var(--sc-bg-soft) !important; }
-.hover\:bg-\[\#B3DBEF\]:hover         { background-color: var(--sc-bg-soft) !important; }
-.hover\:bg-\[\#C3E8FF\]\/50:hover     { background-color: color-mix(in srgb, var(--sc-bg-soft) 65%, transparent) !important; }
-.hover\:bg-\[\#C3E8FF\]\/40:hover     { background-color: color-mix(in srgb, var(--sc-bg-soft) 50%, transparent) !important; }
-.hover\:border-\[\#157FE2\]:hover     { border-color: var(--sc-blue) !important; }
-
-/* Focus */
-.focus\:border-\[\#157FE2\]:focus     { border-color: var(--sc-blue) !important; }
-
-/* DARK MODE - explicit overrides */
-.dark body { background-color: var(--sc-bg); color: var(--sc-text); }
-
-.dark .bg-\[\#FFFFFF\]                { background-color: var(--sc-surface) !important; }
-.dark .bg-\[\#F6F6F6\]                { background-color: var(--sc-surface-2) !important; }
-.dark .bg-\[\#C3E8FF\]                { background-color: rgba(96, 165, 250, 0.10) !important; }
-.dark .bg-\[\#C3E8FF\]\/50            { background-color: rgba(96, 165, 250, 0.06) !important; }
-.dark .bg-\[\#C3E8FF\]\/40            { background-color: rgba(96, 165, 250, 0.05) !important; }
-.dark .bg-\[\#C3E8FF\]\/60            { background-color: rgba(96, 165, 250, 0.08) !important; }
-.dark .bg-\[\#E5F4FF\],
-.dark .bg-\[\#EAF5FF\]                { background-color: rgba(96, 165, 250, 0.10) !important; }
-.dark .bg-\[\#FFDDDD\]                { background-color: rgba(239, 68, 68, 0.16) !important; }
-.dark .bg-\[\#AEAEAE\]                { background: linear-gradient(135deg, #3B82F6, #6366F1) !important; }
-
-.dark .text-\[\#000\],
-.dark .text-\[\#000000\]              { color: var(--sc-text) !important; }
-.dark .text-\[\#157FE2\]              { color: var(--sc-blue) !important; }
-.dark .text-\[\#AEAEAE\]              { color: var(--sc-text-muted) !important; }
-.dark .text-\[\#C0392B\]              { color: #FCA5A5 !important; }
-
-/* Opacity-suffixed text classes - critical for dark mode contrast */
-.dark .text-\[\#000\]\/50,
-.dark .text-\[\#000\]\/55,
-.dark .text-\[\#000\]\/60             { color: var(--sc-text-muted) !important; }
-.dark .text-\[\#000\]\/65,
-.dark .text-\[\#000\]\/70,
-.dark .text-\[\#000\]\/75             { color: var(--sc-text-2) !important; }
-.dark .text-\[\#000\]\/80,
-.dark .text-\[\#000\]\/85,
-.dark .text-\[\#000\]\/90             { color: var(--sc-text) !important; opacity: 0.92; }
-
-/* Same for legacy black text variants without opacity in dark */
-.dark .text-\[\#000000\]\/60          { color: var(--sc-text-muted) !important; }
-.dark .text-\[\#000000\]\/70,
-.dark .text-\[\#000000\]\/75,
-.dark .text-\[\#000000\]\/80          { color: var(--sc-text-2) !important; }
-
-.dark .border-\[\#AEAEAE\]            { border-color: var(--sc-border) !important; }
-.dark .border-\[\#B3DBEF\]            { border-color: var(--sc-border) !important; }
-.dark .border-\[\#9CBBD8\]            { border-color: var(--sc-border-strong) !important; }
-.dark .border-\[\#AEAEAE\]\/30,
-.dark .border-\[\#AEAEAE\]\/40,
-.dark .border-\[\#AEAEAE\]\/50        { border-color: var(--sc-border) !important; }
-.dark .border-\[\#C0392B\]            { border-color: rgba(248, 113, 113, 0.35) !important; }
-
-.dark .hover\:bg-\[\#C3E8FF\]:hover         { background-color: rgba(96, 165, 250, 0.14) !important; }
-.dark .hover\:bg-\[\#B3DBEF\]:hover         { background-color: rgba(96, 165, 250, 0.18) !important; }
-.dark .hover\:bg-\[\#C3E8FF\]\/50:hover     { background-color: rgba(96, 165, 250, 0.10) !important; }
-.dark .hover\:bg-\[\#C3E8FF\]\/40:hover     { background-color: rgba(96, 165, 250, 0.08) !important; }
-.dark .hover\:border-\[\#157FE2\]:hover     { border-color: var(--sc-blue) !important; }
-.dark .focus\:border-\[\#157FE2\]:focus     { border-color: var(--sc-blue) !important; }
-
-/*
-   GLOBAL NEUTRALIZATION of legacy skeumorphic offset shadows
-   Many files still ship inline `box-shadow: 3px 3px 0px #C0DDF8`.
-   We override them site-wide to a soft premium shadow without
-   editing each file. Targeting both the offset color and the
-   stark-offset signature.
- */
-[style*="0px #C0DDF8"],
-[style*="0px#C0DDF8"],
-[style*="0px #A4CAED"],
-[style*="0px#A4CAED"],
-[style*="0px #E8A9A9"],
-[style*="0px#E8A9A9"] {
-  box-shadow: var(--sc-shadow) !important;
-  transition: box-shadow 220ms ease, transform 220ms ease, border-color 220ms ease !important;
-}
-[style*="0px #C0DDF8"]:hover,
-[style*="0px#C0DDF8"]:hover,
-[style*="0px #A4CAED"]:hover,
-[style*="0px#A4CAED"]:hover {
-  box-shadow: var(--sc-shadow-md) !important;
-}
-
-/* Inline `border: 1px solid #B3DBEF` on existing cards keeps the
-   new soft border via the .border-[#B3DBEF] override above when
-   used as className. Inline `style="border: ..."` is rarer and
-   acceptable; it's caught by the global border-color tokens. */
 
 /* Cards / popups */
 .sc-card {

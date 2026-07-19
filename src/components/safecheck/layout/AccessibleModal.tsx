@@ -35,7 +35,7 @@ type AccessibleModalName =
       "aria-labelledby": string
     }
 
-export type AccessibleModalProps = AccessibleModalName & {
+type AccessibleModalProps = AccessibleModalName & {
   open: boolean
   onClose: () => void
   children: ReactNode
@@ -140,7 +140,7 @@ export function AccessibleModal({
       aria-describedby={ariaDescribedBy}
       tabIndex={-1}
       className={cn(
-        "fixed inset-0 flex items-center justify-center bg-[color:var(--sc-text)]/40 backdrop-blur-sm px-4",
+        "fixed inset-0 flex items-center justify-center bg-[color:var(--sc-backdrop)] backdrop-blur-sm px-4",
         className,
       )}
       style={{ ...style, zIndex }}

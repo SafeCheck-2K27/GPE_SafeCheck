@@ -16,7 +16,7 @@ export function PersonalizationSectionCard({
   return (
     <div className="rounded-2xl p-5 md:p-6 flex flex-col gap-4 bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[var(--sc-shadow-sm)]">
       <div className="flex items-start gap-3">
-        <span className="shrink-0 w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold text-white mt-0.5 bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] shadow-[var(--sc-shadow-blue-sm)]">
+        <span className="shrink-0 w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold text-[color:var(--sc-text-on-strong)] mt-0.5 bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] shadow-[var(--sc-shadow-blue-sm)]">
           {number}
         </span>
         <div className="flex-1 min-w-0">

@@ -31,7 +31,7 @@ export function AccueilTestimonials() {
         </h2>
       </div>
 
-      <div className="relative rounded-2xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] shadow-[0_2px_6px_-2px_rgba(15,23,42,0.06),0_10px_30px_-12px_rgba(15,23,42,0.08)] p-6 md:p-10">
+      <div className="relative rounded-2xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] shadow-[0_2px_6px_-2px_rgb(var(--sc-ink-rgb)/0.06),0_10px_30px_-12px_rgb(var(--sc-ink-rgb)/0.08)] p-6 md:p-10">
         <Quote
           className="absolute top-5 left-6 w-8 h-8 text-[color:var(--sc-blue)]/15"
           aria-hidden
@@ -47,7 +47,7 @@ export function AccueilTestimonials() {
           </button>
 
           <div className="flex-1 flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-            <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full shrink-0 flex items-center justify-center text-white text-3xl font-display font-bold bg-[linear-gradient(135deg,#3B82F6,#2563EB_55%,#6366F1)] shadow-[0_12px_28px_-10px_rgba(37,99,235,0.55)]">
+            <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full shrink-0 flex items-center justify-center text-[color:var(--sc-text-on-strong)] text-3xl font-display font-bold bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue)_55%,var(--sc-indigo))] shadow-[0_12px_28px_-10px_rgb(var(--sc-blue-rgb)/0.55)]">
               {testimonial.name[0]}
             </div>
             <div className="flex-1">
@@ -89,9 +89,9 @@ export function AccueilTestimonials() {
             <ChevronLeft className="w-4 h-4" />
           </button>
           <div className="flex justify-center gap-2 mx-auto">
-            {homeTestimonials.map((_, index) => (
+            {homeTestimonials.map((testimonial, index) => (
               <button
-                key={index}
+                key={testimonial.name}
                 onClick={() => setTestimonialIndex(index)}
                 className={`h-2 rounded-full transition-all ${index === testimonialIndex ? "w-6 bg-[color:var(--sc-blue)]" : "w-2 bg-[color:var(--sc-border-strong)]"}`}
                 aria-label={`Aller au témoignage ${index + 1}`}

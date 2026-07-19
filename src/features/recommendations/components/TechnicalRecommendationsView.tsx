@@ -9,7 +9,7 @@ import {
   Clock,
   Filter as FilterIcon,
 } from "lucide-react"
-import { ScBadge } from "@/components/safecheck/primitives"
+import { ScBadge, ScChip } from "@/components/safecheck/primitives"
 import { CATEGORY_LABELS, STATUS_LABELS, TECH } from "../data"
 import { filterTechnicalRecommendations } from "../filters"
 import type {
@@ -19,7 +19,6 @@ import type {
   TechnicalUrgency,
 } from "../types"
 import { getNextRecommendationStatus } from "../utils"
-import { FilterChip } from "./FilterChip"
 import { TechnicalRecommendationDetail } from "./TechnicalRecommendationDetail"
 
 export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: () => void; initialCat: string | null }) {
@@ -50,25 +49,25 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
 
   return (
     <>
-      <section className="bg-[#C3E8FF] border-b border-[#B3DBEF]">
+      <section className="bg-[color:var(--sc-bg-soft)] border-b border-[color:var(--sc-border)]">
         <div className="max-w-6xl mx-auto px-4 py-10">
           {/* Breadcrumb */}
           <nav aria-label="Fil d'Ariane" className="flex items-center gap-1.5 text-sm mb-4">
             <button
               onClick={onBack}
-              className="text-[#157FE2] hover:underline font-medium inline-flex items-center gap-1"
+              className="text-[color:var(--sc-blue)] hover:underline font-medium inline-flex items-center gap-1"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               Recommandations
             </button>
-            <span className="text-[#000]/40" aria-hidden="true">/</span>
-            <span className="text-[#000]/70 font-semibold">Techniques</span>
+            <span className="text-[color:var(--sc-text-muted)]" aria-hidden="true">/</span>
+            <span className="text-[color:var(--sc-text-2)] font-semibold">Techniques</span>
           </nav>
 
-          <h1 className="text-2xl md:text-4xl font-extrabold text-[#000] mb-2 text-balance">
+          <h1 className="text-2xl md:text-4xl font-extrabold text-[color:var(--sc-text)] mb-2 text-balance">
             Les configurations et outils qui renforcent durablement votre posture.
           </h1>
-          <p className="text-sm md:text-base text-[#000]/80 max-w-3xl">
+          <p className="text-sm md:text-base text-[color:var(--sc-text)] max-w-3xl">
             {TECH.length} recommandations classées par catégorie, niveau et urgence. Cliquez sur une carte pour
             voir les étapes détaillées, les tutoriels liés et l&apos;explication complète.
           </p>
@@ -78,17 +77,18 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
             {Object.entries(CATEGORY_LABELS).map(([key, { label, icon: Icon }]) => {
               const count = key === "all" ? TECH.length : TECH.filter((t) => t.category === key).length
               return (
-                <button
+                <ScChip
                   key={key}
                   onClick={() => setCat(key)}
-                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${ cat === key ? "text-white border border-transparent bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] shadow-[0_4px_12px_-3px_rgba(37,99,235,0.40)]" : "bg-[color:var(--sc-surface)] text-[color:var(--sc-text-2)] border border-[color:var(--sc-border)] hover:border-[color:var(--sc-blue)]/45 hover:text-[color:var(--sc-blue)]" }`}
+                  active={cat === key}
+                  className="px-3.5"
                 >
                   <Icon className="w-3.5 h-3.5" />
                   {label}
                   {key !== "all" && (
                     <span className={`ml-0.5 ${cat === key ? "opacity-75" : "opacity-50"}`}>({count})</span>
                   )}
-                </button>
+                </ScChip>
               )
             })}
           </div>
@@ -96,36 +96,38 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
           {/* Sub-filters */}
           <div className="space-y-3 mt-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-semibold text-[#000]/70 uppercase tracking-wider mr-1 inline-flex items-center gap-1">
+              <span className="text-[11px] font-semibold text-[color:var(--sc-text-2)] uppercase tracking-wider mr-1 inline-flex items-center gap-1">
                 <FilterIcon className="w-3 h-3" /> Niveau
               </span>
               {(["all", "Débutant", "Intermédiaire", "Avancé"] as const).map((lvl) => (
-                <FilterChip
+                <ScChip
+                  size="xs"
                   key={lvl}
                   active={levelFilter === lvl}
                   onClick={() => setLevelFilter(lvl as "all" | HabitLevel)}
                 >
                   {lvl === "all" ? "Tous" : lvl}
-                </FilterChip>
+                </ScChip>
               ))}
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-semibold text-[#000]/70 uppercase tracking-wider mr-1 inline-flex items-center gap-1">
+              <span className="text-[11px] font-semibold text-[color:var(--sc-text-2)] uppercase tracking-wider mr-1 inline-flex items-center gap-1">
                 <FilterIcon className="w-3 h-3" /> Urgence
               </span>
               {(["all", "Haute", "Moyenne", "Faible"] as const).map((u) => (
-                <FilterChip
+                <ScChip
+                  size="xs"
                   key={u}
                   active={urgencyFilter === u}
                   onClick={() => setUrgencyFilter(u as typeof urgencyFilter)}
                 >
                   {u === "all" ? "Toutes" : u}
-                </FilterChip>
+                </ScChip>
               ))}
             </div>
           </div>
 
-          <p className="text-xs text-[#000]/60 mt-4">
+          <p className="text-xs text-[color:var(--sc-text-muted)] mt-4">
             {filtered.length} recommandation{filtered.length > 1 ? "s" : ""} affichée{filtered.length > 1 ? "s" : ""}
           </p>
         </div>
@@ -133,8 +135,8 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
 
       <section className="max-w-6xl mx-auto px-4 py-10">
         {filtered.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-[#B3DBEF] bg-[#FFFFFF] p-10 text-center">
-            <p className="text-sm text-[#000]/60">
+          <div className="rounded-xl border border-dashed border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] p-10 text-center">
+            <p className="text-sm text-[color:var(--sc-text-muted)]">
               Aucune recommandation ne correspond à vos filtres pour le moment.
             </p>
           </div>
@@ -148,17 +150,17 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
                 <button
                   key={t.id}
                   onClick={() => setSelected(t)}
-                  className="text-left rounded-xl p-5 bg-[#FFFFFF] flex flex-col gap-3 sc-fade-in transition-all hover:-translate-y-1"
+                  className="text-left rounded-xl p-5 bg-[color:var(--sc-surface)] flex flex-col gap-3 sc-fade-in transition-all hover:-translate-y-1"
                   style={{
                     animationDelay: `${i * 40}ms`,
-                    border: t.urgency === "Haute" ? "1px solid #FCA5A5" : "1px solid #B3DBEF",
-                    boxShadow: t.urgency === "Haute" ? "3px 3px 0px #FECACA" : "3px 3px 0px #C0DDF8",
+                    border: t.urgency === "Haute" ? "1px solid var(--sc-danger-border-strong)" : "1px solid var(--sc-border)",
+                    boxShadow: t.urgency === "Haute" ? "var(--sc-shadow)" : "var(--sc-shadow)",
                   }}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <div className="w-10 h-10 rounded-lg bg-[#C3E8FF] flex items-center justify-center shrink-0">
-                        <Icon className="w-5 h-5 text-[#157FE2]" />
+                      <div className="w-10 h-10 rounded-lg bg-[color:var(--sc-bg-soft)] flex items-center justify-center shrink-0">
+                        <Icon className="w-5 h-5 text-[color:var(--sc-blue)]" />
                       </div>
                       <ScBadge tone={t.urgency === "Haute" ? "warn" : t.urgency === "Moyenne" ? "info" : "muted"}>
                         {t.urgency === "Haute" && <AlertTriangle className="w-3 h-3" />}
@@ -177,20 +179,20 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
                     </button>
                   </div>
 
-                  <h3 className="font-bold text-base text-[#000]">{t.title}</h3>
-                  <p className="text-xs text-[#000]/60 italic">{t.subtitle}</p>
-                  <p className="text-sm text-[#000]/75 leading-relaxed line-clamp-2">{t.description}</p>
+                  <h3 className="font-bold text-base text-[color:var(--sc-text)]">{t.title}</h3>
+                  <p className="text-xs text-[color:var(--sc-text-muted)] italic">{t.subtitle}</p>
+                  <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed line-clamp-2">{t.description}</p>
 
-                  <div className="flex items-center gap-3 text-xs text-[#000]/55 mt-1">
+                  <div className="flex items-center gap-3 text-xs text-[color:var(--sc-text-muted)] mt-1">
                     <span className="inline-flex items-center gap-1">
                       <Clock className="w-3 h-3" /> {t.timeEstimate}
                     </span>
-                    <span className="text-[10px] uppercase tracking-wider font-semibold text-[#000]/40">
+                    <span className="text-[10px] uppercase tracking-wider font-semibold text-[color:var(--sc-text-muted)]">
                       {CATEGORY_LABELS[t.category].label}
                     </span>
                   </div>
 
-                  <span className="text-xs text-[#157FE2] font-semibold mt-auto inline-flex items-center gap-1">
+                  <span className="text-xs text-[color:var(--sc-blue)] font-semibold mt-auto inline-flex items-center gap-1">
                     Voir les étapes <ArrowRight className="w-3 h-3" />
                   </span>
                 </button>

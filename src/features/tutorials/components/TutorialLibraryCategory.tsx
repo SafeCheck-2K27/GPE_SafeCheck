@@ -109,14 +109,14 @@ export function TutorialLibraryCategory({
             {levelsPresent.map((level) => (
               <span
                 key={level}
-                className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full text-white"
+                className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full text-[color:var(--sc-text-on-strong)]"
                 style={{
                   background:
                     level === "Debutant"
-                      ? "#10B981"
+                      ? "var(--sc-success)"
                       : level === "Intermediaire"
-                        ? "#F59E0B"
-                        : "#8B5CF6",
+                        ? "var(--sc-warn)"
+                        : "var(--sc-violet-soft)",
                 }}
               >
                 {level}

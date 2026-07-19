@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { ScBadge, ScButton } from "@/components/safecheck/primitives"
+import { ScBadge, ScButton, ScChip } from "@/components/safecheck/primitives"
 import { tutoriels } from "../data/catalog"
 import type { Tutoriel } from "../data/catalog"
 import {
@@ -16,7 +16,6 @@ import { mockTutoStatus, userProgress } from "../data"
 import { getPersonalizedTutorialGroups } from "../personalization"
 import { TutorialCard } from "./TutorialCards"
 import { TutorialProgressionHero } from "./TutorialProgressionHero"
-import { TutorialViewChip } from "./TutorialViewChip"
 
 export function TutorialPersonalizedView({
   openTuto,
@@ -45,21 +44,21 @@ export function TutorialPersonalizedView({
         <span className="text-xs font-semibold text-[color:var(--sc-text-muted)] uppercase tracking-wider mr-1">
           Vue
         </span>
-        <TutorialViewChip active onClick={() => {}}>
+        <ScChip active onClick={() => {}}>
           <Sparkles className="w-3.5 h-3.5" /> Mes tutoriels
-        </TutorialViewChip>
-        <TutorialViewChip onClick={() => router.push("/tutoriels?vue=tous")}>
+        </ScChip>
+        <ScChip onClick={() => router.push("/tutoriels?vue=tous")}>
           <BookOpen className="w-3.5 h-3.5" /> Tous les tutoriels
-        </TutorialViewChip>
-        <TutorialViewChip onClick={() => router.push("/tutoriels?niveau=debutant")}>
+        </ScChip>
+        <ScChip onClick={() => router.push("/tutoriels?niveau=debutant")}>
           <GraduationCap className="w-3.5 h-3.5" /> Debutant
-        </TutorialViewChip>
-        <TutorialViewChip onClick={() => router.push("/tutoriels?niveau=intermediaire")}>
+        </ScChip>
+        <ScChip onClick={() => router.push("/tutoriels?niveau=intermediaire")}>
           <Flame className="w-3.5 h-3.5" /> Intermediaire
-        </TutorialViewChip>
-        <TutorialViewChip onClick={() => router.push("/tutoriels?niveau=avance")}>
+        </ScChip>
+        <ScChip onClick={() => router.push("/tutoriels?niveau=avance")}>
           <Zap className="w-3.5 h-3.5" /> Avance
-        </TutorialViewChip>
+        </ScChip>
       </div>
 
       {/* Grouped sections */}
@@ -69,7 +68,7 @@ export function TutorialPersonalizedView({
             <section key={sectionTitle} className="mb-8">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-4">
-                  <div className="hidden sm:flex items-center justify-center w-10 h-10 rounded-xl bg-[linear-gradient(135deg,#3B82F6,#2563EB)] text-white font-bold text-sm shadow-[var(--sc-shadow-blue-sm)]">
+                  <div className="hidden sm:flex items-center justify-center w-10 h-10 rounded-xl bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] text-[color:var(--sc-text-on-strong)] font-bold text-sm shadow-[var(--sc-shadow-blue-sm)]">
                     {sectionIndex + 1}
                   </div>
                   <div>

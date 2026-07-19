@@ -3,7 +3,7 @@
 import { useMemo } from "react"
 import type { ReactNode } from "react"
 import { useRouter } from "next/navigation"
-import { ScBadge } from "@/components/safecheck/primitives"
+import { ScBadge, ScChip } from "@/components/safecheck/primitives"
 import { tutoriels } from "../data/catalog"
 import type { Niveau, Tutoriel } from "../data/catalog"
 import {
@@ -15,7 +15,6 @@ import {
 } from "lucide-react"
 import { mockTutoStatus } from "../data"
 import { TutorialCard } from "./TutorialCards"
-import { TutorialViewChip } from "./TutorialViewChip"
 
 export function TutorialLevelView({
   niveau,
@@ -68,10 +67,10 @@ export function TutorialLevelView({
           style={{
             background:
               niveau === "Debutant"
-                ? "radial-gradient(at 0% 0%, rgba(16,185,129,0.12), transparent 50%), radial-gradient(at 100% 50%, rgba(37,99,235,0.10), transparent 50%)"
+                ? "radial-gradient(at 0% 0%, rgb(var(--sc-success-rgb)/0.12), transparent 50%), radial-gradient(at 100% 50%, rgb(var(--sc-blue-rgb)/0.10), transparent 50%)"
                 : niveau === "Intermediaire"
-                  ? "radial-gradient(at 0% 0%, rgba(245,158,11,0.14), transparent 50%), radial-gradient(at 100% 50%, rgba(37,99,235,0.10), transparent 50%)"
-                  : "radial-gradient(at 0% 0%, rgba(139,92,246,0.16), transparent 50%), radial-gradient(at 100% 50%, rgba(37,99,235,0.10), transparent 50%)",
+                  ? "radial-gradient(at 0% 0%, rgb(var(--sc-warn-rgb)/0.14), transparent 50%), radial-gradient(at 100% 50%, rgb(var(--sc-blue-rgb)/0.10), transparent 50%)"
+                  : "radial-gradient(at 0% 0%, rgb(var(--sc-violet-rgb)/0.16), transparent 50%), radial-gradient(at 100% 50%, rgb(var(--sc-blue-rgb)/0.10), transparent 50%)",
           }}
           aria-hidden
         />
@@ -94,30 +93,30 @@ export function TutorialLevelView({
 
           {/* Quick switcher */}
           <div className="flex flex-wrap items-center gap-2">
-            <TutorialViewChip onClick={() => router.push("/tutoriels")}>
+            <ScChip onClick={() => router.push("/tutoriels")}>
               <Sparkles className="w-3.5 h-3.5" /> Mes tutoriels
-            </TutorialViewChip>
-            <TutorialViewChip onClick={() => router.push("/tutoriels?vue=tous")}>
+            </ScChip>
+            <ScChip onClick={() => router.push("/tutoriels?vue=tous")}>
               <BookOpen className="w-3.5 h-3.5" /> Tous
-            </TutorialViewChip>
-            <TutorialViewChip
+            </ScChip>
+            <ScChip
               active={niveau === "Debutant"}
               onClick={() => router.push("/tutoriels?niveau=debutant")}
             >
               <GraduationCap className="w-3.5 h-3.5" /> Debutant
-            </TutorialViewChip>
-            <TutorialViewChip
+            </ScChip>
+            <ScChip
               active={niveau === "Intermediaire"}
               onClick={() => router.push("/tutoriels?niveau=intermediaire")}
             >
               <Flame className="w-3.5 h-3.5" /> Intermediaire
-            </TutorialViewChip>
-            <TutorialViewChip
+            </ScChip>
+            <ScChip
               active={niveau === "Avance"}
               onClick={() => router.push("/tutoriels?niveau=avance")}
             >
               <Zap className="w-3.5 h-3.5" /> Avance
-            </TutorialViewChip>
+            </ScChip>
           </div>
         </div>
       </div>

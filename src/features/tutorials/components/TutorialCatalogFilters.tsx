@@ -20,7 +20,7 @@ import type {
   TutorialFilters,
   TypeFilter,
 } from "../types"
-import { TutorialViewChip } from "./TutorialViewChip"
+import { ScChip } from "@/components/safecheck/primitives"
 
 const CATEGORIES: Array<"all" | Category> = [
   "all",
@@ -64,7 +64,7 @@ export function TutorialCatalogFilters({
           <FilterIcon className="w-3.5 h-3.5" />
           Filtres &amp; tri
           {hasActiveFilters && (
-            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[color:var(--sc-blue)] text-white text-[9px] font-bold">
+            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)] text-[9px] font-bold">
               !
             </span>
           )}
@@ -102,7 +102,7 @@ export function TutorialCatalogFilters({
               </span>
               {(["all", "Debutant", "Intermediaire", "Avance"] as const).map(
                 (level) => (
-                  <TutorialViewChip
+                  <ScChip
                     key={level}
                     size="xs"
                     active={filters.levelFilter === level}
@@ -114,7 +114,7 @@ export function TutorialCatalogFilters({
                     }
                   >
                     {level === "all" ? "Tous" : level}
-                  </TutorialViewChip>
+                  </ScChip>
                 ),
               )}
             </div>
@@ -125,14 +125,14 @@ export function TutorialCatalogFilters({
               Categorie
             </span>
             {CATEGORIES.map((category) => (
-              <TutorialViewChip
+              <ScChip
                 key={category}
                 size="xs"
                 active={filters.catFilter === category}
                 onClick={() => updateFilter("catFilter", category)}
               >
                 {category === "all" ? "Toutes" : CATEGORY_LABEL[category]}
-              </TutorialViewChip>
+              </ScChip>
             ))}
           </div>
 
@@ -144,7 +144,7 @@ export function TutorialCatalogFilters({
               <div className="flex flex-wrap gap-1.5">
                 {(["all", "todo", "inprogress", "done"] as StatusFilter[]).map(
                   (status) => (
-                    <TutorialViewChip
+                    <ScChip
                       key={status}
                       size="xs"
                       active={filters.statusFilter === status}
@@ -157,7 +157,7 @@ export function TutorialCatalogFilters({
                           : status === "inprogress"
                             ? "En cours"
                             : "Termine"}
-                    </TutorialViewChip>
+                    </ScChip>
                   ),
                 )}
               </div>
@@ -170,7 +170,7 @@ export function TutorialCatalogFilters({
               <div className="flex flex-wrap gap-1.5">
                 {(["all", "quick", "medium", "long"] as DurationFilter[]).map(
                   (duration) => (
-                    <TutorialViewChip
+                    <ScChip
                       key={duration}
                       size="xs"
                       active={filters.durationFilter === duration}
@@ -183,7 +183,7 @@ export function TutorialCatalogFilters({
                           : duration === "medium"
                             ? "10-20 min"
                             : "20 min+"}
-                    </TutorialViewChip>
+                    </ScChip>
                   ),
                 )}
               </div>
@@ -203,7 +203,7 @@ export function TutorialCatalogFilters({
                     "technique",
                   ] as TypeFilter[]
                 ).map((type) => (
-                  <TutorialViewChip
+                  <ScChip
                     key={type}
                     size="xs"
                     active={filters.typeFilter === type}
@@ -218,7 +218,7 @@ export function TutorialCatalogFilters({
                           : type === "populaire"
                             ? "Populaire"
                             : "Technique"}
-                  </TutorialViewChip>
+                  </ScChip>
                 ))}
               </div>
             </div>

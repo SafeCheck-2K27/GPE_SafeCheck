@@ -30,7 +30,7 @@ export function RecommendationsContent() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFFFFF] font-sans">
+    <div className="min-h-screen flex flex-col bg-[color:var(--sc-surface)] font-sans">
       <Navbar onSignupClick={() => router.push("/compte/creer")} />
 
       <main className="flex-1">

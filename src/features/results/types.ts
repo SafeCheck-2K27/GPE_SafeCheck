@@ -39,9 +39,9 @@ export interface ResultRiskStyle {
   dot: string
 }
 
-export type ResultLevelId = "novice" | "scarabee" | "gardien" | "sentinelle"
+type ResultLevelId = "novice" | "scarabee" | "gardien" | "sentinelle"
 
-export type ResultStrengthProfile = "low" | "high"
+type ResultStrengthProfile = "low" | "high"
 
 export interface ResultLevelConfig {
   readonly id: ResultLevelId

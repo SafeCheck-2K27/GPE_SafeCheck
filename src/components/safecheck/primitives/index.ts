@@ -1,5 +1,6 @@
 export { ScButton, type ScButtonProps } from "./ScButton"
 export { ScBadge } from "./ScBadge"
 export { ScCard, type ScCardProps } from "./ScCard"
+export { ScChip, type ScChipProps } from "./ScChip"
 export { SafeCheckMark } from "./SafeCheckMark"
 export { GoogleIcon, GoogleAuthButton, AuthDivider } from "./auth-buttons"

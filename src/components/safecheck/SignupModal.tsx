@@ -29,13 +29,7 @@ import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
  * The component is fully self-contained: it owns its own `useState`, traps
  * Escape to close, and locks the page scroll while open.
  */
-export function SignupModal({
-  open,
-  onClose,
-  onSwitchToLogin,
-  pendingHref,
-  reason,
-}: {
+type SignupModalProps = {
   open: boolean
   onClose: () => void
   onSwitchToLogin?: () => void
@@ -49,7 +43,20 @@ export function SignupModal({
    * the modal header so the user understands why they're being asked.
    */
   reason?: string
-}) {
+}
+
+export function SignupModal(props: SignupModalProps) {
+  if (!props.open) return null
+  return <SignupModalContent {...props} />
+}
+
+function SignupModalContent({
+  open,
+  onClose,
+  onSwitchToLogin,
+  pendingHref,
+  reason,
+}: SignupModalProps) {
   const auth = useAuth()
   const router = useRouter()
   const { t } = useI18n()
@@ -59,22 +66,6 @@ export function SignupModal({
   const [showPw, setShowPw] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
   const [submitting, setSubmitting] = React.useState(false)
-
-  // Reset state whenever the modal is freshly opened so it never reopens
-  // with leftover input from a previous attempt.
-  React.useEffect(() => {
-    if (!open) return
-    queueMicrotask(() => {
-      setEmail("")
-      setPassword("")
-      setPseudo("")
-      setShowPw(false)
-      setError(null)
-      setSubmitting(false)
-    })
-  }, [open])
-
-  if (!open) return null
 
   const finishAndRoute = () => {
     onClose()
@@ -137,7 +128,7 @@ export function SignupModal({
       <form
         onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgba(15,23,42,0.30)]"
+        className="w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgb(var(--sc-ink-rgb)/0.30)]"
       >
         <div className="flex items-center gap-2 mb-1">
           <SafeCheckMark />
@@ -233,7 +224,7 @@ export function SignupModal({
           {error && (
             <p
               role="alert"
-              className="text-xs font-medium text-[color:var(--sc-danger,#DC2626)]"
+              className="text-xs font-medium text-[color:var(--sc-danger)]"
             >
               {error}
             </p>

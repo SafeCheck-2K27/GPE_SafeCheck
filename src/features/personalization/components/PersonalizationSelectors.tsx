@@ -45,7 +45,7 @@ export function MultiChip({
             key={option.value}
             type="button"
             onClick={() => !isDisabled && onToggle(option.value)}
-            className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium border transition-all duration-200 cursor-pointer select-none ${isSelected ? "border-[color:var(--sc-blue)] bg-[color:var(--sc-blue)] text-white shadow-[0_4px_12px_-4px_rgba(37,99,235,0.45)]" : isDisabled ? "border-[color:var(--sc-border)] bg-[color:var(--sc-surface-2)] text-[color:var(--sc-text-muted)] opacity-50 cursor-not-allowed" : "border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] text-[color:var(--sc-text-2)] hover:border-[color:var(--sc-blue)]/60 hover:bg-[color:var(--sc-bg-soft)] hover:text-[color:var(--sc-blue)]"}`}
+            className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium border transition-all duration-200 cursor-pointer select-none ${isSelected ? "border-[color:var(--sc-blue)] bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)] shadow-[0_4px_12px_-4px_rgb(var(--sc-blue-rgb)/0.45)]" : isDisabled ? "border-[color:var(--sc-border)] bg-[color:var(--sc-surface-2)] text-[color:var(--sc-text-muted)] opacity-50 cursor-not-allowed" : "border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] text-[color:var(--sc-text-2)] hover:border-[color:var(--sc-blue)]/60 hover:bg-[color:var(--sc-bg-soft)] hover:text-[color:var(--sc-blue)]"}`}
             aria-pressed={isSelected}
           >
             {Icon && (
@@ -83,7 +83,7 @@ export function SingleChip({
             key={option.value}
             type="button"
             onClick={() => onSelect(option.value)}
-            className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium border transition-all duration-200 cursor-pointer select-none ${isSelected ? "border-[color:var(--sc-blue)] bg-[color:var(--sc-blue)] text-white shadow-[0_4px_12px_-4px_rgba(37,99,235,0.45)]" : "border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] text-[color:var(--sc-text-2)] hover:border-[color:var(--sc-blue)]/60 hover:bg-[color:var(--sc-bg-soft)] hover:text-[color:var(--sc-blue)]"}`}
+            className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium border transition-all duration-200 cursor-pointer select-none ${isSelected ? "border-[color:var(--sc-blue)] bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)] shadow-[0_4px_12px_-4px_rgb(var(--sc-blue-rgb)/0.45)]" : "border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] text-[color:var(--sc-text-2)] hover:border-[color:var(--sc-blue)]/60 hover:bg-[color:var(--sc-bg-soft)] hover:text-[color:var(--sc-blue)]"}`}
             aria-pressed={isSelected}
           >
             {isSelected && (
@@ -112,16 +112,16 @@ export function TechSlider({
             key={number}
             type="button"
             onClick={() => onChange(number)}
-            className={`flex-1 flex flex-col items-center gap-1.5 py-2.5 px-1 rounded-xl border transition-all duration-200 cursor-pointer ${value === number ? "border-[color:var(--sc-blue)] bg-[color:var(--sc-blue)] shadow-[0_4px_12px_-4px_rgba(37,99,235,0.45)]" : "border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] hover:border-[color:var(--sc-blue)]/60 hover:bg-[color:var(--sc-bg-soft)]"}`}
+            className={`flex-1 flex flex-col items-center gap-1.5 py-2.5 px-1 rounded-xl border transition-all duration-200 cursor-pointer ${value === number ? "border-[color:var(--sc-blue)] bg-[color:var(--sc-blue)] shadow-[0_4px_12px_-4px_rgb(var(--sc-blue-rgb)/0.45)]" : "border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] hover:border-[color:var(--sc-blue)]/60 hover:bg-[color:var(--sc-bg-soft)]"}`}
             aria-pressed={value === number}
           >
             <span
-              className={`text-lg font-extrabold leading-none transition-colors ${value === number ? "text-white" : "text-[color:var(--sc-blue)]"}`}
+              className={`text-lg font-extrabold leading-none transition-colors ${value === number ? "text-[color:var(--sc-text-on-strong)]" : "text-[color:var(--sc-blue)]"}`}
             >
               {number}
             </span>
             {value === number && (
-              <Check className="w-3 h-3 text-white" strokeWidth={3} />
+              <Check className="w-3 h-3 text-[color:var(--sc-text-on-strong)]" strokeWidth={3} />
             )}
           </button>
         ))}

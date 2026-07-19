@@ -57,7 +57,7 @@ export function TutorialDetailOverview({
               className={`flex items-start gap-3 rounded-xl p-3 border transition-all ${completedSteps.has(index) ? "bg-[color:var(--sc-success)]/6 border-[color:var(--sc-success)]/25" : "bg-[color:var(--sc-bg-soft)] border-[color:var(--sc-border)] hover:border-[color:var(--sc-blue)]/25"}`}
             >
               <span
-                className={`shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center text-[10px] font-bold transition-all ${completedSteps.has(index) ? "bg-[color:var(--sc-success)] border-[color:var(--sc-success)] text-white" : "border-[color:var(--sc-border-strong)] text-[color:var(--sc-text-muted)]"}`}
+                className={`shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center text-[10px] font-bold transition-all ${completedSteps.has(index) ? "bg-[color:var(--sc-success)] border-[color:var(--sc-success)] text-[color:var(--sc-text-on-strong)]" : "border-[color:var(--sc-border-strong)] text-[color:var(--sc-text-muted)]"}`}
               >
                 {completedSteps.has(index) ? (
                   <Check className="w-3 h-3" />

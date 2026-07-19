@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import Navbar from "@/components/safecheck/Navbar"
 import { ScButton, ScBadge } from "@/components/safecheck/primitives"
 import Footer from "@/components/safecheck/Footer"
+import { PageShell } from "@/components/safecheck/layout/PageShell"
 import { Heart, Award, Brain, BookOpen, Coins, Sparkles, Send } from "lucide-react"
 
 /* Brand icons were removed from lucide-react core, so we keep small inline
@@ -43,7 +44,7 @@ const CONTRIBUTORS: Contributor[] = [
     github: "https://github.com",
     linkedin: "https://linkedin.com",
     initials: "EM",
-    accent: "#157FE2",
+    accent: "var(--sc-blue)",
   },
   {
     name: "Karim Benali",
@@ -52,7 +53,7 @@ const CONTRIBUTORS: Contributor[] = [
     contribution: ["Recommandations", "OSS"],
     github: "https://github.com",
     initials: "KB",
-    accent: "#0F766E",
+    accent: "var(--sc-teal)",
   },
   {
     name: "Maëlle Tournier",
@@ -61,7 +62,7 @@ const CONTRIBUTORS: Contributor[] = [
     contribution: ["Design", "UX"],
     linkedin: "https://linkedin.com",
     initials: "MT",
-    accent: "#9A3412",
+    accent: "var(--sc-orange)",
   },
   {
     name: "Lucas Petit",
@@ -70,7 +71,7 @@ const CONTRIBUTORS: Contributor[] = [
     contribution: ["Pédagogie", "Audit"],
     linkedin: "https://linkedin.com",
     initials: "LP",
-    accent: "#7C3AED",
+    accent: "var(--sc-violet)",
   },
   {
     name: "Sofia Reyes",
@@ -79,7 +80,7 @@ const CONTRIBUTORS: Contributor[] = [
     contribution: ["Culture cyber", "Débunk"],
     github: "https://github.com",
     initials: "SR",
-    accent: "#0EA5E9",
+    accent: "var(--sc-info)",
   },
   {
     name: "Thomas Lavigne",
@@ -87,7 +88,7 @@ const CONTRIBUTORS: Contributor[] = [
     bio: "A financé l'illustration mascotte et le développement du module d'audit standard.",
     contribution: ["Don financier"],
     initials: "TL",
-    accent: "#B45309",
+    accent: "var(--sc-warn-strong)",
   },
   {
     name: "Jin-Wo Park",
@@ -97,7 +98,7 @@ const CONTRIBUTORS: Contributor[] = [
     github: "https://github.com",
     linkedin: "https://linkedin.com",
     initials: "JP",
-    accent: "#DC2626",
+    accent: "var(--sc-danger-deep)",
   },
   {
     name: "Amina Diallo",
@@ -106,7 +107,7 @@ const CONTRIBUTORS: Contributor[] = [
     contribution: ["Pédagogie", "Relecture"],
     linkedin: "https://linkedin.com",
     initials: "AD",
-    accent: "#0F766E",
+    accent: "var(--sc-teal)",
   },
 ]
 
@@ -121,21 +122,21 @@ export default function HallOfFamePage() {
   const router = useRouter()
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFFFFF] font-sans">
+    <PageShell className="bg-[color:var(--sc-surface)]">
       <Navbar onSignupClick={() => router.push("/compte/creer")} />
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="bg-[#C3E8FF] border-b border-[#B3DBEF]">
+        <section className="bg-[color:var(--sc-bg-soft)] border-b border-[color:var(--sc-border)]">
           <div className="max-w-5xl mx-auto px-4 py-12 md:py-16 text-center">
             <ScBadge tone="info" className="mb-4">
               <Award className="w-3 h-3" />
               Hall of Fame
             </ScBadge>
-            <h1 className="text-3xl md:text-5xl font-extrabold text-[#000] mb-4 text-balance">
+            <h1 className="text-3xl md:text-5xl font-extrabold text-[color:var(--sc-text)] mb-4 text-balance">
               Merci à toutes les personnes qui font vivre SafeCheck.
             </h1>
-            <p className="text-base md:text-lg text-[#000]/80 max-w-3xl mx-auto leading-relaxed text-pretty">
+            <p className="text-base md:text-lg text-[color:var(--sc-text)] max-w-3xl mx-auto leading-relaxed text-pretty">
               SafeCheck existe grâce à la contribution de pentesters, de formateurs, de designers, d'auteurs et de
               mécènes. Cette page est leur place d'honneur - ils ont donné de leur temps, de leur expertise ou de
               leurs ressources pour que la cybersécurité reste accessible à tous.
@@ -146,9 +147,9 @@ export default function HallOfFamePage() {
               {CATEGORIES.map(({ icon: Icon, label }) => (
                 <span
                   key={label}
-                  className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-[#FFFFFF] border border-[#B3DBEF] text-[#000] font-medium"
+                  className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] text-[color:var(--sc-text)] font-medium"
                 >
-                  <Icon className="w-3.5 h-3.5 text-[#157FE2]" />
+                  <Icon className="w-3.5 h-3.5 text-[color:var(--sc-blue)]" />
                   {label}
                 </span>
               ))}
@@ -168,12 +169,12 @@ export default function HallOfFamePage() {
         {/* Call to action */}
         <section className="max-w-4xl mx-auto px-4 pb-14">
           <div
-            className="rounded-xl p-6 md:p-8 bg-[#FFFFFF] text-center"
-            style={{ border: "1px solid #B3DBEF", boxShadow: "4px 4px 0px #C0DDF8" }}
+            className="rounded-xl p-6 md:p-8 bg-[color:var(--sc-surface)] text-center"
+            style={{ border: "1px solid var(--sc-border)", boxShadow: "var(--sc-shadow-md)" }}
           >
-            <Heart className="w-8 h-8 text-[#157FE2] mx-auto mb-3" />
-            <h2 className="text-xl md:text-2xl font-extrabold text-[#000] mb-2">Vous voulez contribuer ?</h2>
-            <p className="text-sm text-[#000]/75 max-w-xl mx-auto leading-relaxed mb-5">
+            <Heart className="w-8 h-8 text-[color:var(--sc-blue)] mx-auto mb-3" />
+            <h2 className="text-xl md:text-2xl font-extrabold text-[color:var(--sc-text)] mb-2">Vous voulez contribuer ?</h2>
+            <p className="text-sm text-[color:var(--sc-text-2)] max-w-xl mx-auto leading-relaxed mb-5">
               Tutoriels, relecture, traductions, illustrations, dons&nbsp;: toutes les bonnes volontés sont
               bienvenues. Écrivez-nous, nous mettons à jour cette page régulièrement.
             </p>
@@ -186,40 +187,40 @@ export default function HallOfFamePage() {
       </main>
 
       <Footer />
-    </div>
+    </PageShell>
   )
 }
 
 function ContributorCard({ c, delay }: { c: Contributor; delay: number }) {
   return (
     <article
-      className="rounded-xl p-5 bg-[#FFFFFF] flex flex-col gap-3 sc-fade-in transition-all hover:-translate-y-1"
+      className="rounded-xl p-5 bg-[color:var(--sc-surface)] flex flex-col gap-3 sc-fade-in transition-all hover:-translate-y-1"
       style={{
         animationDelay: `${delay}ms`,
-        border: "1px solid #B3DBEF",
-        boxShadow: "3px 3px 0px #C0DDF8",
+        border: "1px solid var(--sc-border)",
+        boxShadow: "var(--sc-shadow)",
       }}
     >
       <div className="flex items-center gap-3">
         <div
-          className="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-white shrink-0"
+          className="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-[color:var(--sc-text-on-strong)] shrink-0"
           style={{ background: `linear-gradient(135deg, ${c.accent}, ${c.accent}aa)` }}
           aria-hidden
         >
           {c.initials}
         </div>
         <div className="min-w-0">
-          <h3 className="font-bold text-sm text-[#000] truncate">{c.name}</h3>
-          <p className="text-xs text-[#000]/60 truncate">{c.role}</p>
+          <h3 className="font-bold text-sm text-[color:var(--sc-text)] truncate">{c.name}</h3>
+          <p className="text-xs text-[color:var(--sc-text-muted)] truncate">{c.role}</p>
         </div>
       </div>
-      <p className="text-xs text-[#000]/75 leading-relaxed">{c.bio}</p>
+      <p className="text-xs text-[color:var(--sc-text-2)] leading-relaxed">{c.bio}</p>
 
       <div className="flex flex-wrap gap-1.5">
         {c.contribution.map((tag) => (
           <span
             key={tag}
-            className="inline-flex items-center text-[10px] px-2 py-0.5 rounded bg-[#C3E8FF] text-[#0F4F8F] font-semibold"
+            className="inline-flex items-center text-[10px] px-2 py-0.5 rounded bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue-ink)] font-semibold"
           >
             {tag}
           </span>
@@ -227,16 +228,16 @@ function ContributorCard({ c, delay }: { c: Contributor; delay: number }) {
       </div>
 
       {(c.github || c.linkedin) && (
-        <div className="flex items-center gap-2 pt-2 border-t border-[#AEAEAE]/30">
+        <div className="flex items-center gap-2 pt-2 border-t border-[color:var(--sc-border)]">
           {c.github && (
             <a
               href={c.github}
               target="_blank"
               rel="noreferrer noopener"
-              className="p-1.5 rounded hover:bg-[#C3E8FF] transition-colors"
+              className="p-1.5 rounded hover:bg-[color:var(--sc-bg-soft)] transition-colors"
               aria-label={`GitHub de ${c.name}`}
             >
-              <Github className="w-4 h-4 text-[#000]" />
+              <Github className="w-4 h-4 text-[color:var(--sc-text)]" />
             </a>
           )}
           {c.linkedin && (
@@ -244,10 +245,10 @@ function ContributorCard({ c, delay }: { c: Contributor; delay: number }) {
               href={c.linkedin}
               target="_blank"
               rel="noreferrer noopener"
-              className="p-1.5 rounded hover:bg-[#C3E8FF] transition-colors"
+              className="p-1.5 rounded hover:bg-[color:var(--sc-bg-soft)] transition-colors"
               aria-label={`LinkedIn de ${c.name}`}
             >
-              <Linkedin className="w-4 h-4 text-[#157FE2]" />
+              <Linkedin className="w-4 h-4 text-[color:var(--sc-blue)]" />
             </a>
           )}
         </div>

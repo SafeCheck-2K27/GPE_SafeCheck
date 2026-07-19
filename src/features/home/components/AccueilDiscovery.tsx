@@ -117,18 +117,18 @@ function ModuleCard({
   badge?: string
 }) {
   const toneGradient = {
-    blue: "from-[#3B82F6] to-[#2563EB] shadow-[0_8px_20px_-6px_rgba(37,99,235,0.45)]",
-    indigo: "from-[#6366F1] to-[#4F46E5] shadow-[0_8px_20px_-6px_rgba(99,102,241,0.45)]",
-    cyan: "from-[#06B6D4] to-[#0891B2] shadow-[0_8px_20px_-6px_rgba(6,182,212,0.45)]",
+    blue: "from-[var(--sc-blue-soft)] to-[var(--sc-blue)] shadow-[0_8px_20px_-6px_rgb(var(--sc-blue-rgb)/0.45)]",
+    indigo: "from-[var(--sc-indigo)] to-[var(--sc-indigo-strong)] shadow-[0_8px_20px_-6px_rgb(var(--sc-indigo-rgb)/0.45)]",
+    cyan: "from-[var(--sc-cyan)] to-[var(--sc-cyan-strong)] shadow-[0_8px_20px_-6px_rgb(var(--sc-cyan-rgb)/0.45)]",
   } as const
 
   return (
     <article
-      className="group relative flex flex-col rounded-2xl p-5 bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_1px_3px_-1px_rgba(15,23,42,0.05)] hover:shadow-[0_16px_32px_-12px_rgba(37,99,235,0.16),0_6px_14px_-6px_rgba(15,23,42,0.08)] hover:border-[color:var(--sc-blue)]/30 hover:-translate-y-0.5 transition-all duration-300 ease-out sc-fade-in"
+      className="group relative flex flex-col rounded-2xl p-5 bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_1px_3px_-1px_rgb(var(--sc-ink-rgb)/0.05)] hover:shadow-[0_16px_32px_-12px_rgb(var(--sc-blue-rgb)/0.16),0_6px_14px_-6px_rgb(var(--sc-ink-rgb)/0.08)] hover:border-[color:var(--sc-blue)]/30 hover:-translate-y-0.5 transition-all duration-300 ease-out sc-fade-in"
       style={{ animationDelay: `${index * 60}ms` }}
     >
       <div className="flex items-center justify-between mb-3">
-        <div className={`inline-flex items-center justify-center w-10 h-10 rounded-xl text-white bg-gradient-to-br ${toneGradient[tone]} group-hover:scale-105 transition-transform`}>
+        <div className={`inline-flex items-center justify-center w-10 h-10 rounded-xl text-[color:var(--sc-text-on-strong)] bg-gradient-to-br ${toneGradient[tone]} group-hover:scale-105 transition-transform`}>
           {icon}
         </div>
         {badge && <ScBadge tone="muted">{badge}</ScBadge>}
@@ -144,7 +144,7 @@ function ModuleCard({
 
       <button
         onClick={onClick}
-        className="mt-4 inline-flex items-center justify-between gap-2 w-full px-4 py-2 rounded-lg text-sm font-semibold text-[color:var(--sc-blue)] bg-[color:var(--sc-bg-soft)] border border-[color:var(--sc-border)] hover:bg-[color:var(--sc-blue)] hover:text-white hover:border-[color:var(--sc-blue)] transition-colors"
+        className="mt-4 inline-flex items-center justify-between gap-2 w-full px-4 py-2 rounded-lg text-sm font-semibold text-[color:var(--sc-blue)] bg-[color:var(--sc-bg-soft)] border border-[color:var(--sc-border)] hover:bg-[color:var(--sc-blue)] hover:text-[color:var(--sc-text-on-strong)] hover:border-[color:var(--sc-blue)] transition-colors"
       >
         {buttonLabel}
         <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
@@ -154,7 +154,7 @@ function ModuleCard({
         className="pointer-events-none absolute inset-x-6 top-0 h-[2px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
         style={{
           background:
-            "linear-gradient(90deg, transparent, rgba(37,99,235,0.5), rgba(99,102,241,0.5), transparent)",
+            "linear-gradient(90deg, transparent, rgb(var(--sc-blue-rgb)/0.5), rgb(var(--sc-indigo-rgb)/0.5), transparent)",
         }}
         aria-hidden
       />

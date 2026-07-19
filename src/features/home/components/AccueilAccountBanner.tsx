@@ -20,7 +20,7 @@ export function AccueilAccountBanner({
         className="relative overflow-hidden rounded-2xl p-6 md:p-8 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 items-center border border-[color:var(--sc-border)]"
         style={{
           background:
-            "linear-gradient(135deg, rgba(37,99,235,0.06) 0%, rgba(99,102,241,0.06) 60%, rgba(6,182,212,0.06) 100%)",
+            "linear-gradient(135deg, rgb(var(--sc-blue-rgb)/0.06) 0%, rgb(var(--sc-indigo-rgb)/0.06) 60%, rgb(var(--sc-cyan-rgb)/0.06) 100%)",
         }}
       >
         <div

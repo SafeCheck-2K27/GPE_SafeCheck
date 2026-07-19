@@ -3,7 +3,7 @@ import { ScCard } from "@/components/safecheck/primitives"
 import type { ResultMetrics } from "../types"
 
 const statIconClassName =
-  "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-white mt-0.5"
+  "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-[color:var(--sc-text-on-strong)] mt-0.5"
 
 export function ResultsStats({ metrics }: { metrics: ResultMetrics }) {
   const items = [
