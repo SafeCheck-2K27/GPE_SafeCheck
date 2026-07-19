@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, Clock } from "lucide-react"
 import { scButtonClassName } from "@/components/safecheck/primitives"
 import { getAuditStatusPresentation } from "../status"
 import type { AuditLevel } from "../types"
+import { AuditLevelIcon } from "./AuditLevelIcon"
 import { AuditLevelTag } from "./AuditLevelTag"
 import { AuditStatusBadge } from "./AuditStatusBadge"
 
@@ -13,7 +14,6 @@ export function AuditLevelCard({
   audit: AuditLevel
   index: number
 }) {
-  const Icon = audit.icon
   const status = getAuditStatusPresentation(audit.status)
 
   return (
@@ -37,7 +37,8 @@ export function AuditLevelCard({
             border: `1px solid ${audit.accent}40`,
           }}
         >
-          <Icon
+          <AuditLevelIcon
+            icon={audit.icon}
             className="w-7 h-7 md:w-8 md:h-8"
             style={{ color: audit.accent }}
           />

@@ -75,16 +75,17 @@ export function TutorialPrecisionModal({
           </div>
         ) : (
           <div className="p-5 space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-[color:var(--sc-text)] mb-2">
+            <fieldset>
+              <legend className="block text-xs font-semibold text-[color:var(--sc-text)] mb-2">
                 Type de retour <span className="text-[color:var(--sc-danger)]">*</span>
-              </label>
+              </legend>
               <div className="grid grid-cols-1 gap-1.5">
                 {(Object.entries(PRECISION_LABELS) as [PrecisionType, string][]).map(([key, label]) => (
                   <button
                     key={key}
                     type="button"
                     onClick={() => setType(key)}
+                    aria-pressed={type === key}
                     className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-left transition-all border ${ type === key ? "bg-[color:var(--sc-blue)]/10 border-[color:var(--sc-blue)]/50 text-[color:var(--sc-blue)]" : "bg-[color:var(--sc-bg-soft)] border-[color:var(--sc-border)] text-[color:var(--sc-text-2)] hover:border-[color:var(--sc-blue)]/30" }`}
                   >
                     <span className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${type === key ? "border-[color:var(--sc-blue)] bg-[color:var(--sc-blue)]" : "border-[color:var(--sc-border-strong)]"}`}>
@@ -94,12 +95,13 @@ export function TutorialPrecisionModal({
                   </button>
                 ))}
               </div>
-            </div>
+            </fieldset>
             <div>
-              <label className="block text-xs font-semibold text-[color:var(--sc-text)] mb-2">
+              <label htmlFor="tutorial-precision-message" className="block text-xs font-semibold text-[color:var(--sc-text)] mb-2">
                 Message <span className="text-[color:var(--sc-danger)]">*</span>
               </label>
               <textarea
+                id="tutorial-precision-message"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Decrivez la precision que vous souhaitez apporter..."
@@ -110,6 +112,7 @@ export function TutorialPrecisionModal({
             <button
               type="button"
               onClick={() => setAnonymous(!anonymous)}
+              aria-pressed={anonymous}
               className={`flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl border text-xs font-medium transition-all ${anonymous ? "bg-[color:var(--sc-surface-2)] border-[color:var(--sc-border-strong)] text-[color:var(--sc-text)]" : "bg-[color:var(--sc-bg-soft)] border-[color:var(--sc-border)] text-[color:var(--sc-text-2)] hover:border-[color:var(--sc-border-strong)]"}`}
             >
               <span className={`w-4 h-4 rounded border-2 flex-shrink-0 flex items-center justify-center transition-all ${anonymous ? "bg-[color:var(--sc-blue)] border-[color:var(--sc-blue)]" : "border-[color:var(--sc-border-strong)] bg-transparent"}`}>

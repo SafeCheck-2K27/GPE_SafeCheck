@@ -50,6 +50,7 @@ export function EssentialsFilters({
               type="search"
               value={search}
               onChange={(event) => onSearchChange(event.target.value)}
+              aria-label="Rechercher un essentiel"
               placeholder="Rechercher un essentiel…"
               className="sc-input w-full pl-9 pr-3 py-2.5 text-sm"
             />

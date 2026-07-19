@@ -1,6 +1,31 @@
-import type { ComponentType } from "react"
-
 export type RecommendationView = "hub" | "habitudes" | "techniques"
+
+export type RecommendationIconKey =
+  | "activity"
+  | "alert-triangle"
+  | "cloud-off"
+  | "cog"
+  | "cpu"
+  | "download"
+  | "eye"
+  | "globe"
+  | "hard-drive"
+  | "headphones"
+  | "key-square"
+  | "layers"
+  | "lock"
+  | "mail"
+  | "monitor"
+  | "network"
+  | "package"
+  | "refresh-cw"
+  | "repeat"
+  | "server"
+  | "shield-alert"
+  | "shield-check"
+  | "smartphone"
+  | "usb"
+  | "wifi"
 
 export type HabitLevel = "Débutant" | "Intermédiaire" | "Avancé"
 export type HabitTag =
@@ -26,7 +51,7 @@ export interface Habit {
   commonMistake: string
   benefit: string
   timeEstimate: string
-  icon: ComponentType<{ className?: string }>
+  icon: RecommendationIconKey
   level: HabitLevel
   tag: HabitTag
   linkedTutorials: LinkedTutorial[]
@@ -51,7 +76,7 @@ export interface TechnicalRecommendation {
   urgency: TechnicalUrgency
   level: HabitLevel
   category: TechnicalCategory
-  icon: ComponentType<{ className?: string }>
+  icon: RecommendationIconKey
   steps: string[]
   timeEstimate: string
   benefit: string

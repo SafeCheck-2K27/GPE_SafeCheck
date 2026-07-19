@@ -1,6 +1,5 @@
-import type { ComponentType, SVGProps } from "react"
-
 export type AuditCatalogStatus = "available" | "coming" | "premium"
+export type AuditLevelIconKey = "crown" | "microscope" | "shield-check" | "zap"
 
 export interface AuditLevel {
   id: string
@@ -13,7 +12,7 @@ export interface AuditLevel {
   audience: string
   status: AuditCatalogStatus
   href: string
-  icon: ComponentType<SVGProps<SVGSVGElement>>
+  icon: AuditLevelIconKey
   accent: string
 }
 

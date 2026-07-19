@@ -19,6 +19,7 @@ import type {
 } from "../types"
 import { getNextRecommendationStatus } from "../utils"
 import { HabitDetail } from "./HabitDetail"
+import { RecommendationIcon } from "./RecommendationIcon"
 
 export function HabitsView({ onBack }: { onBack: () => void }) {
   const [selected, setSelected] = useState<Habit | null>(null)
@@ -61,8 +62,7 @@ export function HabitsView({ onBack }: { onBack: () => void }) {
             Les réflexes qui changent tout, sans jargon.
           </h1>
           <p className="text-sm md:text-base text-[color:var(--sc-text)] max-w-3xl">
-            {HABITUDES.length} réflexes structurés par niveau et par thème. Intégrés au quotidien, ils suppriment une
-            grande partie des risques sans rien avoir à installer.
+            {`${HABITUDES.length} réflexes structurés par niveau et par thème. Intégrés au quotidien, ils suppriment une grande partie des risques sans rien avoir à installer.`}
           </p>
 
           {/* Filters */}
@@ -102,24 +102,28 @@ export function HabitsView({ onBack }: { onBack: () => void }) {
 
       <section className="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filtered.map((h, i) => {
-          const Icon = h.icon
           const status = statuses[h.id] ?? "todo"
           const { label: statusLabel, color: statusColor } = STATUS_LABELS[status]
           return (
-            <button
+            <article
               key={h.id}
-              onClick={() => setSelected(h)}
-              className="text-left rounded-xl p-5 bg-[color:var(--sc-surface)] flex flex-col gap-3 sc-fade-in transition-all hover:-translate-y-1"
+              className="relative rounded-xl p-5 bg-[color:var(--sc-surface)] flex flex-col gap-3 sc-fade-in transition-all hover:-translate-y-1 focus-within:-translate-y-1 focus-within:ring-2 focus-within:ring-[color:var(--sc-blue)]/45 focus-within:ring-offset-2 focus-within:ring-offset-[color:var(--sc-bg)]"
               style={{
                 animationDelay: `${i * 40}ms`,
                 border: "1px solid var(--sc-border)",
                 boxShadow: "var(--sc-shadow)",
               }}
             >
+              <button
+                type="button"
+                onClick={() => setSelected(h)}
+                className="absolute inset-0 z-10 rounded-xl focus-visible:outline-none"
+                aria-label={`En savoir plus sur ${h.title}`}
+              />
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2 flex-wrap">
                   <div className="w-10 h-10 rounded-lg bg-[color:var(--sc-bg-soft)] flex items-center justify-center shrink-0">
-                    <Icon className="w-5 h-5 text-[color:var(--sc-blue)]" />
+                    <RecommendationIcon icon={h.icon} className="w-5 h-5 text-[color:var(--sc-blue)]" />
                   </div>
                   <ScBadge
                     tone={h.level === "Débutant" ? "success" : h.level === "Intermédiaire" ? "info" : "premium"}
@@ -129,9 +133,11 @@ export function HabitsView({ onBack }: { onBack: () => void }) {
                   <ScBadge tone="muted">{h.tag}</ScBadge>
                 </div>
                 <button
+                  type="button"
                   onClick={(e) => cycleStatus(h.id, e)}
-                  className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border transition-colors ${statusColor}`}
+                  className={`relative z-20 shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border transition-colors ${statusColor}`}
                   title="Changer le statut"
+                  aria-label={`Changer le statut de ${h.title}. Statut actuel : ${statusLabel}`}
                 >
                   {statusLabel}
                 </button>
@@ -146,7 +152,7 @@ export function HabitsView({ onBack }: { onBack: () => void }) {
               <span className="text-xs text-[color:var(--sc-blue)] font-semibold mt-auto inline-flex items-center gap-1">
                 En savoir plus <ArrowRight className="w-3 h-3" />
               </span>
-            </button>
+            </article>
           )
         })}
       </section>

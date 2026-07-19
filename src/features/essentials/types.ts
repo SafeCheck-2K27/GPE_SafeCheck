@@ -1,6 +1,15 @@
-import type { ComponentType } from "react"
-
 export type EssentialImportance = "Critique" | "Important" | "Recommandé"
+export type EssentialIconKey =
+  | "cloud"
+  | "eye"
+  | "hard-drive"
+  | "key"
+  | "lock"
+  | "mail"
+  | "save"
+  | "shield"
+  | "smartphone"
+  | "wifi"
 export type EssentialCategory =
   | "motsdepasse"
   | "donnees"
@@ -24,7 +33,7 @@ export interface Essential {
   os: EssentialOs[]
   popularity: number
   details: string
-  icon: ComponentType<{ className?: string }>
+  icon: EssentialIconKey
 }
 
 export interface EssentialFilters {

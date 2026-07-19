@@ -1,17 +1,25 @@
-import { Activity, AlertTriangle, Briefcase, Cpu, Eye, Globe, Stethoscope, Users } from "lucide-react"
+export type VulnerabilityIconKey =
+  | "activity"
+  | "alert-triangle"
+  | "briefcase"
+  | "cpu"
+  | "eye"
+  | "globe"
+  | "stethoscope"
+  | "users"
 
 export const VULNERABILITY_FACTORS = [
-  { icon: Users, label: "Âge & profil démographique" },
-  { icon: Briefcase, label: "Métier & secteur d'activité" },
-  { icon: Cpu, label: "OS et applications utilisées" },
-  { icon: Globe, label: "Environnement de travail" },
-  { icon: Activity, label: "Habitudes en ligne" },
-  { icon: AlertTriangle, label: "Comportements à risque" },
-]
+  { icon: "users", label: "Âge & profil démographique" },
+  { icon: "briefcase", label: "Métier & secteur d'activité" },
+  { icon: "cpu", label: "OS et applications utilisées" },
+  { icon: "globe", label: "Environnement de travail" },
+  { icon: "activity", label: "Habitudes en ligne" },
+  { icon: "alert-triangle", label: "Comportements à risque" },
+] satisfies Array<{ icon: VulnerabilityIconKey; label: string }>
 
 export const VULNERABILITY_EXAMPLES = [
   {
-    icon: Eye,
+    icon: "eye",
     title: "Profil senior",
     quote:
       "Un utilisateur de plus de 50 ans peut avoir un risque plus élevé d'être ciblé par des attaques de phishing ciblées sur des services bancaires et administratifs.",
@@ -19,7 +27,7 @@ export const VULNERABILITY_EXAMPLES = [
     accent: "var(--sc-info)",
   },
   {
-    icon: Stethoscope,
+    icon: "stethoscope",
     title: "Secteur sensible",
     quote:
       "Une personne travaillant dans un environnement sensible - médical, industriel, énergétique - peut être davantage exposée aux tentatives d'intrusion ou d'ingénierie sociale.",
@@ -27,11 +35,17 @@ export const VULNERABILITY_EXAMPLES = [
     accent: "var(--sc-teal)",
   },
   {
-    icon: Cpu,
+    icon: "cpu",
     title: "Logiciels obsolètes",
     quote:
       "Un poste qui n'est pas à jour augmente significativement le risque d'être touché par une exploitation de vulnérabilité connue.",
     risk: "Exploits CVE",
     accent: "var(--sc-orange)",
   },
-]
+] satisfies Array<{
+  icon: VulnerabilityIconKey
+  title: string
+  quote: string
+  risk: string
+  accent: string
+}>

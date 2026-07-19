@@ -27,11 +27,14 @@ export function SignupCredentialsStep({
       </p>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
+          <label htmlFor="signup-first-name" className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
             Prénom
           </label>
           <input
+            id="signup-first-name"
+            name="given-name"
             type="text"
+            autoComplete="given-name"
             value={form.prenom}
             onChange={(event) => onChange("prenom", event.target.value)}
             placeholder="Alaan"
@@ -39,11 +42,14 @@ export function SignupCredentialsStep({
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
+          <label htmlFor="signup-last-name" className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
             Nom
           </label>
           <input
+            id="signup-last-name"
+            name="family-name"
             type="text"
+            autoComplete="family-name"
             value={form.nom}
             onChange={(event) => onChange("nom", event.target.value)}
             placeholder="Smithe"
@@ -52,11 +58,14 @@ export function SignupCredentialsStep({
         </div>
       </div>
       <div>
-        <label className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
+        <label htmlFor="signup-email" className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
           Adresse email
         </label>
         <input
+          id="signup-email"
+          name="email"
           type="email"
+          autoComplete="email"
           value={form.email}
           onChange={(event) => onChange("email", event.target.value)}
           placeholder="exemple@mail.com"

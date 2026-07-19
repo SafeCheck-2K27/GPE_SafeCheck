@@ -13,6 +13,7 @@ import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
 import { STATUS_LABELS } from "../data"
 import type { Habit, RecommendationStatus } from "../types"
+import { RecommendationIcon } from "./RecommendationIcon"
 
 export function HabitDetail({
   h,
@@ -25,7 +26,6 @@ export function HabitDetail({
   status: RecommendationStatus
   onStatusChange: (s: RecommendationStatus) => void
 }) {
-  const Icon = h.icon
   return (
     <AccessibleModal
       open
@@ -43,7 +43,7 @@ export function HabitDetail({
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-lg bg-[color:var(--sc-bg-soft)] flex items-center justify-center shrink-0">
-                <Icon className="w-5 h-5 text-[color:var(--sc-blue)]" />
+                <RecommendationIcon icon={h.icon} className="w-5 h-5 text-[color:var(--sc-blue)]" />
               </div>
               <div>
                 <h3

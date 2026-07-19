@@ -1,6 +1,7 @@
 import { ArrowRight, TrendingUp } from "lucide-react"
 import { ScBadge } from "@/components/safecheck/primitives"
 import type { Essential } from "../types"
+import { EssentialIcon } from "./EssentialIcon"
 
 export function EssentialCard({
   essential,
@@ -11,8 +12,6 @@ export function EssentialCard({
   delay: number
   onClick: () => void
 }) {
-  const Icon = essential.icon
-
   return (
     <button
       onClick={onClick}
@@ -25,7 +24,7 @@ export function EssentialCard({
     >
       <div className="flex items-center gap-2">
         <div className="w-10 h-10 rounded-lg bg-[color:var(--sc-bg-soft)] flex items-center justify-center">
-          <Icon className="w-5 h-5 text-[color:var(--sc-blue)]" />
+          <EssentialIcon icon={essential.icon} className="w-5 h-5 text-[color:var(--sc-blue)]" />
         </div>
         <ScBadge
           tone={

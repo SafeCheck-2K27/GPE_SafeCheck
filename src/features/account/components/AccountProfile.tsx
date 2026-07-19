@@ -63,18 +63,29 @@ export function AccountProfile({
             { label: "Mot de passe", value: form.motDePasse, field: "motDePasse" },
           ].map((item) => (
             <div key={item.field} className="flex flex-col gap-1.5">
-              <label className="text-[11px] font-semibold uppercase tracking-wider text-[color:var(--sc-text-muted)]">
-                {item.label}
-              </label>
               {editMode && item.field !== "motDePasse" ? (
-                <input
-                  type="text"
-                  value={(form as unknown as Record<string, string>)[item.field]}
-                  onChange={(e) => setForm((prev) => ({ ...prev, [item.field]: e.target.value }))}
-                  className="sc-input px-3 py-2 text-sm"
-                />
+                <>
+                  <label
+                    htmlFor={`account-profile-${item.field}`}
+                    className="text-[11px] font-semibold uppercase tracking-wider text-[color:var(--sc-text-muted)]"
+                  >
+                    {item.label}
+                  </label>
+                  <input
+                    id={`account-profile-${item.field}`}
+                    type={item.field === "email" ? "email" : "text"}
+                    value={(form as unknown as Record<string, string>)[item.field]}
+                    onChange={(e) => setForm((prev) => ({ ...prev, [item.field]: e.target.value }))}
+                    className="sc-input px-3 py-2 text-sm"
+                  />
+                </>
               ) : (
-                <span className="text-sm text-[color:var(--sc-text)] py-2">{item.value}</span>
+                <>
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[color:var(--sc-text-muted)]">
+                    {item.label}
+                  </span>
+                  <span className="text-sm text-[color:var(--sc-text)] py-2">{item.value}</span>
+                </>
               )}
             </div>
           ))}
@@ -95,9 +106,12 @@ export function AccountProfile({
       >
         {showPasswordChange ? (
           <div className="flex flex-col gap-2.5 max-w-md">
-            <input type="password" placeholder="Mot de passe actuel" className="sc-input px-3 py-2.5 text-sm" />
-            <input type="password" placeholder="Nouveau mot de passe" className="sc-input px-3 py-2.5 text-sm" />
-            <input type="password" placeholder="Confirmer le nouveau mot de passe" className="sc-input px-3 py-2.5 text-sm" />
+            <label htmlFor="account-current-password" className="sr-only">Mot de passe actuel</label>
+            <input id="account-current-password" name="current-password" type="password" autoComplete="current-password" placeholder="Mot de passe actuel" className="sc-input px-3 py-2.5 text-sm" />
+            <label htmlFor="account-new-password" className="sr-only">Nouveau mot de passe</label>
+            <input id="account-new-password" name="new-password" type="password" autoComplete="new-password" placeholder="Nouveau mot de passe" className="sc-input px-3 py-2.5 text-sm" />
+            <label htmlFor="account-confirm-password" className="sr-only">Confirmer le nouveau mot de passe</label>
+            <input id="account-confirm-password" name="confirm-password" type="password" autoComplete="new-password" placeholder="Confirmer le nouveau mot de passe" className="sc-input px-3 py-2.5 text-sm" />
             <div className="flex gap-2 mt-1">
               <ScButton variant="primary" size="sm" onClick={() => setShowPasswordChange(false)}>
                 <Check className="w-3.5 h-3.5" /> Confirmer

@@ -26,11 +26,14 @@ export function SignupProfileStep({
         Personnalisation du profil
       </p>
       <div>
-        <label className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
+        <label htmlFor="signup-pseudo" className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
           Pseudo (nom d&apos;affichage)
         </label>
         <input
+          id="signup-pseudo"
+          name="nickname"
           type="text"
+          autoComplete="nickname"
           value={form.pseudo}
           onChange={(event) => onChange("pseudo", event.target.value)}
           placeholder="TheAliasMan"
@@ -63,10 +66,13 @@ export function SignupProfileStep({
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
+          <label htmlFor="signup-country" className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
             Pays
           </label>
           <select
+            id="signup-country"
+            name="country-name"
+            autoComplete="country-name"
             value={form.pays}
             onChange={(event) => onChange("pays", event.target.value)}
             className={inputClassName}

@@ -1,15 +1,3 @@
-import {
-  Cloud,
-  Eye,
-  HardDrive,
-  Key,
-  Lock,
-  Mail,
-  Save,
-  Shield,
-  Smartphone,
-  Wifi,
-} from "lucide-react"
 import type { Essential, EssentialFilterOption } from "./types"
 
 export const ESSENTIALS: Essential[] = [
@@ -25,7 +13,7 @@ export const ESSENTIALS: Essential[] = [
     popularity: 92,
     details:
       "Bitwarden (gratuit, open source) ou 1Password permettent de stocker tous vos mots de passe chiffrés. Vous ne retenez plus qu'un seul mot de passe maître. Plus jamais de réutilisation risquée.",
-    icon: Key,
+    icon: "key",
   },
   {
     id: 2,
@@ -39,7 +27,7 @@ export const ESSENTIALS: Essential[] = [
     popularity: 88,
     details:
       "Activez la 2FA sur vos comptes mail, banque, réseaux sociaux. Préférez une application (Aegis, Authy, Google Authenticator) plutôt que les SMS, beaucoup moins sécurisés (SIM swapping).",
-    icon: Shield,
+    icon: "shield",
   },
   {
     id: 3,
@@ -53,7 +41,7 @@ export const ESSENTIALS: Essential[] = [
     popularity: 85,
     details:
       "Activez les mises à jour automatiques sur Windows, macOS, Android et iOS. Mettez aussi à jour vos navigateurs et extensions. Un appareil non mis à jour est une porte ouverte.",
-    icon: HardDrive,
+    icon: "hard-drive",
   },
   {
     id: 4,
@@ -67,7 +55,7 @@ export const ESSENTIALS: Essential[] = [
     popularity: 78,
     details:
       "3 copies de vos données, sur 2 supports différents (disque externe + cloud), dont 1 hors site. OneDrive, Google Drive, iCloud sont de bonnes options. Pour les puristes : un NAS ou Backblaze.",
-    icon: Save,
+    icon: "save",
   },
   {
     id: 5,
@@ -81,7 +69,7 @@ export const ESSENTIALS: Essential[] = [
     popularity: 95,
     details:
       "Vérifiez l'expéditeur (le vrai, pas seulement le nom affiché), survolez les liens pour voir l'URL réelle, méfiez-vous des urgences artificielles (« compte suspendu », « facture impayée »), ne donnez jamais vos identifiants par mail.",
-    icon: Mail,
+    icon: "mail",
   },
   {
     id: 6,
@@ -95,7 +83,7 @@ export const ESSENTIALS: Essential[] = [
     popularity: 72,
     details:
       "Connectez-vous à l'admin de votre box. Activez WPA3 si dispo (sinon WPA2-AES). Changez le mot de passe Wi-Fi par défaut. Désactivez WPS. Renommez le SSID sans mentionner votre nom ou votre opérateur.",
-    icon: Wifi,
+    icon: "wifi",
   },
   {
     id: 7,
@@ -109,7 +97,7 @@ export const ESSENTIALS: Essential[] = [
     popularity: 68,
     details:
       "Réglez le verrouillage automatique entre 1 et 5 minutes. Sur Windows : Win+L. Sur macOS : Ctrl+Cmd+Q. Sur mobile : verrouillage par biométrie ou code de 6 chiffres minimum.",
-    icon: Lock,
+    icon: "lock",
   },
   {
     id: 8,
@@ -123,7 +111,7 @@ export const ESSENTIALS: Essential[] = [
     popularity: 64,
     details:
       "Faites le tour des paramètres confidentialité de Facebook, Instagram, TikTok, X, votre navigateur et votre OS. Désactivez le suivi publicitaire, limitez la visibilité de vos publications, révoquez les apps inutiles.",
-    icon: Eye,
+    icon: "eye",
   },
   {
     id: 9,
@@ -137,7 +125,7 @@ export const ESSENTIALS: Essential[] = [
     popularity: 81,
     details:
       "Verrouillage biométrique + code 6 chiffres. N'installez que depuis le store officiel. Vérifiez les autorisations des apps (micro, position, contacts). Activez le chiffrement et la localisation à distance.",
-    icon: Smartphone,
+    icon: "smartphone",
   },
   {
     id: 10,
@@ -151,7 +139,7 @@ export const ESSENTIALS: Essential[] = [
     popularity: 90,
     details:
       "Préférez une phrase de passe (4-6 mots aléatoires) à un mot de passe court avec des symboles. Exemple : « cheval-banane-tortue-vélo ». Ne réutilisez jamais ce mot de passe ailleurs.",
-    icon: Key,
+    icon: "key",
   },
   {
     id: 11,
@@ -165,7 +153,7 @@ export const ESSENTIALS: Essential[] = [
     popularity: 55,
     details:
       "Pour des données sensibles, préférez un cloud chiffré de bout en bout : Proton Drive, Tresorit, Cryptomator par-dessus un cloud classique. Vos fichiers ne peuvent être lus que par vous.",
-    icon: Cloud,
+    icon: "cloud",
   },
   {
     id: 12,
@@ -179,7 +167,7 @@ export const ESSENTIALS: Essential[] = [
     popularity: 76,
     details:
       "Ne donnez jamais vos codes de carte ou identifiants par téléphone. Si on vous appelle de votre banque, raccrochez et rappelez le numéro officiel. Méfiez-vous des SMS « colis bloqué » avec un lien.",
-    icon: Mail,
+    icon: "mail",
   },
 ]
 

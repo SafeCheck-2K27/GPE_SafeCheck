@@ -22,6 +22,7 @@ import {
 } from "@/lib/account-data"
 import type { AuditStatus } from "@/lib/account-data"
 import { AccountSectionCard } from "./AccountSectionCard"
+import { AccountTutorialIcon } from "./AccountTutorialIcon"
 
 export function AccountHistory() {
   const router = useRouter()
@@ -267,13 +268,12 @@ function AuditRow({ audit }: { audit: typeof mockAudits[number] }) {
 
 function TutoRow({ tuto }: { tuto: typeof mockTutos[number] }) {
   const router = useRouter()
-  const Icon = tuto.icon
   const isDone = tuto.status === "termine"
   return (
     <ScCard className="flex items-center justify-between gap-4 p-3.5 shadow-none hover:border-[color:var(--sc-border-strong)] hover:shadow-[var(--sc-shadow-sm)] transition-all">
       <div className="flex items-start gap-3 min-w-0">
         <span className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue)] border border-[color:var(--sc-border)]">
-          <Icon className="w-4 h-4" />
+          <AccountTutorialIcon icon={tuto.icon} className="w-4 h-4" />
         </span>
         <div className="min-w-0">
           <div className="flex items-center gap-2 flex-wrap">

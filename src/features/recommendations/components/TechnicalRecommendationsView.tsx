@@ -19,6 +19,7 @@ import type {
   TechnicalUrgency,
 } from "../types"
 import { getNextRecommendationStatus } from "../utils"
+import { RecommendationIcon } from "./RecommendationIcon"
 import { TechnicalRecommendationDetail } from "./TechnicalRecommendationDetail"
 
 export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: () => void; initialCat: string | null }) {
@@ -68,13 +69,12 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
             Les configurations et outils qui renforcent durablement votre posture.
           </h1>
           <p className="text-sm md:text-base text-[color:var(--sc-text)] max-w-3xl">
-            {TECH.length} recommandations classées par catégorie, niveau et urgence. Cliquez sur une carte pour
-            voir les étapes détaillées, les tutoriels liés et l&apos;explication complète.
+            {`${TECH.length} recommandations classées par catégorie, niveau et urgence. Cliquez sur une carte pour voir les étapes détaillées, les tutoriels liés et l'explication complète.`}
           </p>
 
           {/* Category tabs */}
           <div className="flex flex-wrap gap-2 mt-5">
-            {Object.entries(CATEGORY_LABELS).map(([key, { label, icon: Icon }]) => {
+            {Object.entries(CATEGORY_LABELS).map(([key, { label, icon }]) => {
               const count = key === "all" ? TECH.length : TECH.filter((t) => t.category === key).length
               return (
                 <ScChip
@@ -83,7 +83,7 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
                   active={cat === key}
                   className="px-3.5"
                 >
-                  <Icon className="w-3.5 h-3.5" />
+                  <RecommendationIcon icon={icon} className="w-3.5 h-3.5" />
                   {label}
                   {key !== "all" && (
                     <span className={`ml-0.5 ${cat === key ? "opacity-75" : "opacity-50"}`}>({count})</span>
@@ -143,24 +143,28 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filtered.map((t, i) => {
-              const Icon = t.icon
               const status = statuses[t.id] ?? "todo"
               const { label: statusLabel, color: statusColor } = STATUS_LABELS[status]
               return (
-                <button
+                <article
                   key={t.id}
-                  onClick={() => setSelected(t)}
-                  className="text-left rounded-xl p-5 bg-[color:var(--sc-surface)] flex flex-col gap-3 sc-fade-in transition-all hover:-translate-y-1"
+                  className="relative rounded-xl p-5 bg-[color:var(--sc-surface)] flex flex-col gap-3 sc-fade-in transition-all hover:-translate-y-1 focus-within:-translate-y-1 focus-within:ring-2 focus-within:ring-[color:var(--sc-blue)]/45 focus-within:ring-offset-2 focus-within:ring-offset-[color:var(--sc-bg)]"
                   style={{
                     animationDelay: `${i * 40}ms`,
                     border: t.urgency === "Haute" ? "1px solid var(--sc-danger-border-strong)" : "1px solid var(--sc-border)",
                     boxShadow: t.urgency === "Haute" ? "var(--sc-shadow)" : "var(--sc-shadow)",
                   }}
                 >
+                  <button
+                    type="button"
+                    onClick={() => setSelected(t)}
+                    className="absolute inset-0 z-10 rounded-xl focus-visible:outline-none"
+                    aria-label={`Voir les étapes de ${t.title}`}
+                  />
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2 flex-wrap">
                       <div className="w-10 h-10 rounded-lg bg-[color:var(--sc-bg-soft)] flex items-center justify-center shrink-0">
-                        <Icon className="w-5 h-5 text-[color:var(--sc-blue)]" />
+                        <RecommendationIcon icon={t.icon} className="w-5 h-5 text-[color:var(--sc-blue)]" />
                       </div>
                       <ScBadge tone={t.urgency === "Haute" ? "warn" : t.urgency === "Moyenne" ? "info" : "muted"}>
                         {t.urgency === "Haute" && <AlertTriangle className="w-3 h-3" />}
@@ -171,9 +175,11 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
                       </ScBadge>
                     </div>
                     <button
+                      type="button"
                       onClick={(e) => cycleStatus(t.id, e)}
-                      className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border transition-colors ${statusColor}`}
+                      className={`relative z-20 shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border transition-colors ${statusColor}`}
                       title="Changer le statut"
+                      aria-label={`Changer le statut de ${t.title}. Statut actuel : ${statusLabel}`}
                     >
                       {statusLabel}
                     </button>
@@ -195,7 +201,7 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
                   <span className="text-xs text-[color:var(--sc-blue)] font-semibold mt-auto inline-flex items-center gap-1">
                     Voir les étapes <ArrowRight className="w-3 h-3" />
                   </span>
-                </button>
+                </article>
               )
             })}
           </div>

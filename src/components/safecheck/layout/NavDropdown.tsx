@@ -5,6 +5,7 @@ import Link from "next/link"
 import { ChevronDown } from "lucide-react"
 import type { DropdownItem } from "@/components/safecheck/layout/nav-data"
 import { cn } from "@/lib/utils"
+import { NavItemIcon } from "./NavItemIcon"
 
 export function NavDropdown({
   label,
@@ -66,7 +67,6 @@ export function NavDropdown({
           )}
         >
           {items.map((item) => {
-            const Icon = item.icon
             return (
               <Link
                 key={item.href + item.label}
@@ -74,9 +74,9 @@ export function NavDropdown({
                 onClick={onClose}
                 className="group flex items-start gap-2.5 px-3 py-2.5 rounded-lg text-sm text-[color:var(--sc-text)] hover:bg-[color:var(--sc-bg-soft)] transition-colors"
               >
-                {withIcons && Icon && (
+                {withIcons && item.icon && (
                   <span className="mt-0.5 inline-flex items-center justify-center w-7 h-7 rounded-md bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue)] group-hover:bg-[color:var(--sc-blue)] group-hover:text-[color:var(--sc-text-on-strong)] transition-colors">
-                    <Icon className="w-3.5 h-3.5" />
+                    <NavItemIcon icon={item.icon} className="w-3.5 h-3.5" />
                   </span>
                 )}
                 <div className="flex-1 min-w-0">

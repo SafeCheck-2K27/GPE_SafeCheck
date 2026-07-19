@@ -14,12 +14,15 @@ export function SignupPasswordField({
 }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
+      <label htmlFor="signup-password" className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
         Mot de passe
       </label>
       <div className="relative">
         <input
+          id="signup-password"
+          name="new-password"
           type={isVisible ? "text" : "password"}
+          autoComplete="new-password"
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder="12 caractères minimum"

@@ -16,6 +16,34 @@ test("essential query initializes search and its dialog closes with Escape", asy
   expectNoHydrationErrors()
 })
 
+test("recommendation cards use valid interactive markup and keep both actions", async ({ page }) => {
+  const expectNoHydrationErrors = monitorHydration(page)
+
+  await page.goto("/recommandations?type=habitudes")
+  await expect(page.locator("button button")).toHaveCount(0)
+  const habitDetails = page.locator('button[aria-label^="En savoir plus sur"]')
+  await expect(habitDetails.first()).toBeVisible()
+  await habitDetails.first().click()
+  await expect(page.getByRole("dialog")).toBeVisible()
+  await page.keyboard.press("Escape")
+  const habitStatus = page.locator('button[aria-label^="Changer le statut de"]').first()
+  await habitStatus.click()
+  await expect(habitStatus).toHaveAttribute("aria-label", /Statut actuel : En cours/)
+
+  await page.goto("/recommandations?type=techniques")
+  await expect(page.locator("button button")).toHaveCount(0)
+  const technicalDetails = page.locator('button[aria-label^="Voir les étapes de"]')
+  await expect(technicalDetails.first()).toBeVisible()
+  await technicalDetails.first().click()
+  await expect(page.getByRole("dialog")).toBeVisible()
+  await page.keyboard.press("Escape")
+  const technicalStatus = page.locator('button[aria-label^="Changer le statut de"]').first()
+  await technicalStatus.click()
+  await expect(technicalStatus).toHaveAttribute("aria-label", /Statut actuel : En cours/)
+
+  expectNoHydrationErrors()
+})
+
 test("account tabs synchronize URL and browser history", async ({ page }) => {
   const expectNoHydrationErrors = monitorHydration(page)
   await seedAuthenticatedUser(page)

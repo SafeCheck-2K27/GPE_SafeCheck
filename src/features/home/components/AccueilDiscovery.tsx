@@ -53,6 +53,7 @@ export function AccueilDiscovery({
                 type="search"
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
+                aria-label="Rechercher dans les contenus SafeCheck"
                 placeholder="Rechercher un tutoriel, un essentiel, une recommandation…"
                 className="min-w-0 flex-1 text-sm bg-transparent outline-none text-[color:var(--sc-text)] placeholder:text-[color:var(--sc-text-muted)]"
               />

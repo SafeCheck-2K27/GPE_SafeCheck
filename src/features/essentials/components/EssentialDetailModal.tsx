@@ -2,6 +2,7 @@ import { X } from "lucide-react"
 import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
 import type { Essential } from "../types"
+import { EssentialIcon } from "./EssentialIcon"
 
 export function EssentialDetailModal({
   essential,
@@ -10,8 +11,6 @@ export function EssentialDetailModal({
   essential: Essential
   onClose: () => void
 }) {
-  const Icon = essential.icon
-
   return (
     <AccessibleModal
       open
@@ -31,7 +30,7 @@ export function EssentialDetailModal({
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-lg bg-[color:var(--sc-bg-soft)] flex items-center justify-center">
-                <Icon className="w-5 h-5 text-[color:var(--sc-blue)]" />
+                <EssentialIcon icon={essential.icon} className="w-5 h-5 text-[color:var(--sc-blue)]" />
               </div>
               <div>
                 <h3

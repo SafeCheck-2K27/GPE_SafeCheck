@@ -53,11 +53,14 @@ export function PreHomeLoginModal({
         </p>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-[color:var(--sc-text)] mb-1.5">
+            <label htmlFor="prehome-login-email" className="block text-sm font-medium text-[color:var(--sc-text)] mb-1.5">
               Adresse email
             </label>
             <input
+              id="prehome-login-email"
+              name="email"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="exemple@mail.com"
@@ -65,11 +68,14 @@ export function PreHomeLoginModal({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[color:var(--sc-text)] mb-1.5">
+            <label htmlFor="prehome-login-password" className="block text-sm font-medium text-[color:var(--sc-text)] mb-1.5">
               Mot de passe
             </label>
             <input
+              id="prehome-login-password"
+              name="password"
               type="password"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"

@@ -1,4 +1,3 @@
-import { Crown, Microscope, ShieldCheck, Zap } from "lucide-react"
 import type { AuditLevel } from "./types"
 
 export const AUDIT_LEVELS: AuditLevel[] = [
@@ -19,7 +18,7 @@ export const AUDIT_LEVELS: AuditLevel[] = [
     audience: "Recommandé à toutes les nouvelles personnes inscrites.",
     status: "available",
     href: "/audit",
-    icon: Zap,
+    icon: "zap",
     accent: "var(--sc-blue)",
   },
   {
@@ -39,7 +38,7 @@ export const AUDIT_LEVELS: AuditLevel[] = [
     audience: "Pour les utilisateurs qui veulent un vrai diagnostic.",
     status: "coming",
     href: "/wip?feature=audit-standard",
-    icon: ShieldCheck,
+    icon: "shield-check",
     accent: "var(--sc-info)",
   },
   {
@@ -59,7 +58,7 @@ export const AUDIT_LEVELS: AuditLevel[] = [
     audience: "Pour utilisateurs impliqués ou usages semi-professionnels.",
     status: "coming",
     href: "/wip?feature=audit-complet",
-    icon: Microscope,
+    icon: "microscope",
     accent: "var(--sc-teal)",
   },
   {
@@ -79,7 +78,7 @@ export const AUDIT_LEVELS: AuditLevel[] = [
     audience: "Pour profils expérimentés ou exigences fortes.",
     status: "premium",
     href: "/wip?feature=audit-expert",
-    icon: Crown,
+    icon: "crown",
     accent: "var(--sc-orange)",
   },
 ]
