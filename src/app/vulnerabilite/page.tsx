@@ -1,66 +1,19 @@
-"use client"
-
-import { useRouter } from "next/navigation"
 import Navbar from "@/components/safecheck/Navbar"
-import { ScButton, ScBadge } from "@/components/safecheck/primitives"
+import { ScLinkButton, ScBadge } from "@/components/safecheck/primitives"
 import Footer from "@/components/safecheck/Footer"
 import { PageShell } from "@/components/safecheck/layout/PageShell"
 import {
   ShieldAlert,
-  Activity,
   FileText,
   ArrowRight,
-  Stethoscope,
-  Briefcase,
-  Globe,
-  Cpu,
-  Users,
-  AlertTriangle,
-  Eye,
 } from "lucide-react"
-
-const FACTORS = [
-  { icon: Users, label: "Âge & profil démographique" },
-  { icon: Briefcase, label: "Métier & secteur d'activité" },
-  { icon: Cpu, label: "OS et applications utilisées" },
-  { icon: Globe, label: "Environnement de travail" },
-  { icon: Activity, label: "Habitudes en ligne" },
-  { icon: AlertTriangle, label: "Comportements à risque" },
-]
-
-const EXAMPLES = [
-  {
-    icon: Eye,
-    title: "Profil senior",
-    quote:
-      "Un utilisateur de plus de 50 ans peut avoir un risque plus élevé d'être ciblé par des attaques de phishing ciblées sur des services bancaires et administratifs.",
-    risk: "Phishing ciblé",
-    accent: "var(--sc-info)",
-  },
-  {
-    icon: Stethoscope,
-    title: "Secteur sensible",
-    quote:
-      "Une personne travaillant dans un environnement sensible - médical, industriel, énergétique - peut être davantage exposée aux tentatives d'intrusion ou d'ingénierie sociale.",
-    risk: "Ingénierie sociale",
-    accent: "var(--sc-teal)",
-  },
-  {
-    icon: Cpu,
-    title: "Logiciels obsolètes",
-    quote:
-      "Un poste qui n'est pas à jour augmente significativement le risque d'être touché par une exploitation de vulnérabilité connue.",
-    risk: "Exploits CVE",
-    accent: "var(--sc-orange)",
-  },
-]
+import { VulnerabilityExamples } from "./_components/VulnerabilityExamples"
+import { VulnerabilityFactors } from "./_components/VulnerabilityFactors"
 
 export default function VulnerabilitePage() {
-  const router = useRouter()
-
   return (
     <PageShell className="bg-[color:var(--sc-surface)]">
-      <Navbar onSignupClick={() => router.push("/compte/creer")} />
+      <Navbar signupHref="/compte/creer" />
 
       <main className="flex-1">
         {/* Hero */}
@@ -82,13 +35,13 @@ export default function VulnerabilitePage() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <ScButton variant="primary" size="lg" onClick={() => router.push("/wip?feature=test-vulnerabilite")}>
+              <ScLinkButton variant="primary" size="lg" href="/wip?feature=test-vulnerabilite">
                 Lancer le test
                 <ArrowRight className="w-4 h-4 ml-1" />
-              </ScButton>
-              <ScButton variant="secondary" size="lg" onClick={() => router.push("/audits")}>
+              </ScLinkButton>
+              <ScLinkButton variant="secondary" size="lg" href="/audits">
                 Voir tous les audits
-              </ScButton>
+              </ScLinkButton>
             </div>
           </div>
         </section>
@@ -103,19 +56,7 @@ export default function VulnerabilitePage() {
             </p>
           </div>
 
-          {/* Factors grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-12">
-            {FACTORS.map(({ icon: Icon, label }) => (
-              <div
-                key={label}
-                className="rounded-lg p-4 bg-[color:var(--sc-surface)] flex items-start gap-3 transition-all hover:scale-[1.02]"
-                style={{ border: "1px solid var(--sc-border)", boxShadow: "var(--sc-shadow-sm)" }}
-              >
-                <Icon className="w-5 h-5 text-[color:var(--sc-blue)] mt-0.5 shrink-0" />
-                <span className="text-sm font-medium text-[color:var(--sc-text)]">{label}</span>
-              </div>
-            ))}
-          </div>
+          <VulnerabilityFactors />
 
           {/* Real examples */}
           <div className="text-center mb-6">
@@ -125,32 +66,7 @@ export default function VulnerabilitePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {EXAMPLES.map((ex) => {
-              const Icon = ex.icon
-              return (
-                <div
-                  key={ex.title}
-                  className="rounded-xl p-5 bg-[color:var(--sc-surface)] flex flex-col"
-                  style={{ border: "1px solid var(--sc-border)", boxShadow: "var(--sc-shadow)" }}
-                >
-                  <div className="flex items-center gap-2 mb-3">
-                    <div
-                      className="w-9 h-9 rounded-lg flex items-center justify-center"
-                      style={{ background: `${ex.accent}15`, border: `1px solid ${ex.accent}40` }}
-                    >
-                      <Icon className="w-4 h-4" style={{ color: ex.accent }} />
-                    </div>
-                    <span className="font-bold text-sm text-[color:var(--sc-text)]">{ex.title}</span>
-                  </div>
-                  <p className="text-sm text-[color:var(--sc-text)] leading-relaxed mb-4 italic">«&nbsp;{ex.quote}&nbsp;»</p>
-                  <div className="mt-auto">
-                    <ScBadge tone="warn">{ex.risk}</ScBadge>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+          <VulnerabilityExamples />
         </section>
 
         {/* Disclaimer */}
@@ -173,13 +89,13 @@ export default function VulnerabilitePage() {
             </div>
 
             <div className="mt-5 flex flex-wrap gap-3 justify-center">
-              <ScButton variant="primary" onClick={() => router.push("/wip?feature=test-vulnerabilite")}>
+              <ScLinkButton variant="primary" href="/wip?feature=test-vulnerabilite">
                 Lancer le test
                 <ArrowRight className="w-4 h-4 ml-1" />
-              </ScButton>
-              <ScButton variant="secondary" onClick={() => router.push("/essentiels")}>
+              </ScLinkButton>
+              <ScLinkButton variant="secondary" href="/essentiels">
                 Voir les essentiels
-              </ScButton>
+              </ScLinkButton>
             </div>
           </div>
         </section>

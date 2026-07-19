@@ -7,7 +7,7 @@ import {
   getInlineLexiqueDefinition,
   getTerm,
   INLINE_LEXIQUE_TERMS,
-} from "@/lib/lexique-data"
+} from "@/features/lexicon/data"
 import { TUTORIAL_DETAIL_LEXICON_TAGS } from "../data"
 
 function TutorialLexiconTooltip({
