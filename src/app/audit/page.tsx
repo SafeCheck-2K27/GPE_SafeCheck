@@ -5,18 +5,25 @@ import { useRouter } from "next/navigation"
 import Navbar from "@/components/safecheck/Navbar"
 import Footer from "@/components/safecheck/Footer"
 import { PageShell } from "@/components/safecheck/layout/PageShell"
+import { AuditProgressProvider, useAuditProgress } from "@/features/audit/AuditProgressProvider"
 import { AuditProgressSidebar } from "@/features/audit/components/AuditProgressSidebar"
 import { AuditQuestionPanel } from "@/features/audit/components/AuditQuestionPanel"
 import { AuditTopBar } from "@/features/audit/components/AuditTopBar"
 import { auditQuestions } from "@/features/audit/data"
 import { calculateAuditScore } from "@/features/audit/scoring"
-import type { AuditAnswers, AuditAnswerValue } from "@/features/audit/types"
+import type { AuditAnswerValue } from "@/features/audit/types"
 
 export default function AuditPage() {
+  return (
+    <AuditProgressProvider>
+      <AuditPageContent />
+    </AuditProgressProvider>
+  )
+}
+
+function AuditPageContent() {
   const router = useRouter()
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [answers, setAnswers] = useState<AuditAnswers>({})
-  const [selectedOption, setSelectedOption] = useState<AuditAnswerValue | null>(null)
+  const { answers, currentQuestionIndex, setAnswer, setCurrentQuestionIndex } = useAuditProgress()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
@@ -31,10 +38,10 @@ export default function AuditPage() {
   const question = auditQuestions[currentQuestionIndex]
   const isLast = currentQuestionIndex === auditQuestions.length - 1
   const progress = ((currentQuestionIndex + 1) / auditQuestions.length) * 100
+  const selectedOption: AuditAnswerValue | null = answers[question.id] || null
 
   const handleSelect = (value: AuditAnswerValue) => {
-    setSelectedOption(value)
-    setAnswers((previous) => ({ ...previous, [question.id]: value }))
+    setAnswer(question.id, value)
   }
 
   const goNext = () => {
@@ -46,22 +53,17 @@ export default function AuditPage() {
       return
     }
 
-    const nextQuestionIndex = currentQuestionIndex + 1
-    setCurrentQuestionIndex(nextQuestionIndex)
-    setSelectedOption(answers[auditQuestions[nextQuestionIndex]?.id] || null)
+    setCurrentQuestionIndex(currentQuestionIndex + 1)
   }
 
   const goPrevious = () => {
     if (currentQuestionIndex === 0) return
 
-    const previousQuestionIndex = currentQuestionIndex - 1
-    setCurrentQuestionIndex(previousQuestionIndex)
-    setSelectedOption(answers[auditQuestions[previousQuestionIndex]?.id] || null)
+    setCurrentQuestionIndex(currentQuestionIndex - 1)
   }
 
   const goToQuestion = (index: number) => {
     setCurrentQuestionIndex(index)
-    setSelectedOption(answers[auditQuestions[index].id] || null)
   }
 
   return (
