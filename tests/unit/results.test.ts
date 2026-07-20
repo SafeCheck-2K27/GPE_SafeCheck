@@ -50,21 +50,27 @@ test("getResultLevel respects every score boundary", () => {
 })
 
 test("recommendations are resolved by stable ids in configured order", () => {
-  const resolved = resolveScoreRecommendationsById(
+  const resolution = resolveScoreRecommendationsById(
     [3, 1, 6],
     scoreRecommendations,
   )
 
-  assert.deepEqual(resolved.map(({ id }) => id), [3, 1, 6])
+  assert.deepEqual(
+    resolution.recommendations.map(({ id }) => id),
+    [3, 1, 6],
+  )
+  assert.deepEqual(resolution.missingIds, [])
 })
 
-test("an unknown recommendation id fails explicitly", () => {
-  assert.throws(
-    () =>
-      resolveScoreRecommendationsById(
-        [999 as ScoreRecommendationId],
-        scoreRecommendations,
-      ),
-    /Unknown score recommendation id: 999/,
+test("unknown recommendation ids are reported without hiding valid entries", () => {
+  const resolution = resolveScoreRecommendationsById(
+    [3, 999 as ScoreRecommendationId, 1],
+    scoreRecommendations,
   )
+
+  assert.deepEqual(
+    resolution.recommendations.map(({ id }) => id),
+    [3, 1],
+  )
+  assert.deepEqual(resolution.missingIds, [999])
 })

@@ -25,6 +25,11 @@ export interface ScoreRecommendation {
   icon: ScoreRecommendationIconKey
 }
 
+export interface ScoreRecommendationResolution {
+  recommendations: ScoreRecommendation[]
+  missingIds: ScoreRecommendationId[]
+}
+
 export type ResultLanguage = "fr" | "en"
 
 export type ResultTranslator = (

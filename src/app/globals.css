@@ -115,7 +115,6 @@
   --sc-radius-xl: 22px;
 
   /* Legacy aliases (kept for backward compat) */
-  --sc-white: var(--sc-surface);
   --sc-black: var(--sc-text);
   --sc-block: var(--sc-bg-soft);
   --sc-block-border: var(--sc-border);
@@ -281,8 +280,8 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-inter), 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-display: var(--font-space-grotesk), 'Space Grotesk', var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -329,7 +328,6 @@
   body {
     @apply bg-background text-foreground;
   }
-  :root { --font-barlow: var(--font-inter); }
   .font-display { font-family: var(--font-display); letter-spacing: -0.02em; }
 }
 

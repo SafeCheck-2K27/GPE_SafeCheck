@@ -32,7 +32,8 @@ function ResultatsContent() {
 
   const score = getResultScore(searchParams.get("score"))
   const level = getResultLevel(score)
-  const scoreRecommendations = getScoreRecommendationsForLevel(level)
+  const recommendationResolution = getScoreRecommendationsForLevel(level)
+  const scoreRecommendations = recommendationResolution.recommendations
   const metrics = getResultMetrics(score, level)
 
   const [signupOpen, setSignupOpen] = useState(false)
@@ -57,6 +58,16 @@ function ResultatsContent() {
       <Navbar />
 
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-8 md:py-12 flex flex-col gap-6">
+        {process.env.NODE_ENV === "development" &&
+          recommendationResolution.missingIds.length > 0 && (
+            <aside
+              role="status"
+              className="rounded-lg border border-[color:var(--sc-warn-border)] bg-[color:var(--sc-warn-soft)] px-4 py-3 text-sm text-[color:var(--sc-warn-text)]"
+            >
+              Configuration Résultats incomplète : recommandations introuvables (
+              {recommendationResolution.missingIds.join(", ")}).
+            </aside>
+          )}
         <ResultsScoreHero
           score={score}
           level={level}

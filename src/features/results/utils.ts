@@ -3,6 +3,7 @@ import { resultsBenchmarks } from "./mock-data"
 import type {
   ScoreRecommendation,
   ScoreRecommendationId,
+  ScoreRecommendationResolution,
   ScoreRecommendationsByCategory,
   ResultLevelConfig,
   ResultMetrics,
@@ -33,7 +34,7 @@ export function getResultScore(scoreParam: string | null): number {
 
 export function getScoreRecommendationsForLevel(
   level: ResultLevelConfig,
-): ScoreRecommendation[] {
+): ScoreRecommendationResolution {
   return resolveScoreRecommendationsById(
     level.scoreRecommendationIds,
     scoreRecommendations,
@@ -43,18 +44,29 @@ export function getScoreRecommendationsForLevel(
 export function resolveScoreRecommendationsById(
   ids: readonly ScoreRecommendationId[],
   recommendations: readonly ScoreRecommendation[],
-): ScoreRecommendation[] {
+): ScoreRecommendationResolution {
   const recommendationsById = new Map(
     recommendations.map((recommendation) => [recommendation.id, recommendation]),
   )
 
-  return ids.map((id) => {
+  const resolvedRecommendations: ScoreRecommendation[] = []
+  const missingIds: ScoreRecommendationId[] = []
+
+  ids.forEach((id) => {
     const recommendation = recommendationsById.get(id)
-    if (!recommendation) {
-      throw new Error(`Unknown score recommendation id: ${id}`)
+
+    if (recommendation) {
+      resolvedRecommendations.push(recommendation)
+      return
     }
-    return recommendation
+
+    missingIds.push(id)
   })
+
+  return {
+    recommendations: resolvedRecommendations,
+    missingIds,
+  }
 }
 
 export function getResultMetrics(

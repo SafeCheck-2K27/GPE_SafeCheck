@@ -44,18 +44,69 @@ test("recommendation cards use valid interactive markup and keep both actions", 
   expectNoHydrationErrors()
 })
 
-test("account tabs synchronize URL and browser history", async ({ page }) => {
+test("account section links preserve URL state, history and keyboard navigation", async ({ page }) => {
   const expectNoHydrationErrors = monitorHydration(page)
   await seedAuthenticatedUser(page)
 
-  await page.goto("/compte?source=e2e&tab=dashboard")
-  await page.getByRole("button", { name: "Préférences", exact: true }).click()
-  await expect(page).toHaveURL(/source=e2e&tab=preferences/)
-  await expect(page.getByRole("button", { name: "Préférences", exact: true })).toHaveAttribute("aria-current", "page")
+  await page.goto("/compte?source=e2e&tab=preferences")
+  const navigation = page.getByRole("navigation", {
+    name: "Sections du compte",
+  })
+  const tabs = [
+    { id: "dashboard", label: "Tableau de bord" },
+    { id: "historique", label: "Historique & activité" },
+    { id: "profil", label: "Profil & sécurité" },
+    { id: "preferences", label: "Préférences" },
+  ] as const
+
+  await expect(navigation.getByRole("link")).toHaveCount(4)
+  await expect(navigation.getByRole("button")).toHaveCount(0)
+
+  for (const tab of tabs) {
+    const link = navigation.getByRole("link", { name: tab.label, exact: true })
+    await expect(link).toHaveAttribute(
+      "href",
+      `/compte?source=e2e&tab=${tab.id}`,
+    )
+    await link.click()
+    await expect(page).toHaveURL(
+      new RegExp(`source=e2e&tab=${tab.id}$`),
+    )
+    await expect(link).toHaveAttribute("aria-current", "page")
+  }
+
+  await page.reload()
+  await expect(page).toHaveURL(/source=e2e&tab=preferences$/)
+  await expect(
+    navigation.getByRole("link", { name: "Préférences", exact: true }),
+  ).toHaveAttribute("aria-current", "page")
 
   await page.goBack()
-  await expect(page).toHaveURL(/source=e2e&tab=dashboard/)
-  await expect(page.getByRole("button", { name: "Tableau de bord", exact: true })).toHaveAttribute("aria-current", "page")
+  await expect(page).toHaveURL(/source=e2e&tab=profil$/)
+  await expect(
+    navigation.getByRole("link", { name: "Profil & sécurité", exact: true }),
+  ).toHaveAttribute("aria-current", "page")
+
+  await page.goForward()
+  await expect(page).toHaveURL(/source=e2e&tab=preferences$/)
+
+  await page.goto("/compte?source=e2e&tab=invalide")
+  await expect(page).toHaveURL(/source=e2e&tab=dashboard$/)
+  const dashboardLink = navigation.getByRole("link", {
+    name: "Tableau de bord",
+    exact: true,
+  })
+  const historyLink = navigation.getByRole("link", {
+    name: "Historique & activité",
+    exact: true,
+  })
+  await expect(dashboardLink).toHaveAttribute("aria-current", "page")
+  await dashboardLink.focus()
+  await page.keyboard.press("Tab")
+  await expect(historyLink).toBeFocused()
+  await page.keyboard.press("Enter")
+  await expect(page).toHaveURL(/source=e2e&tab=historique$/)
+  await expect(historyLink).toHaveAttribute("aria-current", "page")
   expectNoHydrationErrors()
 })
 

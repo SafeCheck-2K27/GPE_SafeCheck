@@ -6,8 +6,11 @@ import {
   type RefObject,
   useEffect,
   useRef,
+  useSyncExternalStore,
 } from "react"
+import { createPortal } from "react-dom"
 import { cn } from "@/lib/utils"
+import { ModalStack } from "./modal-stack"
 
 const FOCUSABLE_SELECTOR = [
   "a[href]",
@@ -19,7 +22,19 @@ const FOCUSABLE_SELECTOR = [
   "[tabindex]:not([tabindex='-1'])",
 ].join(",")
 
-const openModalIds: symbol[] = []
+const MODAL_ATTRIBUTE = "data-safecheck-modal"
+
+const openModals = new ModalStack<HTMLElement>()
+
+interface PreservedAttributes {
+  inert: string | null
+  ariaHidden: string | null
+}
+
+const isolatedBackgroundElements = new Map<HTMLElement, PreservedAttributes>()
+const isolatedModalElements = new Map<HTMLElement, PreservedAttributes>()
+
+let backgroundObserver: MutationObserver | null = null
 
 let scrollLockCount = 0
 let previousBodyOverflow = ""
@@ -67,13 +82,20 @@ export function AccessibleModal({
   const modalRef = useRef<HTMLDivElement>(null)
   const modalIdRef = useRef(Symbol("accessible-modal"))
   const onCloseRef = useRef(onClose)
+  const closeOnEscapeRef = useRef(closeOnEscape)
+  const isClient = useSyncExternalStore(
+    subscribeToClientReady,
+    getClientSnapshot,
+    getServerSnapshot,
+  )
 
   useEffect(() => {
     onCloseRef.current = onClose
-  }, [onClose])
+    closeOnEscapeRef.current = closeOnEscape
+  }, [closeOnEscape, onClose])
 
   useEffect(() => {
-    if (!open) return
+    if (!open || !isClient) return
 
     const modal = modalRef.current
     if (!modal) return
@@ -84,14 +106,15 @@ export function AccessibleModal({
         ? document.activeElement
         : null
 
-    openModalIds.push(modalId)
+    openModals.add(modalId, modal)
     lockBodyScroll()
     focusInitialElement(modal, initialFocusRef)
+    syncModalIsolation()
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!isTopModal(modalId)) return
 
-      if (event.key === "Escape" && closeOnEscape) {
+      if (event.key === "Escape" && closeOnEscapeRef.current) {
         event.preventDefault()
         event.stopPropagation()
         onCloseRef.current()
@@ -119,20 +142,26 @@ export function AccessibleModal({
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true)
       document.removeEventListener("focusin", handleFocusIn, true)
-      removeOpenModal(modalId)
+      openModals.remove(modalId)
+      restoreManagedElement(modal, isolatedModalElements)
       unlockBodyScroll()
+      syncModalIsolation()
 
-      if (previouslyFocused?.isConnected) {
+      if (
+        previouslyFocused?.isConnected &&
+        !previouslyFocused.closest("[inert]")
+      ) {
         previouslyFocused.focus({ preventScroll: true })
       }
     }
-  }, [closeOnEscape, initialFocusRef, open])
+  }, [initialFocusRef, isClient, open])
 
-  if (!open) return null
+  if (!open || !isClient) return null
 
-  return (
+  return createPortal(
     <div
       ref={modalRef}
+      data-safecheck-modal=""
       role={role}
       aria-modal="true"
       aria-label={ariaLabel}
@@ -155,7 +184,8 @@ export function AccessibleModal({
       }}
     >
       {children}
-    </div>
+    </div>,
+    document.body,
   )
 }
 
@@ -217,12 +247,119 @@ function trapFocus(event: KeyboardEvent, modal: HTMLElement) {
 }
 
 function isTopModal(modalId: symbol): boolean {
-  return openModalIds[openModalIds.length - 1] === modalId
+  return openModals.isTop(modalId)
 }
 
-function removeOpenModal(modalId: symbol) {
-  const modalIndex = openModalIds.lastIndexOf(modalId)
-  if (modalIndex >= 0) openModalIds.splice(modalIndex, 1)
+function syncModalIsolation() {
+  const entries = openModals.entries
+
+  if (entries.length === 0) {
+    backgroundObserver?.disconnect()
+    backgroundObserver = null
+    restoreManagedElements(isolatedBackgroundElements)
+    restoreManagedElements(isolatedModalElements)
+    return
+  }
+
+  isolateBodyChildren()
+  observeBodyChildren()
+
+  const topModal = entries[entries.length - 1]?.value
+  entries.forEach(({ value }) => {
+    if (value === topModal) {
+      restoreManagedElement(value, isolatedModalElements)
+    } else {
+      isolateElement(value, isolatedModalElements)
+    }
+  })
+}
+
+function isolateBodyChildren() {
+  Array.from(document.body.children).forEach((element) => {
+    if (
+      element instanceof HTMLElement &&
+      !element.hasAttribute(MODAL_ATTRIBUTE)
+    ) {
+      isolateElement(element, isolatedBackgroundElements)
+    }
+  })
+}
+
+function observeBodyChildren() {
+  if (backgroundObserver) return
+
+  backgroundObserver = new MutationObserver((records) => {
+    records.forEach((record) => {
+      record.addedNodes.forEach((node) => {
+        if (
+          node instanceof HTMLElement &&
+          !node.hasAttribute(MODAL_ATTRIBUTE)
+        ) {
+          isolateElement(node, isolatedBackgroundElements)
+        }
+      })
+    })
+  })
+  backgroundObserver.observe(document.body, { childList: true })
+}
+
+function subscribeToClientReady() {
+  return () => undefined
+}
+
+function getClientSnapshot() {
+  return true
+}
+
+function getServerSnapshot() {
+  return false
+}
+
+function isolateElement(
+  element: HTMLElement,
+  preservedAttributes: Map<HTMLElement, PreservedAttributes>,
+) {
+  if (!preservedAttributes.has(element)) {
+    preservedAttributes.set(element, {
+      inert: element.getAttribute("inert"),
+      ariaHidden: element.getAttribute("aria-hidden"),
+    })
+  }
+
+  element.inert = true
+  element.setAttribute("aria-hidden", "true")
+}
+
+function restoreManagedElement(
+  element: HTMLElement,
+  preservedAttributes: Map<HTMLElement, PreservedAttributes>,
+) {
+  const attributes = preservedAttributes.get(element)
+  if (!attributes) return
+
+  restoreAttribute(element, "inert", attributes.inert)
+  restoreAttribute(element, "aria-hidden", attributes.ariaHidden)
+  preservedAttributes.delete(element)
+}
+
+function restoreManagedElements(
+  preservedAttributes: Map<HTMLElement, PreservedAttributes>,
+) {
+  preservedAttributes.forEach((_, element) => {
+    restoreManagedElement(element, preservedAttributes)
+  })
+}
+
+function restoreAttribute(
+  element: HTMLElement,
+  name: "inert" | "aria-hidden",
+  value: string | null,
+) {
+  if (value === null) {
+    element.removeAttribute(name)
+  } else {
+    element.setAttribute(name, value)
+  }
 }
 
 function lockBodyScroll() {

@@ -22,7 +22,6 @@ import {
 } from "@/features/account/tabs"
 import type {
   AccountForm,
-  AccountTabId,
   NotificationPreferences,
 } from "@/features/account/types"
 
@@ -94,15 +93,6 @@ function AccountPageContent() {
     router.push("/")
   }
 
-  const handleTabChange = (tab: AccountTabId) => {
-    if (tab === activeTab) return
-    window.history.pushState(
-      null,
-      "",
-      getAccountTabHref(pathname, queryString, tab),
-    )
-  }
-
   return (
     <>
       <main className="flex-1 max-w-6xl mx-auto w-full px-4 md:px-6 py-8">
@@ -111,7 +101,11 @@ function AccountPageContent() {
           onAvatarClick={() => router.push("/wip?feature=avatar")}
         />
 
-        <AccountTabs activeTab={activeTab} onTabChange={handleTabChange} />
+        <AccountTabs
+          activeTab={activeTab}
+          pathname={pathname}
+          queryString={queryString}
+        />
 
         {activeTab === "dashboard" && <AccountDashboard form={form} />}
 
