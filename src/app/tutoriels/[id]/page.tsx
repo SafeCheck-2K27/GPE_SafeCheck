@@ -7,6 +7,10 @@ import Navbar from "@/components/safecheck/Navbar"
 import Footer from "@/components/safecheck/Footer"
 import { PageShell } from "@/components/safecheck/layout/PageShell"
 import { ScButton, ScBadge } from "@/components/safecheck/primitives"
+import {
+  TutorialsProgressProvider,
+  useTutorialsProgress,
+} from "@/features/tutorials/TutorialsProgressProvider"
 import { tutoriels, CATEGORY_LABEL } from "@/lib/tutoriels-data"
 import type { Tutoriel } from "@/lib/tutoriels-data"
 import {
@@ -795,6 +799,14 @@ function LevelBadge({ level }: { level: Tutoriel["level"] }) {
 
 /* MAIN DETAIL PAGE */
 export default function TutorielDetailPage() {
+  return (
+    <TutorialsProgressProvider>
+      <TutorielDetailPageContent />
+    </TutorialsProgressProvider>
+  )
+}
+
+function TutorielDetailPageContent() {
   const params = useParams()
   const router = useRouter()
   // The dynamic segment accepts either a slug ("phishing") or a numeric id
@@ -805,11 +817,13 @@ export default function TutorielDetailPage() {
     (t) => t.slug === routeParam || t.id === Number(routeParam)
   )
 
+  const { getStatus, setStatus } = useTutorialsProgress()
+
   const [readerOpen, setReaderOpen] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set())
   const [saved, setSaved] = useState(false)
-  const [markedDone, setMarkedDone] = useState(false)
+  const markedDone = tuto ? getStatus(tuto.id) === "done" : false
 
   const [precisionOpen, setPrecisionOpen] = useState(false)
   const [precisionStepTitle, setPrecisionStepTitle] = useState<string | undefined>(undefined)
@@ -826,6 +840,13 @@ export default function TutorielDetailPage() {
       else next.add(i)
       return next
     })
+  }
+
+  const closeReader = () => {
+    setReaderOpen(false)
+    if (tuto && !markedDone && completedSteps.size > 0) {
+      setStatus(tuto.id, completedSteps.size === tuto.steps.length ? "done" : "inprogress")
+    }
   }
 
   const openReader = () => {
@@ -859,7 +880,11 @@ export default function TutorielDetailPage() {
 
   // Determine tutorial state
   const tutoState: "not_started" | "in_progress" | "done" =
-    markedDone ? "done" : completedSteps.size > 0 ? "in_progress" : "not_started"
+    markedDone
+      ? "done"
+      : completedSteps.size > 0 || getStatus(tuto.id) === "inprogress"
+        ? "in_progress"
+        : "not_started"
 
   const relatedTutos = tutoriels
     .filter(
@@ -977,7 +1002,7 @@ export default function TutorielDetailPage() {
                   <ScButton
                     variant="ghost"
                     size="sm"
-                    onClick={() => setMarkedDone(!markedDone)}
+                    onClick={() => setStatus(tuto.id, markedDone ? "todo" : "done")}
                   >
                     <CheckCircle2 className={`w-3.5 h-3.5 ${markedDone ? "text-[color:var(--sc-success)]" : ""}`} />
                     {markedDone ? "Marque comme termine" : "Marquer comme termine"}
@@ -1213,7 +1238,7 @@ export default function TutorielDetailPage() {
           completedSteps={completedSteps}
           onStepChange={setCurrentStep}
           onMarkStep={markStep}
-          onClose={() => setReaderOpen(false)}
+          onClose={closeReader}
           onOpenPrecision={openPrecision}
         />
       )}
