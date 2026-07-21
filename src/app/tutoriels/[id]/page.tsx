@@ -1002,7 +1002,19 @@ function TutorielDetailPageContent() {
                   <ScButton
                     variant="ghost"
                     size="sm"
-                    onClick={() => setStatus(tuto.id, markedDone ? "todo" : "done")}
+                    onClick={() =>
+                      setStatus(
+                        tuto.id,
+                        markedDone
+                          ? // On ne retombe pas systematiquement sur "todo" :
+                            // si des etapes sont deja validees, le tutoriel
+                            // reste "en cours" plutot que de perdre l'avancee.
+                            completedSteps.size > 0
+                            ? "inprogress"
+                            : "todo"
+                          : "done",
+                      )
+                    }
                   >
                     <CheckCircle2 className={`w-3.5 h-3.5 ${markedDone ? "text-[color:var(--sc-success)]" : ""}`} />
                     {markedDone ? "Marque comme termine" : "Marquer comme termine"}

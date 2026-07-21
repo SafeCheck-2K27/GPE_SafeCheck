@@ -4,14 +4,16 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
 import type { TutoStatus } from "./types"
 
 /*
-   SafeCheck - Tutorials progress context
+   SafeCheck - Contexte de progression des tutoriels
 
-   Persists per-tutorial reading status ("todo" / "inprogress" / "done")
-   in localStorage, replacing the mockTutoStatus fixture with a real,
-   per-user record that survives reloads.
+   Persiste le statut de lecture par tutoriel ("todo" / "inprogress" /
+   "done") dans le localStorage, en remplacement du jeu de donnees fige
+   `mockTutoStatus`, pour un suivi reel qui survit aux rechargements.
  */
 
 const STORAGE_KEY = "safecheck.tutorials.status.v1"
+
+const STATUTS_VALIDES: readonly TutoStatus[] = ["todo", "inprogress", "done"]
 
 type StatusMap = Record<number, TutoStatus>
 
@@ -19,7 +21,7 @@ const EMPTY_STATE: StatusMap = {}
 
 interface TutorialsProgressContextValue {
   statuses: StatusMap
-  /** True until we've read localStorage on first mount (avoids a flash). */
+  /** Passe a true une fois le localStorage lu au premier montage (evite un flash). */
   isHydrated: boolean
   getStatus: (tutorialId: number) => TutoStatus
   setStatus: (tutorialId: number, status: TutoStatus) => void
@@ -27,14 +29,32 @@ interface TutorialsProgressContextValue {
 
 const TutorialsProgressContext = createContext<TutorialsProgressContextValue | null>(null)
 
+/*
+   Le contenu du localStorage est une entree non fiable : on ne le caste
+   jamais directement. On ne recopie que les paires (id numerique ->
+   statut connu), ce qui ecarte au passage les cles speciales du type
+   `__proto__` et les statuts devenus obsoletes.
+ */
+function sanitizeStatusMap(parsed: unknown): StatusMap {
+  if (!parsed || typeof parsed !== "object") return EMPTY_STATE
+
+  const clean: StatusMap = {}
+  for (const [cle, valeur] of Object.entries(parsed)) {
+    const id = Number(cle)
+    if (!Number.isInteger(id) || id < 0) continue
+    if (typeof valeur !== "string") continue
+    if (!STATUTS_VALIDES.includes(valeur as TutoStatus)) continue
+    clean[id] = valeur as TutoStatus
+  }
+  return clean
+}
+
 function readFromStorage(): StatusMap {
   if (typeof window === "undefined") return EMPTY_STATE
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY)
     if (!raw) return EMPTY_STATE
-    const parsed = JSON.parse(raw)
-    if (parsed && typeof parsed === "object") return parsed as StatusMap
-    return EMPTY_STATE
+    return sanitizeStatusMap(JSON.parse(raw))
   } catch {
     return EMPTY_STATE
   }
@@ -45,7 +65,7 @@ function writeToStorage(statuses: StatusMap) {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(statuses))
   } catch {
-    /* ignore quota / privacy mode errors */
+    /* on ignore les erreurs de quota / navigation privee */
   }
 }
 
@@ -53,7 +73,7 @@ export function TutorialsProgressProvider({ children }: { children: React.ReactN
   const [statuses, setStatuses] = useState<StatusMap>(EMPTY_STATE)
   const [isHydrated, setIsHydrated] = useState(false)
 
-  // Hydrate from localStorage on mount.
+  // Hydratation depuis le localStorage au montage.
   useEffect(() => {
     queueMicrotask(() => {
       setStatuses(readFromStorage())
@@ -61,7 +81,7 @@ export function TutorialsProgressProvider({ children }: { children: React.ReactN
     })
   }, [])
 
-  // Sync progress across tabs.
+  // Synchronisation de la progression entre les onglets.
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
       if (e.key !== STORAGE_KEY) return
