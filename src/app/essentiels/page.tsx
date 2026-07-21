@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Navbar from "@/components/safecheck/Navbar"
 import { ScButton, ScBadge } from "@/components/safecheck/primitives"
 import Footer from "@/components/safecheck/Footer"
+import { EssentielsProvider, useEssentielsProgress } from "@/features/essentiels/EssentielsProvider"
+import type { EssentielStatut } from "@/features/essentiels/types"
 import {
   Search,
   X,
@@ -26,7 +28,15 @@ import {
   Cog,
   Heart,
   Sliders,
+  Check,
+  RotateCcw,
 } from "lucide-react"
+
+const STATUT_LABELS: Record<EssentielStatut, string> = {
+  a_faire: "À faire",
+  fait: "Fait",
+  a_revoir: "À revoir",
+}
 
 interface Essentiel {
   id: number
@@ -421,7 +431,9 @@ export default function EssentielsPage() {
         </div>
       }
     >
-      <EssentielsContent />
+      <EssentielsProvider>
+        <EssentielsContent />
+      </EssentielsProvider>
     </Suspense>
   )
 }
@@ -468,12 +480,23 @@ function FilterRow({
 
 function EssentielCard({ e, delay, onClick }: { e: Essentiel; delay: number; onClick: () => void }) {
   const Icon = e.icon
+  const { getStatut } = useEssentielsProgress()
+  const statut = getStatut(e.id)
   return (
     <button
       onClick={onClick}
-      className="text-left rounded-xl p-5 bg-[#FFFFFF] flex flex-col gap-3 sc-fade-in transition-all hover:-translate-y-1"
+      className="relative text-left rounded-xl p-5 bg-[#FFFFFF] flex flex-col gap-3 sc-fade-in transition-all hover:-translate-y-1"
       style={{ animationDelay: `${delay}ms`, border: "1px solid #B3DBEF", boxShadow: "3px 3px 0px #C0DDF8" }}
     >
+      {statut !== "a_faire" && (
+        <span
+          className={`absolute top-3 right-3 text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full ${
+            statut === "fait" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
+          }`}
+        >
+          {STATUT_LABELS[statut]}
+        </span>
+      )}
       <div className="flex items-center gap-2">
         <div className="w-10 h-10 rounded-lg bg-[#C3E8FF] flex items-center justify-center">
           <Icon className="w-5 h-5 text-[#157FE2]" />
@@ -499,6 +522,8 @@ function EssentielCard({ e, delay, onClick }: { e: Essentiel; delay: number; onC
 
 function EssentielDetail({ e, onClose }: { e: Essentiel; onClose: () => void }) {
   const Icon = e.icon
+  const { getStatut, setStatut } = useEssentielsProgress()
+  const statut = getStatut(e.id)
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4" onClick={onClose}>
       <div
@@ -527,6 +552,38 @@ function EssentielDetail({ e, onClose }: { e: Essentiel; onClose: () => void }) 
           </div>
           <p className="text-sm text-[#000]/85 leading-relaxed mb-3">{e.description}</p>
           <p className="text-sm text-[#000]/75 leading-relaxed">{e.details}</p>
+
+          <div className="mt-5">
+            <span className="block text-xs font-semibold text-[#000]/60 mb-2 uppercase tracking-wider">
+              Mon statut
+            </span>
+            <div className="flex flex-wrap gap-2">
+              <ScButton
+                variant={statut === "a_faire" ? "primary" : "secondary"}
+                size="sm"
+                onClick={() => setStatut(e.id, "a_faire")}
+              >
+                À faire
+              </ScButton>
+              <ScButton
+                variant={statut === "fait" ? "primary" : "secondary"}
+                size="sm"
+                onClick={() => setStatut(e.id, "fait")}
+              >
+                <Check className="w-3.5 h-3.5" />
+                Fait
+              </ScButton>
+              <ScButton
+                variant={statut === "a_revoir" ? "primary" : "secondary"}
+                size="sm"
+                onClick={() => setStatut(e.id, "a_revoir")}
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                À revoir
+              </ScButton>
+            </div>
+          </div>
+
           <div className="mt-6 flex justify-end">
             <ScButton variant="primary" onClick={onClose}>Compris</ScButton>
           </div>
