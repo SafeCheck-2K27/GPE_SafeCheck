@@ -23,8 +23,21 @@ export default function AuditPage() {
 
 function AuditPageContent() {
   const router = useRouter()
-  const { answers, currentQuestionIndex, setAnswer, setCurrentQuestionIndex } = useAuditProgress()
+  const {
+    answers,
+    currentQuestionIndex: storedQuestionIndex,
+    setAnswer,
+    setCurrentQuestionIndex,
+  } = useAuditProgress()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  /*
+     L'index vient du localStorage : si la liste des questions a change
+     depuis la derniere visite, il peut pointer hors du tableau. On le
+     borne avant toute indexation pour ne jamais rendre une question
+     `undefined`.
+   */
+  const currentQuestionIndex = Math.min(storedQuestionIndex, auditQuestions.length - 1)
 
   useEffect(() => {
     const desktop = window.matchMedia("(min-width: 1024px)")

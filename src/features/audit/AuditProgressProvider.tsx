@@ -4,11 +4,11 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
 import type { AuditAnswers, AuditAnswerValue } from "./types"
 
 /*
-   SafeCheck - Audit progress context
+   SafeCheck - Contexte de progression de l'audit
 
-   Persists the in-progress audit (answers + current question) in
-   localStorage so a user who closes the tab or navigates away can
-   resume the audit exactly where they left off.
+   Persiste l'audit en cours (reponses + question courante) dans le
+   localStorage, pour qu'un utilisateur qui ferme l'onglet ou navigue
+   ailleurs reprenne exactement la ou il s'etait arrete.
  */
 
 const STORAGE_KEY = "safecheck.audit.progress.v1"
@@ -21,7 +21,7 @@ interface AuditProgressState {
 const EMPTY_STATE: AuditProgressState = { answers: {}, currentQuestionIndex: 0 }
 
 interface AuditProgressContextValue extends AuditProgressState {
-  /** True until we've read localStorage on first mount (avoids a flash). */
+  /** Passe a true une fois le localStorage lu au premier montage (evite un flash). */
   isHydrated: boolean
   setAnswer: (questionId: number, value: AuditAnswerValue) => void
   setCurrentQuestionIndex: (index: number) => void
@@ -29,6 +29,17 @@ interface AuditProgressContextValue extends AuditProgressState {
 }
 
 const AuditProgressContext = createContext<AuditProgressContextValue | null>(null)
+
+/*
+   Un localStorage peut etre corrompu ou dater d'une version precedente du
+   questionnaire. On assainit donc l'index avant de s'en servir : sans ca,
+   une valeur negative, NaN ou hors bornes ferait planter le rendu au
+   moment d'indexer `auditQuestions`.
+ */
+function sanitizeQuestionIndex(value: unknown): number {
+  if (typeof value !== "number" || !Number.isInteger(value) || value < 0) return 0
+  return value
+}
 
 function readFromStorage(): AuditProgressState {
   if (typeof window === "undefined") return EMPTY_STATE
@@ -39,8 +50,7 @@ function readFromStorage(): AuditProgressState {
     if (parsed && typeof parsed === "object" && typeof parsed.answers === "object") {
       return {
         answers: parsed.answers ?? {},
-        currentQuestionIndex:
-          typeof parsed.currentQuestionIndex === "number" ? parsed.currentQuestionIndex : 0,
+        currentQuestionIndex: sanitizeQuestionIndex(parsed.currentQuestionIndex),
       }
     }
     return EMPTY_STATE
@@ -54,7 +64,7 @@ function writeToStorage(state: AuditProgressState) {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
   } catch {
-    /* ignore quota / privacy mode errors */
+    /* on ignore les erreurs de quota / navigation privee */
   }
 }
 
@@ -62,7 +72,7 @@ export function AuditProgressProvider({ children }: { children: React.ReactNode 
   const [state, setState] = useState<AuditProgressState>(EMPTY_STATE)
   const [isHydrated, setIsHydrated] = useState(false)
 
-  // Hydrate from localStorage on mount.
+  // Hydratation depuis le localStorage au montage.
   useEffect(() => {
     queueMicrotask(() => {
       setState(readFromStorage())
@@ -70,7 +80,7 @@ export function AuditProgressProvider({ children }: { children: React.ReactNode 
     })
   }, [])
 
-  // Sync progress across tabs.
+  // Synchronisation de la progression entre les onglets.
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
       if (e.key !== STORAGE_KEY) return
