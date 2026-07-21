@@ -18,31 +18,31 @@ La colonne **Source** indique le rattachement de chaque entrée au catalogue exi
 
 | # | Thème | Tutoriel | Source | Réf. catalogue |
 |---|---|---|---|---|
-| 1 | **Mises à jour** | Mettre à jour Windows | À décliner | id 7 — `mettre-a-jour-windows-macos` |
+| 1 | **Mises à jour** | Mettre à jour Windows | À décliner | id 7 — `mises-a-jour` |
 | 2 | **MFA** | Activer la double authentification sur ses comptes | Existant | id 1 — `double-authentification` |
-| 3 | **Sauvegarde** | Sauvegarder ses fichiers avec l'Historique des fichiers | À décliner | id 5 — `sauvegarder-fichiers` |
-| 4 | **Navigateur** | Mettre à jour son navigateur | Existant | id 12 — `mettre-a-jour-navigateur` |
-| 5 | **Permissions** | Configurer la confidentialité et les permissions de Windows | Existant | id 17 — `confidentialite-windows` |
-| 6 | Mots de passe | Créer un mot de passe fort | Existant | id 2 — `mot-de-passe-fort` |
-| 7 | Mots de passe | Installer et utiliser Bitwarden | Existant | id 3 — `installer-bitwarden` |
-| 8 | Phishing | Identifier un email de phishing | Existant | id 6 — `identifier-phishing` |
+| 3 | **Sauvegarde** | Sauvegarder ses fichiers avec l'Historique des fichiers | À décliner | id 5 — `sauvegardes` |
+| 4 | **Navigateur** | Mettre à jour son navigateur | Existant | id 12 — `mettre-a-jour-son-navigateur` |
+| 5 | **Permissions** | Configurer la confidentialité et les permissions de Windows | Existant | id 17 — `configurer-la-confidentialite-de-windows` |
+| 6 | Mots de passe | Créer un mot de passe fort | Existant | id 2 — `creer-un-mot-de-passe-fort` |
+| 7 | Mots de passe | Installer et utiliser Bitwarden | Existant | id 3 — `gestionnaire-mdp` |
+| 8 | Phishing | Identifier un email de phishing | Existant | id 6 — `phishing` |
 | 9 | Réseau | Sécuriser son Wi-Fi domestique | Existant | id 8 — `securiser-wifi` |
-| 10 | Navigateur | Sécuriser son navigateur web | Existant | id 13 — `securiser-navigateur` |
-| 11 | Données | Vérifier le chiffrement du disque (BitLocker) | À décliner | id 29 — `chiffrement-disque` |
-| 12 | Réseau | Comprendre et durcir le pare-feu Windows | À décliner | id 27 — `durcir-pare-feu` |
+| 10 | Navigateur | Sécuriser son navigateur web | Existant | id 13 — `securiser-son-navigateur-web` |
+| 11 | Données | Vérifier le chiffrement du disque (BitLocker) | À décliner | id 29 — `verifier-l-etat-du-chiffrement-disque` |
+| 12 | Réseau | Comprendre et durcir le pare-feu Windows | À décliner | id 27 — `comprendre-et-durcir-son-pare-feu` |
 
 ## macOS — 8 tutoriels
 
 | # | Thème | Tutoriel | Source | Réf. catalogue |
 |---|---|---|---|---|
-| 1 | **Mises à jour** | Mettre à jour macOS | À décliner | id 7 — `mettre-a-jour-windows-macos` |
+| 1 | **Mises à jour** | Mettre à jour macOS | À décliner | id 7 — `mises-a-jour` |
 | 2 | **MFA** | Activer la double authentification sur ses comptes | Existant | id 1 — `double-authentification` |
-| 3 | **Sauvegarde** | Sauvegarder ses fichiers avec Time Machine | À décliner | id 5 — `sauvegarder-fichiers` |
-| 4 | **Navigateur** | Mettre à jour son navigateur | Existant | id 12 — `mettre-a-jour-navigateur` |
+| 3 | **Sauvegarde** | Sauvegarder ses fichiers avec Time Machine | À décliner | id 5 — `sauvegardes` |
+| 4 | **Navigateur** | Mettre à jour son navigateur | Existant | id 12 — `mettre-a-jour-son-navigateur` |
 | 5 | **Permissions** | Régler Confidentialité et sécurité sur macOS | À écrire | — |
-| 6 | Mots de passe | Installer et utiliser Bitwarden | Existant | id 3 — `installer-bitwarden` |
-| 7 | Phishing | Identifier un email de phishing | Existant | id 6 — `identifier-phishing` |
-| 8 | Données | Activer et vérifier FileVault | À décliner | id 29 — `chiffrement-disque` |
+| 6 | Mots de passe | Installer et utiliser Bitwarden | Existant | id 3 — `gestionnaire-mdp` |
+| 7 | Phishing | Identifier un email de phishing | Existant | id 6 — `phishing` |
+| 8 | Données | Activer et vérifier FileVault | À décliner | id 29 — `verifier-l-etat-du-chiffrement-disque` |
 
 ## Couverture des thèmes obligatoires
 
