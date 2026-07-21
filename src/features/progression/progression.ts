@@ -3,15 +3,16 @@ import type { EssentielStatut } from "@/features/essentiels/types"
 import type { TutoStatus } from "@/features/tutorials/types"
 
 /*
-   SafeCheck - Global progression
+   SafeCheck - Progression globale
 
-   Aggregates the three persisted sources (audit, essentiels, tutoriels)
-   into a single coherent view. Kept as a pure function so it can be
-   unit-tested and reused server-side once progression is synced to the DB.
+   Agrege les trois sources persistees (audit, essentiels, tutoriels) en
+   une vue coherente. Volontairement ecrite comme une fonction pure :
+   testable unitairement et reutilisable cote serveur le jour ou la
+   progression sera synchronisee en base.
 
-   Deliberately expresses progression as "actions completed", never as a
-   percentage of "security achieved" - a user who did every action is not
-   100% safe, and the product must not imply otherwise.
+   Exprime volontairement la progression en "actions realisees", jamais
+   en pourcentage de "securite atteinte" : un utilisateur qui a tout fait
+   n'est pas protege a 100%, et le produit ne doit pas le laisser croire.
  */
 
 export interface ProgressionInput {
@@ -33,11 +34,11 @@ export interface Progression {
   tutorielsTermines: number
   tutorielsEnCours: number
   tutorielsTotal: number
-  /** Completed actions across all three sources. */
+  /** Actions realisees, toutes sources confondues. */
   actionsFaites: number
-  /** Total trackable actions across all three sources. */
+  /** Total des actions suivies, toutes sources confondues. */
   actionsTotal: number
-  /** Ratio of completed actions, 0 to 1. Not a "security score". */
+  /** Part des actions realisees, entre 0 et 1. Ce n'est pas un "score de securite". */
   partFaite: number
 }
 
@@ -54,16 +55,37 @@ export function calculerProgression(input: ProgressionInput): Progression {
   const auditRepondu = Object.keys(auditAnswers).length
   const auditTermine = auditQuestionCount > 0 && auditRepondu >= auditQuestionCount
 
+  /*
+     Les statuts viennent du localStorage et peuvent survivre a la
+     disparition d'un essentiel ou d'un tutoriel du catalogue. Sans
+     plafonnement, on compterait plus d'actions faites qu'il n'en existe
+     et `partFaite` depasserait 1.
+   */
   const essentielsValues = Object.values(essentielsStatuts)
-  const essentielsFaits = essentielsValues.filter((s) => s === "fait").length
-  const essentielsARevoir = essentielsValues.filter((s) => s === "a_revoir").length
+  const essentielsFaits = Math.min(
+    essentielsValues.filter((s) => s === "fait").length,
+    essentielsCount,
+  )
+  const essentielsARevoir = Math.min(
+    essentielsValues.filter((s) => s === "a_revoir").length,
+    essentielsCount,
+  )
 
   const tutorielsValues = Object.values(tutorielsStatuts)
-  const tutorielsTermines = tutorielsValues.filter((s) => s === "done").length
-  const tutorielsEnCours = tutorielsValues.filter((s) => s === "inprogress").length
+  const tutorielsTermines = Math.min(
+    tutorielsValues.filter((s) => s === "done").length,
+    tutorielsCount,
+  )
+  const tutorielsEnCours = Math.min(
+    tutorielsValues.filter((s) => s === "inprogress").length,
+    tutorielsCount,
+  )
+
+  // L'audit ne compte comme une action que s'il comporte des questions.
+  const auditEstUneAction = auditQuestionCount > 0 ? 1 : 0
 
   const actionsFaites = (auditTermine ? 1 : 0) + essentielsFaits + tutorielsTermines
-  const actionsTotal = 1 + essentielsCount + tutorielsCount
+  const actionsTotal = auditEstUneAction + essentielsCount + tutorielsCount
 
   return {
     auditRepondu,
