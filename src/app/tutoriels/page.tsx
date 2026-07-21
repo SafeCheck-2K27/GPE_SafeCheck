@@ -10,6 +10,10 @@ import { TutorialLevelView } from "@/features/tutorials/components/TutorialLevel
 import { TutorialModal } from "@/features/tutorials/components/TutorialModal"
 import { TutorialPersonalizedView } from "@/features/tutorials/components/TutorialPersonalizedView"
 import { TutorialPrecisionModal } from "@/features/tutorials/components/TutorialPrecisionModal"
+import {
+  TutorialsProgressProvider,
+  useTutorialsProgress,
+} from "@/features/tutorials/TutorialsProgressProvider"
 import type { Category, Niveau, Tutoriel } from "@/lib/tutoriels-data"
 
 export default function TutorielsPage() {
@@ -21,7 +25,9 @@ export default function TutorielsPage() {
         </div>
       }
     >
-      <TutorielsContent />
+      <TutorialsProgressProvider>
+        <TutorielsContent />
+      </TutorialsProgressProvider>
     </Suspense>
   )
 }
@@ -37,6 +43,7 @@ function TutorielsContent() {
       ? "all"
       : "personalized"
 
+  const { setStatus } = useTutorialsProgress()
   const [selectedTuto, setSelectedTuto] = useState<Tutoriel | null>(null)
   const [currentStep, setCurrentStep] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set())
@@ -67,6 +74,17 @@ function TutorielsContent() {
       else nextSteps.add(stepIndex)
       return nextSteps
     })
+  }
+
+  const closeTuto = () => {
+    if (selectedTuto) {
+      if (completedSteps.size === selectedTuto.steps.length) {
+        setStatus(selectedTuto.id, "done")
+      } else if (completedSteps.size > 0) {
+        setStatus(selectedTuto.id, "inprogress")
+      }
+    }
+    setSelectedTuto(null)
   }
 
   const level: Niveau =
@@ -109,7 +127,7 @@ function TutorielsContent() {
           completedSteps={completedSteps}
           onStepChange={setCurrentStep}
           onMarkStep={markStep}
-          onClose={() => setSelectedTuto(null)}
+          onClose={closeTuto}
           onOpenPrecision={openPrecision}
         />
       )}
