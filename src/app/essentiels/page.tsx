@@ -33,9 +33,9 @@ import {
 } from "lucide-react"
 
 const STATUT_LABELS: Record<EssentielStatut, string> = {
-  a_faire: "A faire",
+  a_faire: "À faire",
   fait: "Fait",
-  a_revoir: "A revoir",
+  a_revoir: "À revoir",
 }
 
 interface Essentiel {
@@ -563,7 +563,7 @@ function EssentielDetail({ e, onClose }: { e: Essentiel; onClose: () => void }) 
                 size="sm"
                 onClick={() => setStatut(e.id, "a_faire")}
               >
-                A faire
+                À faire
               </ScButton>
               <ScButton
                 variant={statut === "fait" ? "primary" : "secondary"}
@@ -579,7 +579,7 @@ function EssentielDetail({ e, onClose }: { e: Essentiel; onClose: () => void }) 
                 onClick={() => setStatut(e.id, "a_revoir")}
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                A revoir
+                À revoir
               </ScButton>
             </div>
           </div>
