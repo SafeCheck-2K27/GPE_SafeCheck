@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/safecheck/ThemeProvider'
 import { AuthProvider } from '@/components/safecheck/AuthProvider'
 import { I18nProvider } from '@/components/safecheck/I18nProvider'
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/seo'
 import './globals.css'
 
 const inter = Inter({
@@ -20,11 +21,34 @@ const spaceGrotesk = Space_Grotesk({
   display: 'swap',
 })
 
+const HOME_TITLE = 'SafeCheck - La cybersécurité, sereinement.'
+
 export const metadata: Metadata = {
-  title: 'SafeCheck - La cybersécurité, sereinement.',
-  description:
-    'SafeCheck vous aide à comprendre votre niveau de sécurité numérique, à identifier vos points faibles et à appliquer des actions concrètes pour mieux vous protéger sur Internet et sur votre ordinateur.',
-  generator: 'v0.app',
+  /*
+     URL absolue de reference : sans elle, Next.js ne peut pas resoudre
+     les URL canoniques ni les images Open Graph declarees en relatif.
+   */
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: HOME_TITLE,
+    /* Les pages filles fournissent leur titre court, suffixe ici. */
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    locale: 'fr_FR',
+    siteName: SITE_NAME,
+    title: HOME_TITLE,
+    description: SITE_DESCRIPTION,
+    url: '/',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: HOME_TITLE,
+    description: SITE_DESCRIPTION,
+  },
 }
 
 export default function RootLayout({

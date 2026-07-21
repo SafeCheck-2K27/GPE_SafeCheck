@@ -1,4 +1,9 @@
-"use client"
+/*
+   Module de donnees pur : ni hook, ni API navigateur. Il ne porte donc
+   pas la directive "use client", ce qui le rend importable aussi bien
+   depuis un Client Component que depuis un Server Component - necessaire
+   pour generer les metadonnees des fiches tutoriels (SC-057).
+ */
 
 import {
   Shield,
