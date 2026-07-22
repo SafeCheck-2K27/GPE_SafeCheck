@@ -8,9 +8,20 @@ import { SignupModal } from "@/components/safecheck/SignupModal"
 import { useAuth } from "@/components/safecheck/AuthProvider"
 import { useI18n } from "@/components/safecheck/I18nProvider"
 import { PageShell } from "@/components/safecheck/layout/PageShell"
+import { AuditProgressProvider, useAuditProgress } from "@/features/audit/AuditProgressProvider"
+import { auditQuestions } from "@/features/audit/data"
+import {
+  calculerScoreGlobal,
+  calculerScoresParCategorie,
+  compterReponses,
+  extrairePointsFaibles,
+  extrairePointsForts,
+} from "@/features/results/categoryScoring"
 import { ResultsAssessment } from "@/features/results/components/ResultsAssessment"
 import { ResultsAuditInfo } from "@/features/results/components/ResultsAuditInfo"
+import { ResultsCategories } from "@/features/results/components/ResultsCategories"
 import { ResultsComparison } from "@/features/results/components/ResultsComparison"
+import { ResultsEssentielsCta } from "@/features/results/components/ResultsEssentielsCta"
 import { ResultsNextSteps } from "@/features/results/components/ResultsNextSteps"
 import { ResultsRecommendations } from "@/features/results/components/ResultsRecommendations"
 import { ResultsScoreHero } from "@/features/results/components/ResultsScoreHero"
@@ -28,8 +39,24 @@ function ResultatsContent() {
   const searchParams = useSearchParams()
   const { t, lang } = useI18n()
   const auth = useAuth()
+  const { answers, isHydrated } = useAuditProgress()
 
-  const score = getResultScore(searchParams.get("score"))
+  /*
+     Les réponses persistées font foi : elles permettent de recalculer le
+     score et surtout de le ventiler par thème. Le paramètre d'URL reste
+     un repli pour les arrivées directes sur la page (lien partagé,
+     résultat consulté sans avoir repassé l'audit).
+   */
+  const aRepondu = compterReponses(answers) > 0
+  const scoresParCategorie = aRepondu
+    ? calculerScoresParCategorie(auditQuestions, answers)
+    : []
+  const pointsForts = extrairePointsForts(scoresParCategorie)
+  const pointsFaibles = extrairePointsFaibles(scoresParCategorie)
+
+  const score = aRepondu
+    ? calculerScoreGlobal(auditQuestions, answers)
+    : getResultScore(searchParams.get("score"))
   const level = getResultLevel(score)
   const displayedRecommendations = getDisplayedRecommendations(level)
   const metrics = getResultMetrics(score, level)
@@ -51,6 +78,15 @@ function ResultatsContent() {
     setSignupOpen(true)
   }
 
+  /*
+     Tant que le localStorage n'est pas lu, on ne rend rien de définitif :
+     afficher le score de repli puis le remplacer par le vrai produirait
+     un clignotement trompeur sur une page de diagnostic.
+     Ce retour est placé après tous les hooks, pour que leur ordre
+     d'appel reste identique à chaque rendu.
+   */
+  if (!isHydrated) return <ResultatsLoading />
+
   return (
     <PageShell>
       <Navbar />
@@ -65,7 +101,18 @@ function ResultatsContent() {
         />
         <ResultsSummary score={score} level={level} />
         <ResultsStats metrics={metrics} />
-        <ResultsAssessment score={score} level={level} t={t} />
+        <ResultsCategories scores={scoresParCategorie} />
+        <ResultsAssessment
+          score={score}
+          level={level}
+          t={t}
+          pointsForts={pointsForts}
+          pointsFaibles={pointsFaibles}
+        />
+        <ResultsEssentielsCta
+          pointsFaibles={pointsFaibles}
+          onOpenEssentiels={() => router.push("/essentiels")}
+        />
         <ResultsRecommendations
           recommendations={displayedRecommendations}
           lang={lang}
@@ -115,7 +162,9 @@ function ResultatsLoading() {
 export default function ResultatsPage() {
   return (
     <Suspense fallback={<ResultatsLoading />}>
-      <ResultatsContent />
+      <AuditProgressProvider>
+        <ResultatsContent />
+      </AuditProgressProvider>
     </Suspense>
   )
 }
