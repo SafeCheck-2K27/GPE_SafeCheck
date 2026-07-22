@@ -12,9 +12,12 @@ datasource db {
 
 /// Application user account.
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
+  id       String  @id @default(uuid())
+  email    String  @unique
+  name     String?
+  /// Empreinte scrypt du mot de passe, au format `scrypt$N$r$p$sel$empreinte`.
+  /// Jamais le mot de passe en clair, jamais une valeur réversible.
+  passwordHash String
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
