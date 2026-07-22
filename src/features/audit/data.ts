@@ -3,21 +3,21 @@ import type { AuditQuestion } from "./types"
 /*
    SafeCheck - Banque de questions de l'audit rapide (SC-017)
 
-   10 categories x 5 questions. Les questions sont regroupees par
-   categorie pour que l'utilisateur avance theme par theme plutot que de
-   sauter d'un sujet a l'autre.
+   10 catégories x 5 questions. Les questions sont regroupées par
+   catégorie pour que l'utilisateur avance thème par thème plutôt que de
+   sauter d'un sujet à l'autre.
 
    Chaque option porte un `score` sur 10 qui fait office de poids : 10 =
-   pratique recommandee, 0 = pratique a risque ou notion inconnue. Une
-   reponse "je ne sais pas ce que c'est" vaut 0 parce qu'elle signale un
+   pratique recommandée, 0 = pratique à risque ou notion inconnue. Une
+   réponse "je ne sais pas ce que c'est" vaut 0 parce qu'elle signale un
    besoin d'accompagnement, pas parce qu'elle sanctionne l'utilisateur.
 
-   Le vocabulaire reste grand public : tout terme technique est explique
-   entre parentheses dans l'intitule.
+   Le vocabulaire reste grand public : tout terme technique est expliqué
+   entre parenthèses dans l'intitulé.
  */
 
 export const auditQuestions: AuditQuestion[] = [
-  /* ---------- Connaissances generales ---------- */
+  /* ---------- Connaissances générales ---------- */
   {
     id: 1,
     category: "Connaissances générales",
@@ -302,7 +302,7 @@ export const auditQuestions: AuditQuestion[] = [
     ],
   },
 
-  /* ---------- Mises a jour ---------- */
+  /* ---------- Mises à jour ---------- */
   {
     id: 6,
     category: "Mises à jour",
@@ -530,7 +530,7 @@ export const auditQuestions: AuditQuestion[] = [
     ],
   },
 
-  /* ---------- Donnees personnelles ---------- */
+  /* ---------- Données personnelles ---------- */
   {
     id: 10,
     category: "Données personnelles",
