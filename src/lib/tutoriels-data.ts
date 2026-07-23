@@ -1,0 +1,1113 @@
+/* TYPES */
+export type Niveau = "Debutant" | "Intermediaire" | "Avance"
+export type Category =
+  | "comptes"
+  | "motsdepasse"
+  | "donnees"
+  | "sauvegardes"
+  | "phishing"
+  | "os"
+  | "reseau"
+  | "navigateur"
+  | "mobile"
+export type Tag =
+  | "essentiel"
+  | "populaire"
+  | "technique"
+  | "confidentialite"
+  | "reseau"
+  | "comptes"
+  | "donnees"
+  | "phishing"
+  | "mobile"
+  | "systeme"
+
+export type TutorialIconKey =
+  | "activity"
+  | "alert-triangle"
+  | "compass"
+  | "cpu"
+  | "eye"
+  | "globe"
+  | "hard-drive"
+  | "key"
+  | "layers"
+  | "lock"
+  | "save"
+  | "server"
+  | "settings"
+  | "shield"
+  | "smartphone"
+  | "terminal"
+  | "users"
+  | "wifi"
+
+export interface TutoStep {
+  title: string
+  description: string
+}
+
+export interface Tutoriel {
+  id: number
+  slug: string
+  title: string
+  duration: string
+  level: Niveau
+  description: string
+  category: Category
+  tags: Tag[]
+  icon: TutorialIconKey
+  steps: TutoStep[]
+  tip?: string
+  isRecommended?: boolean
+  isEssential?: boolean
+  isNextStep?: boolean
+  /** Short objective sentence shown on the detail page */
+  objective?: string
+  /** List of what the user will learn */
+  learns?: string[]
+  /** Prerequisites before starting */
+  prerequisites?: string[]
+  /** Platform concerned by the tutorial */
+  platform?: string
+}
+
+export const CATEGORY_LABEL: Record<Category, string> = {
+  comptes: "Comptes",
+  motsdepasse: "Mots de passe",
+  donnees: "Donnees personnelles",
+  sauvegardes: "Sauvegardes",
+  phishing: "Phishing & arnaques",
+  os: "Systeme d'exploitation",
+  reseau: "Reseau & Wi-Fi",
+  navigateur: "Navigateur",
+  mobile: "Mobile",
+}
+
+export const tutoriels: Tutoriel[] = [
+  /* DEBUTANT */
+  {
+    id: 1,
+    slug: "double-authentification",
+    title: "Activer la double authentification sur Google",
+    duration: "5 min",
+    level: "Debutant",
+    description:
+      "Protege ton compte Google en ajoutant une deuxieme couche de verification. Meme si ton mot de passe est vole, personne ne pourra acceder sans ton telephone.",
+    category: "comptes",
+    tags: ["essentiel", "comptes", "populaire"],
+    icon: "shield",
+    isRecommended: true,
+    isEssential: true,
+    objective:
+      "Rendre ton compte Google inaccessible meme en cas de vol de mot de passe, en activant la validation en deux etapes.",
+    learns: [
+      "Trouver les bons parametres de securite Google",
+      "Activer la double authentification (2FA)",
+      "Choisir une methode fiable (application plutot que SMS)",
+      "Sauvegarder les codes de secours",
+      "Verifier que la protection est bien activee",
+    ],
+    prerequisites: [
+      "Avoir un compte Google actif",
+      "Disposer d'un smartphone (Android ou iOS)",
+      "Acces a Internet",
+    ],
+    platform: "Google Account (tous appareils)",
+    steps: [
+      { title: "Ouvrir les parametres Google", description: "Va sur myaccount.google.com et clique sur 'Securite' dans le menu de gauche." },
+      { title: "Trouver la validation en deux etapes", description: "Section 'Comment tu te connectes'. Clique sur 'Validation en deux etapes'." },
+      { title: "Choisir ta methode", description: "Privilegie l'application Google Authenticator plutot que le SMS, plus sur." },
+      { title: "Scanner le QR code", description: "Installe Google Authenticator, scanne le QR code, valide le code a 6 chiffres." },
+      { title: "Sauvegarder les codes de secours", description: "Imprime ou note les codes de secours dans un endroit sur. Indispensable si tu perds ton telephone." },
+      { title: "Tester la connexion", description: "Deconnecte-toi puis reconnecte-toi pour verifier que la 2FA fonctionne bien." },
+    ],
+    tip: "Active aussi la 2FA sur ton email principal et tes reseaux sociaux. Chaque compte protege renforce ta securite globale.",
+  },
+  {
+    id: 2,
+    slug: "creer-un-mot-de-passe-fort",
+    title: "Creer un mot de passe fort",
+    duration: "3 min",
+    level: "Debutant",
+    description:
+      "Apprends les regles pour creer des mots de passe qui resistent aux attaques par force brute, dictionnaire et techniques de devinette.",
+    category: "motsdepasse",
+    tags: ["essentiel", "comptes"],
+    icon: "key",
+    isNextStep: true,
+    objective: "Creer des mots de passe robustes qui resistsent aux attaques automatisees.",
+    learns: [
+      "Identifier les erreurs classiques de mot de passe",
+      "Appliquer les regles de complexite minimale",
+      "Utiliser une phrase de passe memorisable",
+      "Comprendre pourquoi un mot de passe unique par compte est crucial",
+    ],
+    prerequisites: ["Aucun prerequis particulier"],
+    platform: "Tous services en ligne",
+    steps: [
+      { title: "Eviter les classiques", description: "'azerty', '123456', ton prenom : ce sont les premiers mots testes par les pirates." },
+      { title: "Viser 12 caracteres minimum", description: "Chaque caractere supplementaire multiplie le temps de craquage." },
+      { title: "Melanger les types", description: "Majuscules, minuscules, chiffres et caracteres speciaux." },
+      { title: "Utiliser une phrase de passe", description: "Ex : 'JeBois!Du-Cafe@7h30Tous-LesMatins' est solide et memorisable." },
+      { title: "Un mot de passe unique par compte", description: "Si un site fuit, tes autres comptes restent proteges." },
+    ],
+    tip: "Teste la force d'un mot de passe similaire (pas le tien) sur security.org/how-secure-is-my-password.",
+  },
+  {
+    id: 3,
+    slug: "gestionnaire-mdp",
+    title: "Installer et utiliser Bitwarden",
+    duration: "10 min",
+    level: "Debutant",
+    description:
+      "Bitwarden est un gestionnaire de mots de passe open source et gratuit. Stocke tous tes mots de passe chiffres et remplis-les automatiquement.",
+    category: "motsdepasse",
+    tags: ["essentiel", "populaire", "comptes"],
+    icon: "lock",
+    isRecommended: true,
+    objective: "Centraliser et securiser tous tes mots de passe dans un coffre chiffre gratuit.",
+    learns: [
+      "Creer un compte Bitwarden securise",
+      "Installer l'extension navigateur et l'app mobile",
+      "Importer des mots de passe existants",
+      "Generer des mots de passe forts automatiquement",
+    ],
+    prerequisites: ["Avoir un navigateur moderne (Chrome, Firefox, Edge, Safari)", "Acces a Internet"],
+    platform: "Windows, macOS, Linux, iOS, Android",
+    steps: [
+      { title: "Creer un compte Bitwarden", description: "bitwarden.com > 'Demarrer gratuitement'. Cree un mot de passe maitre TRES solide." },
+      { title: "Installer l'extension navigateur", description: "Chrome / Firefox / Safari : extension officielle, connecte-toi." },
+      { title: "Installer l'application mobile", description: "App Store / Google Play. Active le deverrouillage par empreinte." },
+      { title: "Importer tes mots de passe", description: "Depuis Chrome ou Firefox via Outils > Importation." },
+      { title: "Generer des mots de passe", description: "Pour chaque nouveau compte, utilise le generateur (16+ caracteres)." },
+    ],
+    tip: "La version gratuite de Bitwarden est suffisante pour la plupart des utilisateurs.",
+  },
+  {
+    id: 4,
+    slug: "verifier-si-ton-email-a-ete-compromis",
+    title: "Verifier si ton email a ete compromis",
+    duration: "3 min",
+    level: "Debutant",
+    description:
+      "HaveIBeenPwned te permet de verifier en quelques secondes si ton adresse email figure dans une fuite de donnees connue.",
+    category: "donnees",
+    tags: ["essentiel", "donnees"],
+    icon: "eye",
+    objective: "Savoir si tes donnees ont fuite et agir immediatement.",
+    learns: [
+      "Utiliser HaveIBeenPwned pour verifier une adresse email",
+      "Interpreter les resultats (fuites detectees vs propre)",
+      "Reagir rapidement en cas de fuite confirmee",
+      "Activer les alertes futures",
+    ],
+    prerequisites: ["Une adresse email a verifier"],
+    platform: "Web (tous navigateurs)",
+    steps: [
+      { title: "Acceder a HaveIBeenPwned", description: "haveibeenpwned.com - service gratuit, recherches anonymes." },
+      { title: "Entrer ton adresse email", description: "Saisis l'adresse principale, clique sur 'pwned?'." },
+      { title: "Analyser les resultats", description: "Rouge = ton email est dans des fuites. Vert = aucune fuite connue." },
+      { title: "Agir en cas de fuite", description: "Change immediatement le mot de passe sur les sites concernes." },
+      { title: "S'abonner aux alertes", description: "Inscris-toi pour etre notifie de futures fuites." },
+    ],
+    tip: "Verifie toutes tes adresses email, y compris celles que tu utilises peu.",
+  },
+  {
+    id: 5,
+    slug: "sauvegardes",
+    title: "Sauvegarder ses fichiers importants",
+    duration: "10 min",
+    level: "Debutant",
+    description:
+      "Apprends a mettre en place la regle 3-2-1 pour ne jamais perdre tes photos et documents, meme en cas de ransomware.",
+    category: "sauvegardes",
+    tags: ["essentiel", "donnees"],
+    icon: "save",
+    objective: "Mettre en place une strategie de sauvegarde qui resiste aux ransomwares et pannes.",
+    learns: [
+      "Identifier quels fichiers sauvegarder en priorite",
+      "Comprendre et appliquer la regle 3-2-1",
+      "Configurer une sauvegarde automatique dans le cloud",
+      "Utiliser un disque dur externe comme copie locale",
+    ],
+    prerequisites: ["Acces Internet", "Optionnel : un disque dur externe"],
+    platform: "Windows, macOS",
+    steps: [
+      { title: "Identifier ce qui doit etre sauvegarde", description: "Documents, photos, contacts, favoris." },
+      { title: "Comprendre la regle 3-2-1", description: "3 copies / 2 supports differents / 1 hors site." },
+      { title: "Configurer Google Drive ou OneDrive", description: "Synchro automatique de Documents, Bureau, Photos." },
+      { title: "Brancher un disque dur externe", description: "Windows : Historique des fichiers. macOS : Time Machine." },
+      { title: "Planifier des sauvegardes regulieres", description: "Quotidien pour les fichiers actifs, hebdo pour le reste." },
+    ],
+    tip: "Avec une sauvegarde deconnectee (disque debranche), tu recuperes tout sans payer la rancon.",
+  },
+  {
+    id: 6,
+    slug: "phishing",
+    title: "Identifier un email de phishing",
+    duration: "5 min",
+    level: "Debutant",
+    description:
+      "Le phishing represente 90% des attaques. Apprends a reconnaitre les signaux d'alarme pour ne plus jamais cliquer sur un lien malveillant.",
+    category: "phishing",
+    tags: ["essentiel", "phishing", "populaire"],
+    icon: "alert-triangle",
+    isEssential: true,
+    objective: "Reconnaitre un email frauduleux avant de cliquer sur quoi que ce soit.",
+    learns: [
+      "Verifier l'adresse email reelle de l'expediteur",
+      "Reperer les signaux d'urgence et de manipulation",
+      "Inspecter les liens sans les ouvrir",
+      "Signaler et supprimer un email suspect",
+    ],
+    prerequisites: ["Acces a une messagerie email"],
+    platform: "Tous clients email (Gmail, Outlook, etc.)",
+    steps: [
+      { title: "Verifier l'expediteur reel", description: "Clique sur le nom pour voir l'adresse complete. Verifie le domaine." },
+      { title: "Reperer les signaux d'urgence", description: "Menaces, deadlines courtes, gains incroyables : suspect." },
+      { title: "Survoler les liens sans cliquer", description: "L'URL reelle s'affiche en bas du navigateur. Verifie le domaine final." },
+      { title: "Ne pas ouvrir les pieces jointes inattendues", description: ".exe, .zip, .docm : tres risque." },
+      { title: "Signaler et supprimer", description: "Marque comme spam, signale au service IT le cas echeant." },
+    ],
+    tip: "En cas de doute sur un email de ta banque, ne clique sur AUCUN lien. Va sur le site officiel en tapant l'adresse toi-meme.",
+  },
+  {
+    id: 7,
+    slug: "mises-a-jour",
+    title: "Mettre a jour Windows ou macOS",
+    duration: "10 min",
+    level: "Debutant",
+    description:
+      "Les mises a jour systeme sont la premiere ligne de defense. Apprends a les activer et les gerer correctement.",
+    category: "os",
+    tags: ["essentiel", "systeme"],
+    icon: "hard-drive",
+    objective: "Maintenir ton systeme a jour pour combler les failles de securite connues.",
+    learns: [
+      "Verifier la version de ton systeme d'exploitation",
+      "Lancer et suivre une mise a jour",
+      "Activer les mises a jour automatiques",
+      "Comprendre pourquoi remettre a plus tard est dangereux",
+    ],
+    prerequisites: ["Avoir un compte administrateur sur ton PC"],
+    platform: "Windows 10/11, macOS Monterey et superieur",
+    steps: [
+      { title: "Verifier la version actuelle", description: "Win+I > Systeme. macOS : Menu Apple > A propos." },
+      { title: "Lancer une verification manuelle", description: "Windows Update / Mise a jour de logiciels." },
+      { title: "Activer les mises a jour automatiques", description: "Coche la case 'telecharger automatiquement'." },
+      { title: "Mettre a jour les pilotes", description: "Carte graphique, chipset : via le site du fabricant." },
+      { title: "Planifier les redemarrages", description: "Hors heures de travail, ne reporte pas indefiniment." },
+    ],
+    tip: "WannaCry exploitait une faille corrigee 2 mois plus tot. Les victimes n'avaient pas mis a jour.",
+  },
+  {
+    id: 8,
+    slug: "securiser-wifi",
+    title: "Securiser son Wi-Fi domestique",
+    duration: "8 min",
+    level: "Debutant",
+    description:
+      "Un Wi-Fi mal securise permet a tes voisins d'espionner tes communications ou de lancer des attaques depuis chez toi.",
+    category: "reseau",
+    tags: ["essentiel", "reseau"],
+    icon: "wifi",
+    isRecommended: true,
+    objective: "Empecher toute intrusion sur ton reseau Wi-Fi domestique.",
+    learns: [
+      "Acceder a l'interface d'administration de ta box",
+      "Changer le mot de passe administrateur par defaut",
+      "Configurer le bon protocole de chiffrement (WPA3/WPA2)",
+      "Desactiver les fonctions vulnerables (WPS)",
+    ],
+    prerequisites: ["Acces a ta box ou routeur", "Le mot de passe administrateur (souvent imprime sur la box)"],
+    platform: "Box Internet (tous operateurs)",
+    steps: [
+      { title: "Acceder a l'interface de la box", description: "192.168.1.1 ou 192.168.0.1 dans le navigateur." },
+      { title: "Changer le mot de passe administrateur", description: "Le mot de passe par defaut est souvent imprime sur la box." },
+      { title: "Configurer WPA3 ou WPA2-AES", description: "Evite WEP / WPA1, cassables en quelques minutes." },
+      { title: "Personnaliser le SSID", description: "Evite ton nom ou ton adresse dans le nom du reseau." },
+      { title: "Desactiver le WPS", description: "Cette fonction pratique est aussi vulnerable." },
+    ],
+    tip: "Change le mot de passe Wi-Fi au moins une fois par an, ou si tu l'as partage trop largement.",
+  },
+  {
+    id: 9,
+    slug: "verifier-les-permissions-de-son-smartphone",
+    title: "Verifier les permissions de son smartphone",
+    duration: "6 min",
+    level: "Debutant",
+    description:
+      "Beaucoup d'apps demandent des acces qui n'ont rien a voir avec leur fonction (camera, micro, contacts). Reprends le controle.",
+    category: "mobile",
+    tags: ["mobile", "confidentialite"],
+    icon: "smartphone",
+    objective: "Reprendre le controle sur les acces accordes a chaque application installee.",
+    learns: [
+      "Localiser les parametres de permissions sur iOS et Android",
+      "Identifier les acces sensibles (micro, camera, localisation)",
+      "Revoquer les acces inutiles ou excessifs",
+      "Etablir une routine de verification reguliere",
+    ],
+    prerequisites: ["Un smartphone iOS ou Android"],
+    platform: "iOS 14+, Android 10+",
+    steps: [
+      { title: "Ouvrir les permissions", description: "iOS : Reglages > Confidentialite. Android : Parametres > Apps > Permissions." },
+      { title: "Lister les acces sensibles", description: "Camera, micro, localisation, contacts, fichiers." },
+      { title: "Auditer chaque app", description: "Une lampe torche n'a pas besoin de tes contacts." },
+      { title: "Revoquer les acces inutiles", description: "Bascule en 'Jamais' ou 'Pendant l'utilisation'." },
+      { title: "Re-verifier tous les 3 mois", description: "Les apps changent leurs demandes a chaque mise a jour." },
+    ],
+    tip: "iOS et Android affichent un point vert / orange quand le micro ou la camera est actif.",
+  },
+  {
+    id: 10,
+    slug: "reconnaitre-un-faux-lien-url-spoofing",
+    title: "Reconnaitre un faux lien (URL spoofing)",
+    duration: "5 min",
+    level: "Debutant",
+    description:
+      "Les pirates creent des URL qui imitent les marques connues. Apprends a lire une URL pour reperer les pieges.",
+    category: "phishing",
+    tags: ["phishing", "essentiel"],
+    icon: "eye",
+    objective: "Lire et analyser une URL pour detecter une tentative d'usurpation.",
+    learns: [
+      "Lire une URL de droite a gauche pour trouver le vrai domaine",
+      "Reconnaitre les sous-domaines trompeurs",
+      "Reperer les caracteres visuellement similaires (homoglyphes)",
+      "Utiliser des outils de verification en ligne",
+    ],
+    prerequisites: ["Aucun prerequis"],
+    platform: "Tous navigateurs web",
+    steps: [
+      { title: "Lire l'URL de droite a gauche", description: "Le vrai domaine est juste avant le premier '/'." },
+      { title: "Reperer les sous-domaines trompeurs", description: "'paypal.compte-securite.ru' n'est PAS PayPal." },
+      { title: "Verifier les caracteres ressemblants", description: "'rn' qui imite 'm', 'I' qui imite 'l', '0' qui imite 'o'." },
+      { title: "Verifier le HTTPS", description: "Pas de cadenas = pas de connexion chiffree. Mais HTTPS ne garantit pas la legitimite." },
+      { title: "Survoler avant de cliquer", description: "L'URL reelle s'affiche en bas du navigateur." },
+    ],
+    tip: "Tu peux copier-coller un lien suspect dans virustotal.com pour le faire analyser sans le visiter.",
+  },
+  {
+    id: 11,
+    slug: "eviter-les-arnaques-classiques-en-ligne",
+    title: "Eviter les arnaques classiques en ligne",
+    duration: "7 min",
+    level: "Debutant",
+    description:
+      "Faux support technique, faux gain, faux livreur SMS : un tour d'horizon des arnaques courantes et comment les detecter.",
+    category: "phishing",
+    tags: ["phishing", "populaire"],
+    icon: "alert-triangle",
+    objective: "Identifier et dejouer les arnaques en ligne les plus repandues.",
+    learns: [
+      "Reconnaitre l'arnaque du faux support technique",
+      "Identifier les faux SMS de livraison",
+      "Refuser les faux gains et tirages au sort",
+      "Adopter les bons reflexes face a une demande suspecte",
+    ],
+    prerequisites: ["Aucun prerequis"],
+    platform: "Email, SMS, navigateur web",
+    steps: [
+      { title: "Faux support Microsoft / Apple", description: "Pop-up qui te dit que ton PC est infecte. Toujours faux." },
+      { title: "Faux SMS de livraison", description: "Lien pour 'payer 1.99E de douane'. Toujours suspect." },
+      { title: "Faux gains et tirages au sort", description: "Tu n'as pas joue, tu n'as donc pas gagne." },
+      { title: "Faux conseillers bancaires", description: "Une banque ne demande JAMAIS un code par telephone." },
+      { title: "Reflexe a adopter", description: "Doute, raccroche, va sur le site officiel directement." },
+    ],
+    tip: "En cas de doute, appelle le 33700 pour signaler un SMS frauduleux.",
+  },
+  {
+    id: 12,
+    slug: "mettre-a-jour-son-navigateur",
+    title: "Mettre a jour son navigateur",
+    duration: "3 min",
+    level: "Debutant",
+    description:
+      "Ton navigateur est ta principale porte d'entree internet. Une version obsolete = une porte ouverte aux attaques.",
+    category: "navigateur",
+    tags: ["essentiel", "systeme"],
+    icon: "globe",
+    objective: "Garder ton navigateur a jour pour bloquer les failles connues.",
+    learns: [
+      "Verifier la version de ton navigateur",
+      "Lancer et appliquer une mise a jour",
+      "Activer les mises a jour automatiques",
+      "Verifier l'etat des extensions apres mise a jour",
+    ],
+    prerequisites: ["Chrome, Firefox, Edge ou Safari installe"],
+    platform: "Chrome, Firefox, Edge, Safari",
+    steps: [
+      { title: "Verifier la version", description: "Chrome : chrome://settings/help. Firefox : Aide > A propos." },
+      { title: "Lancer la mise a jour", description: "Le navigateur telecharge et installe automatiquement." },
+      { title: "Redemarrer", description: "La mise a jour s'applique au redemarrage." },
+      { title: "Activer les MAJ automatiques", description: "Cochees par defaut sur Chrome / Firefox / Edge." },
+    ],
+    tip: "Apres une grosse mise a jour, verifie tes extensions : certaines peuvent avoir ete desactivees.",
+  },
+  /* INTERMEDIAIRE */
+  {
+    id: 13,
+    slug: "securiser-son-navigateur-web",
+    title: "Securiser son navigateur web",
+    duration: "10 min",
+    level: "Intermediaire",
+    description:
+      "Mal configure, ton navigateur peut laisser passer des malwares, collecter tes donnees et t'exposer a des sites frauduleux.",
+    category: "navigateur",
+    tags: ["confidentialite", "systeme"],
+    icon: "globe",
+    objective: "Durcir la configuration de ton navigateur pour reduire les risques.",
+    learns: [
+      "Auditer et supprimer les extensions inutiles",
+      "Activer la protection renforcee",
+      "Installer uBlock Origin correctement",
+      "Gerer les permissions par site",
+    ],
+    prerequisites: ["Chrome ou Firefox installe et a jour"],
+    platform: "Chrome, Firefox",
+    steps: [
+      { title: "Auditer les extensions", description: "Supprime celles que tu n'utilises plus." },
+      { title: "Activer la protection renforcee", description: "Chrome : 'Protection amelioree'. Firefox : 'Stricte'." },
+      { title: "Installer uBlock Origin", description: "Bloqueur de pubs et de traceurs publicitaires." },
+      { title: "Bloquer les notifications", description: "Empeche les sites de demander des notifications." },
+      { title: "Reviser les permissions par site", description: "Camera, micro, localisation : qui a vraiment acces ?" },
+    ],
+    tip: "Installe Password Alert (Google) pour etre alerte si tu saisis ton mot de passe Google sur un faux site.",
+  },
+  {
+    id: 14,
+    slug: "configurer-bitwarden-sur-plusieurs-appareils",
+    title: "Configurer Bitwarden sur plusieurs appareils",
+    duration: "12 min",
+    level: "Intermediaire",
+    description:
+      "Synchronise ton coffre Bitwarden entre PC, Mac, telephone et tablette, en gardant le maximum de securite.",
+    category: "motsdepasse",
+    tags: ["comptes", "confidentialite"],
+    icon: "lock",
+    objective: "Deployer Bitwarden sur tous tes appareils sans compromettre la securite.",
+    learns: [
+      "Activer la 2FA sur Bitwarden lui-meme",
+      "Installer et connecter l'app sur chaque appareil",
+      "Configurer un timeout et un verrouillage biometrique",
+      "Verifier la synchronisation entre appareils",
+    ],
+    prerequisites: ["Avoir deja un compte Bitwarden (voir tutoriel #3)", "Bitwarden installe sur au moins un appareil"],
+    platform: "Windows, macOS, iOS, Android",
+    steps: [
+      { title: "Activer la 2FA sur Bitwarden", description: "Authenticator obligatoire avant tout deploiement multi-appareils." },
+      { title: "Installer sur chaque appareil", description: "Extension navigateur + apps mobiles + app desktop." },
+      { title: "Configurer le verrouillage rapide", description: "PIN court ou biometrie pour deverrouiller en local." },
+      { title: "Definir le timeout", description: "5 a 15 minutes selon le contexte (perso / pro)." },
+      { title: "Tester la synchronisation", description: "Cree une entree sur un appareil, verifie qu'elle apparait partout." },
+    ],
+    tip: "Active 'Master password re-prompt' pour les entrees critiques (banque, email principal).",
+  },
+  {
+    id: 15,
+    slug: "chiffrer-ses-fichiers-sensibles",
+    title: "Chiffrer ses fichiers sensibles",
+    duration: "15 min",
+    level: "Intermediaire",
+    description:
+      "Apprends a chiffrer documents bancaires, scans de papiers d'identite et fichiers professionnels avec VeraCrypt ou 7-Zip.",
+    category: "donnees",
+    tags: ["donnees", "confidentialite", "technique"],
+    icon: "layers",
+    objective: "Rendre tes fichiers sensibles inaccessibles sans le bon mot de passe.",
+    learns: [
+      "Choisir le bon outil selon ton usage (7-Zip vs VeraCrypt)",
+      "Creer un volume chiffre avec VeraCrypt",
+      "Definir un mot de passe robuste pour le volume",
+      "Monter et utiliser un volume chiffre au quotidien",
+    ],
+    prerequisites: ["Windows ou macOS", "Droits d'installation de logiciels"],
+    platform: "Windows, macOS, Linux",
+    steps: [
+      { title: "Choisir l'outil", description: "7-Zip pour un fichier ponctuel, VeraCrypt pour un coffre persistant." },
+      { title: "Telecharger VeraCrypt", description: "veracrypt.fr : open source, francais, audite." },
+      { title: "Creer un volume chiffre", description: "Choisis AES, taille adaptee a ton usage." },
+      { title: "Definir un mot de passe long", description: "20 caracteres minimum, unique." },
+      { title: "Monter et utiliser le volume", description: "Comme un disque dur classique. Demonte avant de partir." },
+    ],
+    tip: "VeraCrypt propose un mode 'volume cache' : un coffre dans le coffre, invisible sans le bon mot de passe.",
+  },
+  {
+    id: 16,
+    slug: "verifier-les-sessions-actives-sur-ses-comptes",
+    title: "Verifier les sessions actives sur ses comptes",
+    duration: "8 min",
+    level: "Intermediaire",
+    description:
+      "Une session orpheline sur un PC public ou un ancien telephone peut compromettre ton compte. Audite et deconnecte regulierement.",
+    category: "comptes",
+    tags: ["comptes", "confidentialite"],
+    icon: "activity",
+    objective: "Fermer toutes les sessions ouvertes sur des appareils inconnus ou oublies.",
+    learns: [
+      "Consulter les sessions actives sur Google, Microsoft et Apple",
+      "Identifier les appareils suspects ou inconnus",
+      "Fermer les sessions a distance",
+      "Etablir une routine d'audit trimestriel",
+    ],
+    prerequisites: ["Comptes Google, Microsoft ou Apple actifs"],
+    platform: "Google, Microsoft, Apple, reseaux sociaux",
+    steps: [
+      { title: "Google", description: "myaccount.google.com > Securite > 'Vos appareils'. Deconnecte les inconnus." },
+      { title: "Microsoft", description: "account.microsoft.com > Securite > 'Activite recente'." },
+      { title: "Apple", description: "Reglages > Identifiant Apple > liste des appareils." },
+      { title: "Reseaux sociaux", description: "Facebook, Instagram, X : section 'Ou tu es connecte'." },
+      { title: "Etablir une routine", description: "Audit trimestriel des sessions actives." },
+    ],
+    tip: "Si tu vends un appareil, deconnecte tes comptes AVANT de le reinitialiser.",
+  },
+  {
+    id: 17,
+    slug: "configurer-la-confidentialite-de-windows",
+    title: "Configurer la confidentialite de Windows",
+    duration: "12 min",
+    level: "Intermediaire",
+    description:
+      "Windows envoie pas mal de donnees a Microsoft par defaut. Apprends a reduire la collecte sans casser ton systeme.",
+    category: "os",
+    tags: ["systeme", "confidentialite"],
+    icon: "settings",
+    objective: "Reduire la collecte de donnees par Windows sans affecter les fonctions essentielles.",
+    learns: [
+      "Acceder aux parametres de confidentialite et securite",
+      "Limiter les donnees de diagnostic envoyees a Microsoft",
+      "Desactiver l'identifiant publicitaire",
+      "Controler l'historique d'activite stocke",
+    ],
+    prerequisites: ["Windows 10 ou 11", "Compte administrateur"],
+    platform: "Windows 10, Windows 11",
+    steps: [
+      { title: "Ouvrir Confidentialite et securite", description: "Win+I > Confidentialite et securite." },
+      { title: "Diagnostic et commentaires", description: "Passe en 'Donnees de diagnostic obligatoires' uniquement." },
+      { title: "ID de publicite", description: "Desactive 'Autoriser les apps a utiliser un ID de publicite'." },
+      { title: "Historique d'activite", description: "Decoche 'Stocker mon historique sur cet appareil'." },
+      { title: "Cortana / recherche cloud", description: "Limite la recherche cloud aux usages reellement utiles." },
+    ],
+    tip: "Sur Windows Pro, utilise gpedit.msc pour aller plus loin via les strategies de groupe.",
+  },
+  {
+    id: 18,
+    slug: "choisir-et-installer-les-bonnes-extensions-navigateur",
+    title: "Choisir et installer les bonnes extensions navigateur",
+    duration: "10 min",
+    level: "Intermediaire",
+    description:
+      "Quelques extensions bien choisies renforcent ta securite. Mais une mauvaise extension est une porte ouverte. Selection commentee.",
+    category: "navigateur",
+    tags: ["confidentialite", "technique"],
+    icon: "globe",
+    objective: "Choisir et installer uniquement les extensions qui renforcent vraiment ta securite.",
+    learns: [
+      "Connaitre les extensions de reference (uBlock, Privacy Badger, Bitwarden)",
+      "Verifier les permissions demandees par une extension",
+      "Comprendre pourquoi moins d'extensions = moins de risques",
+      "Auditer les extensions installees",
+    ],
+    prerequisites: ["Chrome ou Firefox installe"],
+    platform: "Chrome, Firefox",
+    steps: [
+      { title: "uBlock Origin", description: "Le bloqueur de publicites et traceurs de reference." },
+      { title: "Privacy Badger (EFF)", description: "Bloque les traceurs en analysant leur comportement." },
+      { title: "Bitwarden", description: "Saisie automatique securisee de tes mots de passe." },
+      { title: "HTTPS Everywhere", description: "Force le HTTPS quand il est disponible (deja integre dans Chrome / Firefox recents)." },
+      { title: "Auditer les permissions", description: "Pour chaque extension, verifie ce a quoi elle a acces." },
+    ],
+    tip: "Moins d'extensions = moins de surface d'attaque. Ne garde que celles que tu utilises VRAIMENT.",
+  },
+  {
+    id: 19,
+    slug: "detecter-les-apps-a-risque-sur-son-telephone",
+    title: "Detecter les apps a risque sur son telephone",
+    duration: "9 min",
+    level: "Intermediaire",
+    description:
+      "Apprends a reperer les apps abusives ou suspectes sur Android et iOS, et a les supprimer proprement.",
+    category: "mobile",
+    tags: ["mobile", "confidentialite"],
+    icon: "smartphone",
+    objective: "Identifier et supprimer les applications mobiles abusives ou malveillantes.",
+    learns: [
+      "Auditer les permissions accordees application par application",
+      "Reperer une consommation reseau anormale",
+      "Evaluer la fiabilite d'un editeur d'application",
+      "Desinstaller proprement une app suspecte",
+    ],
+    prerequisites: ["Un smartphone iOS ou Android"],
+    platform: "iOS, Android",
+    steps: [
+      { title: "Auditer les permissions accordees", description: "Reglages > Confidentialite > permission par permission." },
+      { title: "Verifier la consommation reseau", description: "Une app qui consomme enormement en arriere-plan est suspecte." },
+      { title: "Lire les avis et l'editeur", description: "Editeur inconnu, peu d'avis = prudence." },
+      { title: "Eviter les APK hors stores", description: "Sauf source de confiance (F-Droid, par ex.)." },
+      { title: "Desinstaller proprement", description: "Reglages > Apps > Desinstaller, pas juste 'cacher'." },
+    ],
+    tip: "Sur Android, exodus-privacy.eu.org analyse les traceurs presents dans une app.",
+  },
+  {
+    id: 20,
+    slug: "mettre-en-place-une-routine-de-sauvegarde-3-2-1",
+    title: "Mettre en place une routine de sauvegarde 3-2-1",
+    duration: "20 min",
+    level: "Intermediaire",
+    description:
+      "Une vraie strategie de sauvegarde, automatisee, qui resiste aux ransomwares et aux pannes materielles.",
+    category: "sauvegardes",
+    tags: ["donnees", "technique"],
+    icon: "save",
+    objective: "Automatiser une strategie de sauvegarde robuste et testee.",
+    learns: [
+      "Cartographier toutes les donnees critiques",
+      "Mettre en place une sauvegarde locale automatique",
+      "Configurer une sauvegarde cloud chiffree",
+      "Tester et valider une restauration",
+    ],
+    prerequisites: ["Un disque dur externe (recommande)", "Compte cloud (Google Drive, Backblaze ou equivalent)"],
+    platform: "Windows, macOS",
+    steps: [
+      { title: "Cartographier les donnees critiques", description: "Documents, photos, projets, base de mots de passe." },
+      { title: "Sauvegarde locale automatique", description: "Disque externe + Time Machine (Mac) ou Historique des fichiers (Windows)." },
+      { title: "Sauvegarde cloud chiffree", description: "Cryptomator + Drive / Dropbox, ou Backblaze." },
+      { title: "Tester la restauration", description: "Une sauvegarde non testee n'existe pas." },
+      { title: "Planifier des verifications", description: "Trimestrielles : taille, integrite, restauration test." },
+    ],
+    tip: "Garde au moins une copie deconnectee (debranchee) pour resister aux ransomwares.",
+  },
+  {
+    id: 21,
+    slug: "comprendre-les-bases-d-un-vpn-et-bien-le-choisir",
+    title: "Comprendre les bases d'un VPN et bien le choisir",
+    duration: "12 min",
+    level: "Intermediaire",
+    description:
+      "Tout le monde parle de VPN, mais peu de gens en comprennent les limites. Apprends a quoi ca sert vraiment et lequel choisir.",
+    category: "reseau",
+    tags: ["reseau", "confidentialite"],
+    icon: "globe",
+    objective: "Comprendre ce qu'un VPN fait reellement et choisir un fournisseur de confiance.",
+    learns: [
+      "Comprendre ce qu'un VPN chiffre et ne chiffre pas",
+      "Identifier les limites reelles d'un VPN",
+      "Eviter les VPN gratuits dangereux",
+      "Choisir parmi les fournisseurs audites et reconnus",
+    ],
+    prerequisites: ["Aucun prerequis technique"],
+    platform: "Windows, macOS, iOS, Android",
+    steps: [
+      { title: "Comprendre ce qu'un VPN fait", description: "Chiffre ton trafic et masque ton IP. Ne te rend pas anonyme." },
+      { title: "Comprendre ses limites", description: "Ne te protege pas du phishing, des malwares ou des cookies." },
+      { title: "Eviter les VPN gratuits", description: "Si c'est gratuit, c'est souvent toi le produit." },
+      { title: "Choisir un fournisseur reconnu", description: "Mullvad, ProtonVPN, IVPN : politique 'no logs' auditee." },
+      { title: "Activer le kill switch", description: "Coupe internet si le VPN tombe, evite les fuites." },
+    ],
+    tip: "Sur un Wi-Fi public, le VPN est utile. A la maison, il est rarement necessaire.",
+  },
+  {
+    id: 22,
+    slug: "identifier-un-phishing-avance-spear-bec",
+    title: "Identifier un phishing avance (spear / BEC)",
+    duration: "10 min",
+    level: "Intermediaire",
+    description:
+      "Au-dela du phishing de masse, certaines attaques sont ciblees, personnalisees, et beaucoup plus credibles. Apprends a les detecter.",
+    category: "phishing",
+    tags: ["phishing", "technique"],
+    icon: "alert-triangle",
+    objective: "Detecter les attaques de phishing ciblees, personalisees et difficiles a distinguer.",
+    learns: [
+      "Reconnaitre un email de spear phishing",
+      "Identifier une attaque BEC (faux ordre de virement)",
+      "Analyser les en-tetes d'un email suspect",
+      "Etablir une procedure de verification hors-canal",
+    ],
+    prerequisites: ["Avoir suivi le tutoriel 'Identifier un email de phishing' (#6)"],
+    platform: "Tous clients email professionnels",
+    steps: [
+      { title: "Spear phishing", description: "Email personnalise base sur ton role, ton entreprise, tes contacts." },
+      { title: "BEC (Business Email Compromise)", description: "Faux email du PDG demandant un virement urgent." },
+      { title: "Verifier les en-tetes (headers)", description: "Affiche-les pour voir le vrai chemin de l'email." },
+      { title: "Comparer le domaine au pixel pres", description: "'@entreprise-fr.com' vs '@entreprise.fr' : nuance critique." },
+      { title: "Etablir un canal de verification", description: "Toujours valider une demande financiere sensible par telephone." },
+    ],
+    tip: "Une demande qui te met sous pression et te demande de garder le secret est presque toujours une arnaque.",
+  },
+  {
+    id: 23,
+    slug: "separer-ses-usages-perso-et-sensibles",
+    title: "Separer ses usages perso et sensibles",
+    duration: "10 min",
+    level: "Intermediaire",
+    description:
+      "Avoir un compte unique pour tout est une erreur. Apprends a creer une hygiene de comptes minimaliste mais robuste.",
+    category: "comptes",
+    tags: ["comptes", "confidentialite"],
+    icon: "users",
+    objective: "Organiser ses comptes email et numeros pour limiter l'impact d'une fuite.",
+    learns: [
+      "Distinguer les usages critiques des usages quotidiens",
+      "Creer et utiliser des adresses email secondaires",
+      "Utiliser des adresses email jetables",
+      "Documenter son organisation dans un gestionnaire de mots de passe",
+    ],
+    prerequisites: ["Un gestionnaire de mots de passe comme Bitwarden"],
+    platform: "Tous services en ligne",
+    steps: [
+      { title: "Email principal pour le critique", description: "Banque, impots, assurance, sante. Jamais utilise pour s'inscrire ailleurs." },
+      { title: "Email secondaire pour le quotidien", description: "Reseaux sociaux, achats, newsletters." },
+      { title: "Email jetable pour l'inutile", description: "duck.com / SimpleLogin pour les inscriptions douteuses." },
+      { title: "Numero secondaire", description: "Pour les services qui demandent un numero non critique." },
+      { title: "Documenter tout dans le coffre", description: "Bitwarden : note quel email pour quel service." },
+    ],
+    tip: "Si ton email secondaire fuit, ton compte bancaire reste intouche.",
+  },
+  /* AVANCE */
+  {
+    id: 24,
+    slug: "limiter-la-telemetrie-systeme",
+    title: "Limiter la telemetrie systeme",
+    duration: "25 min",
+    level: "Avance",
+    description:
+      "Reduit drastiquement les donnees envoyees par Windows et macOS, sans casser ton systeme. Pour profils experts.",
+    category: "os",
+    tags: ["systeme", "technique", "confidentialite"],
+    icon: "settings",
+    objective: "Minimiser les donnees envoyees a l'editeur du systeme d'exploitation.",
+    learns: [
+      "Auditer le trafic sortant avec Wireshark ou Little Snitch",
+      "Utiliser les strategies de groupe Windows",
+      "Appliquer des outils communautaires audites",
+      "Bloquer les services telemetrie via le pare-feu",
+    ],
+    prerequisites: ["Windows Pro ou macOS", "Bonnes bases systeme", "Connaissance des risques de modification"],
+    platform: "Windows 10/11 Pro, macOS",
+    steps: [
+      { title: "Auditer le trafic sortant", description: "Wireshark ou Little Snitch (macOS) pour observer les connexions." },
+      { title: "Strategies de groupe Windows Pro", description: "gpedit.msc > Composants Windows > Donnees de diagnostic." },
+      { title: "Outils communautaires audites", description: "O&O ShutUp10++ (Windows), reglages avances macOS." },
+      { title: "Pare-feu sortant", description: "Bloque les services telemetrie via Microsoft Defender Firewall ou LuLu." },
+      { title: "Tester apres chaque etape", description: "Verifie que les services critiques continuent de fonctionner." },
+    ],
+    tip: "Documente toutes tes modifications dans un fichier note. Tu en auras besoin pour le rollback.",
+  },
+  {
+    id: 25,
+    slug: "auditer-les-services-de-demarrage-windows",
+    title: "Auditer les services de demarrage Windows",
+    duration: "20 min",
+    level: "Avance",
+    description:
+      "Identifie ce qui se lance avec Windows, supprime le superflu et detecte d'eventuels persistants malveillants.",
+    category: "os",
+    tags: ["systeme", "technique"],
+    icon: "activity",
+    objective: "Detecter et eliminer les services de demarrage suspects ou inutiles.",
+    learns: [
+      "Utiliser Autoruns (Sysinternals)",
+      "Filtrer et analyser les entrees de demarrage",
+      "Verifier l'integrite d'une entree sur VirusTotal",
+      "Desactiver sans supprimer pour tester d'abord",
+    ],
+    prerequisites: ["Windows", "Confort avec les outils systeme Sysinternals"],
+    platform: "Windows 10, Windows 11",
+    steps: [
+      { title: "Outil Autoruns (Sysinternals)", description: "Microsoft, gratuit, exhaustif. Telecharge depuis docs.microsoft.com." },
+      { title: "Filtrer les editeurs verifies", description: "'Hide Microsoft Entries' + 'Hide Windows Entries'." },
+      { title: "Auditer ligne par ligne", description: "Pour chaque entree non Microsoft, verifie l'editeur et le chemin." },
+      { title: "Verifier sur VirusTotal", description: "Clic droit > 'Check VirusTotal' sur les entrees douteuses." },
+      { title: "Desactiver, pas supprimer", description: "Decoche d'abord, observe. Supprime seulement apres confirmation." },
+    ],
+    tip: "Les malwares persistants se cachent souvent dans les taches planifiees, pas seulement le demarrage.",
+  },
+  {
+    id: 26,
+    slug: "verifier-les-ports-ouverts-sur-sa-machine",
+    title: "Verifier les ports ouverts sur sa machine",
+    duration: "15 min",
+    level: "Avance",
+    description:
+      "Identifie les services qui ecoutent sur le reseau, ferme ce qui ne devrait pas l'etre.",
+    category: "reseau",
+    tags: ["reseau", "technique", "systeme"],
+    icon: "terminal",
+    objective: "Identifier et fermer les ports reseau ouverts inutilement.",
+    learns: [
+      "Utiliser netstat pour lister les ports en ecoute",
+      "Identifier le processus responsable d'un port ouvert",
+      "Lancer un scan local avec nmap",
+      "Fermer un port via le pare-feu ou en desactivant le service",
+    ],
+    prerequisites: ["Notions de ligne de commande (Windows ou macOS/Linux)", "nmap installe (optionnel)"],
+    platform: "Windows, macOS, Linux",
+    steps: [
+      { title: "netstat (Windows / macOS / Linux)", description: "netstat -ano (Windows) ou netstat -anv | grep LISTEN (macOS)." },
+      { title: "Identifier le PID", description: "Croise avec le gestionnaire de taches pour trouver l'app responsable." },
+      { title: "Lancer un scan local avec nmap", description: "nmap localhost ou nmap 127.0.0.1." },
+      { title: "Comparer avec ce qui est attendu", description: "Une imprimante reseau, un service de partage. Pas de surprises." },
+      { title: "Fermer ou bloquer au pare-feu", description: "Desactive le service ou bloque le port en sortant." },
+    ],
+    tip: "Sur un poste personnel, presque rien ne devrait ecouter en LISTEN sauf services de partage explicites.",
+  },
+  {
+    id: 27,
+    slug: "comprendre-et-durcir-son-pare-feu",
+    title: "Comprendre et durcir son pare-feu",
+    duration: "25 min",
+    level: "Avance",
+    description:
+      "Au-dela du 'pare-feu active', apprends a creer des regles fines pour controler precisement entrant et sortant.",
+    category: "reseau",
+    tags: ["reseau", "technique"],
+    icon: "shield",
+    objective: "Creer des regles pare-feu fines pour controler entrant et sortant.",
+    learns: [
+      "Distinguer regles entrantes et sortantes",
+      "Configurer des regles par profil reseau",
+      "Appliquer une politique de blocage sortant par defaut",
+      "Logger les blocages pour analyse",
+    ],
+    prerequisites: ["Windows avec Defender Firewall ou macOS avec LuLu/Little Snitch", "Bonnes bases reseau"],
+    platform: "Windows, macOS",
+    steps: [
+      { title: "Comprendre entrant vs sortant", description: "Entrant = qui peut me parler. Sortant = qui je laisse parler dehors." },
+      { title: "Regles par profil reseau", description: "Domaine / Prive / Public : politiques distinctes." },
+      { title: "Bloquer sortant par defaut", description: "Approche zero trust. Autorise uniquement le necessaire." },
+      { title: "Logger les blocages", description: "Indispensable pour comprendre ce que tu casses involontairement." },
+      { title: "Outils tiers (LuLu, Little Snitch)", description: "Sur macOS, controle granulaire app par app." },
+    ],
+    tip: "Bloquer le sortant par defaut est radical. Commence par observer 1 semaine avant de bloquer.",
+  },
+  {
+    id: 28,
+    slug: "analyser-les-permissions-avancees-d-une-app-android",
+    title: "Analyser les permissions avancees d'une app Android",
+    duration: "20 min",
+    level: "Avance",
+    description:
+      "Au-dela des permissions visibles, decortique le manifeste d'une app Android pour comprendre ce qu'elle demande vraiment.",
+    category: "mobile",
+    tags: ["mobile", "technique", "confidentialite"],
+    icon: "smartphone",
+    objective: "Analyser en profondeur les permissions et traceurs d'une application Android.",
+    learns: [
+      "Recuperer et analyser un APK",
+      "Utiliser exodus-privacy pour detecter les traceurs",
+      "Lire le manifeste Android avec apktool",
+      "Reperer les permissions silencieuses et a risque",
+    ],
+    prerequisites: ["Android et notion de fichier APK", "Familiarite avec la ligne de commande (pour apktool)"],
+    platform: "Android",
+    steps: [
+      { title: "Recuperer l'APK", description: "Via APKMirror ou en extrayant l'app installee." },
+      { title: "Inspecter avec exodus-privacy.eu.org", description: "Liste les traceurs presents dans l'app." },
+      { title: "Analyser le manifest", description: "Avec apktool ou JADX pour voir toutes les permissions declarees." },
+      { title: "Reperer les permissions silencieuses", description: "RECEIVE_BOOT_COMPLETED, FOREGROUND_SERVICE, etc." },
+      { title: "Decider en consequence", description: "Conserver, sandboxer (Shelter), remplacer ou desinstaller." },
+    ],
+    tip: "Sur un device aosp ou GrapheneOS, tu peux refuser des permissions que les apps croient obligatoires.",
+  },
+  {
+    id: 29,
+    slug: "verifier-l-etat-du-chiffrement-disque",
+    title: "Verifier l'etat du chiffrement disque",
+    duration: "10 min",
+    level: "Avance",
+    description:
+      "Confirme que ton disque est reellement chiffre, gere ta cle de recuperation et comprends les limites du modele.",
+    category: "donnees",
+    tags: ["donnees", "technique", "systeme"],
+    icon: "cpu",
+    objective: "Confirmer que le chiffrement disque est bien actif et que la cle de recuperation est protegee.",
+    learns: [
+      "Verifier l'etat BitLocker (Windows) ou FileVault (macOS)",
+      "Localiser et sauvegarder la cle de recuperation hors ligne",
+      "Comprendre le role du TPM et du Secure Enclave",
+      "Tester une procedure de recuperation",
+    ],
+    prerequisites: ["Windows avec BitLocker ou macOS avec FileVault", "Compte administrateur"],
+    platform: "Windows 10/11 Pro, macOS",
+    steps: [
+      { title: "Windows : etat BitLocker", description: "manage-bde -status dans une console admin." },
+      { title: "macOS : etat FileVault", description: "Reglages > Confidentialite > FileVault, et fdesetup status en CLI." },
+      { title: "Sauvegarder la cle de recuperation", description: "Hors ligne : papier, gestionnaire de mots de passe chiffre." },
+      { title: "Comprendre TPM / Secure Enclave", description: "Le chiffrement repose sur le materiel. Si TPM HS = donnees inaccessibles." },
+      { title: "Tester la procedure de recuperation", description: "Au moins une fois sur une machine de test." },
+    ],
+    tip: "Si ta cle de recuperation est sur Microsoft / Apple, pense aussi a en garder une copie hors ligne.",
+  },
+  {
+    id: 30,
+    slug: "hygiene-de-comptes-compartimentee",
+    title: "Hygiene de comptes compartimentee",
+    duration: "30 min",
+    level: "Avance",
+    description:
+      "Va plus loin que la separation perso / pro : compartimentation par usage avec aliases, profils navigateur et numeros virtuels.",
+    category: "comptes",
+    tags: ["comptes", "confidentialite", "technique"],
+    icon: "users",
+    objective: "Mettre en place une hygiene de comptes par compartiments etanches.",
+    learns: [
+      "Creer et gerer des aliases email avec SimpleLogin",
+      "Dediquer des profils navigateur par usage",
+      "Utiliser des numeros et cartes virtuelles",
+      "Documenter son organisation dans Bitwarden",
+    ],
+    prerequisites: ["Bitwarden configure", "Connaissance des tutoriels #2 et #23"],
+    platform: "Tous services en ligne",
+    steps: [
+      { title: "Aliases d'email", description: "SimpleLogin, addy.io, Apple Hide My Email : un alias par service." },
+      { title: "Profils navigateur dedies", description: "Banque, achats, social : chacun son profil isole." },
+      { title: "Numeros secondaires", description: "MySudo, services VoIP, eSIM secondaire." },
+      { title: "Cartes virtuelles", description: "Revolut, Lydia : une carte virtuelle par abonnement." },
+      { title: "Documenter dans le coffre", description: "Bitwarden : champs custom pour tracer alias / profil par compte." },
+    ],
+    tip: "Cette compartimentation rend une fuite de donnees beaucoup moins impactante.",
+  },
+  {
+    id: 31,
+    slug: "controler-les-surfaces-d-exposition-reseau-a-domicile",
+    title: "Controler les surfaces d'exposition reseau a domicile",
+    duration: "25 min",
+    level: "Avance",
+    description:
+      "Cartographie tout ce qui est expose sur ton reseau domestique : box, NAS, IoT, et durcis chaque element.",
+    category: "reseau",
+    tags: ["reseau", "technique"],
+    icon: "server",
+    objective: "Cartographier et reduire la surface d'attaque reseau de ton domicile.",
+    learns: [
+      "Lister tous les peripheriques connectes au reseau",
+      "Auditer les services exposes par chaque appareil",
+      "Desactiver UPnP et ses risques",
+      "Creer un reseau invite isole pour les IoT",
+    ],
+    prerequisites: ["Acces admin a ta box ou routeur", "Notions de reseau (IP, port, SSID)"],
+    platform: "Box Internet, NAS, appareils IoT",
+    steps: [
+      { title: "Lister les peripheriques", description: "Interface admin de la box ou nmap -sn 192.168.1.0/24." },
+      { title: "Auditer les services exposes", description: "nmap -sV par IP : versions, services, vulnerabilites connues." },
+      { title: "Desactiver UPnP", description: "Trop souvent active par defaut, ouvre des ports automatiquement." },
+      { title: "Reseau invite separe", description: "IoT et invites sur un SSID isole, sans acces au LAN principal." },
+      { title: "Mettre a jour les firmwares", description: "Box, NAS, imprimante, ampoules connectees." },
+    ],
+    tip: "Une cafetiere connectee non a jour peut servir de pivot vers ton PC. Les IoT sont la maille faible.",
+  },
+  {
+    id: 32,
+    slug: "lire-les-logs-de-connexion-google-microsoft",
+    title: "Lire les logs de connexion Google / Microsoft",
+    duration: "15 min",
+    level: "Avance",
+    description:
+      "Apprends a interpreter les journaux d'acces sur tes comptes principaux pour detecter les acces suspects.",
+    category: "comptes",
+    tags: ["comptes", "technique"],
+    icon: "eye",
+    objective: "Detecter les acces suspects en interpretant les journaux de connexion.",
+    learns: [
+      "Consulter les logs de securite Google et Microsoft",
+      "Reperer les anomalies (pays inhabituel, navigateur inconnu)",
+      "Distinguer acces depuis une app vs un navigateur",
+      "Reagir vite en cas d'acces suspect confirme",
+    ],
+    prerequisites: ["Compte Google ou Microsoft actif"],
+    platform: "Google, Microsoft",
+    steps: [
+      { title: "Google : timeline de securite", description: "myaccount.google.com > Securite > Activite recente." },
+      { title: "Microsoft : journal d'activite", description: "account.microsoft.com > Securite > Activite de connexion." },
+      { title: "Reperer les anomalies", description: "Pays inhabituel, navigateur inconnu, horaire impossible." },
+      { title: "Differencier app vs navigateur", description: "Une app mobile peut apparaitre comme un acces 'inconnu'." },
+      { title: "Reagir vite", description: "Doute = changement de mot de passe + revocation des sessions." },
+    ],
+    tip: "Active les notifications par email pour chaque nouvel acces depuis un appareil non reconnu.",
+  },
+  {
+    id: 33,
+    slug: "strategie-de-navigation-cloisonnee",
+    title: "Strategie de navigation cloisonnee",
+    duration: "20 min",
+    level: "Avance",
+    description:
+      "Profils Firefox, conteneurs (Multi-Account Containers), navigateurs distincts : compartimente vraiment ta navigation.",
+    category: "navigateur",
+    tags: ["confidentialite", "technique"],
+    icon: "layers",
+    objective: "Isoler les usages de navigation pour eviter tout croisement de donnees.",
+    learns: [
+      "Creer des profils Firefox dedies par usage",
+      "Utiliser Multi-Account Containers",
+      "Dediquer un navigateur different aux usages sensibles",
+      "Configurer un DNS chiffre par profil",
+    ],
+    prerequisites: ["Firefox installe", "Tutoriel #13 suivi"],
+    platform: "Firefox, Brave, LibreWolf",
+    steps: [
+      { title: "Profils navigateur dedies", description: "Firefox -P : un profil par usage (banque, social, perso)." },
+      { title: "Multi-Account Containers (Firefox)", description: "Cloisonne les cookies et le tracking par container." },
+      { title: "Navigateur secondaire pour le sensible", description: "Brave ou LibreWolf uniquement pour la banque." },
+      { title: "DNS chiffre par profil", description: "DoH active sur chaque profil, fournisseur different si possible." },
+      { title: "Routine de nettoyage", description: "Cookies / cache effaces a la fermeture pour le profil 'social'." },
+    ],
+    tip: "Un container Firefox 'banque' et un autre 'shopping' rendent le tracking publicitaire bien plus difficile.",
+  },
+  {
+    id: 34,
+    slug: "configurer-un-dns-chiffre-doh-dot-sur-son-reseau",
+    title: "Configurer un DNS chiffre (DoH / DoT) sur son reseau",
+    duration: "20 min",
+    level: "Avance",
+    description:
+      "Empeche ton FAI ou un attaquant local de voir tes requetes DNS, en chiffrant la resolution sur tout ton reseau.",
+    category: "reseau",
+    tags: ["reseau", "technique", "confidentialite"],
+    icon: "compass",
+    objective: "Chiffrer les requetes DNS pour empecher leur interception.",
+    learns: [
+      "Comprendre la difference entre DoH et DoT",
+      "Choisir un resolveur DNS de confiance",
+      "Configurer DoH au niveau du systeme d'exploitation",
+      "Verifier que le DNS chiffre est bien actif",
+    ],
+    prerequisites: ["Notions de reseau (DNS, IP)", "Windows 11 ou macOS Ventura minimum pour la config native"],
+    platform: "Windows 11, macOS Ventura+, routeur/box compatible",
+    steps: [
+      { title: "Comprendre DoH vs DoT", description: "DoH = DNS over HTTPS, DoT = DNS over TLS. Memes objectifs, transports differents." },
+      { title: "Choisir un resolveur", description: "Quad9 (9.9.9.9), Cloudflare (1.1.1.1), NextDNS (configurable)." },
+      { title: "Configurer au niveau OS", description: "Windows 11 / macOS Ventura supportent DoH nativement." },
+      { title: "Configurer au niveau reseau", description: "Pi-hole + unbound + DoH-stub, ou box compatibles." },
+      { title: "Verifier l'effet", description: "1.1.1.1/help ou dnscheck.tools confirmation que le DoH est actif." },
+    ],
+    tip: "NextDNS te donne aussi un blocage de tracker / malware au niveau DNS, sans rien installer sur les appareils.",
+  },
+]
+
+export const userProgress = {
+  level: "Petit Scarabee",
+  levelKey: "Debutant" as Niveau,
+  levelIndex: 1,
+  totalLevels: 5,
+  progressPercent: 18,
+  nextLevel: "Luciole",
+  stepsToNextLevel: 3,
+  completedTutos: 2,
+  totalTutos: tutoriels.length,
+  percentileBetter: 42,
+  avgUserMessage:
+    "Les utilisateurs de ton profil commencent souvent par securiser leurs comptes et leur Wi-Fi.",
+  badges: ["Badge 01"],
+}
+
+export const levels = [
+  { name: "Petit Scarabee", icon: "S", color: "var(--sc-warn)", key: "Debutant" as Niveau },
+  { name: "Luciole", icon: "L", color: "var(--sc-cyan)", key: "Debutant" as Niveau },
+  { name: "Renard", icon: "R", color: "var(--sc-violet-soft)", key: "Intermediaire" as Niveau },
+  { name: "Hibou", icon: "H", color: "var(--sc-blue)", key: "Intermediaire" as Niveau },
+  { name: "Dragon", icon: "D", color: "var(--sc-success)", key: "Avance" as Niveau },
+]
