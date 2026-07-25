@@ -1,16 +1,34 @@
 import { AlertTriangle, Check } from "lucide-react"
 import { ScCard } from "@/components/safecheck/primitives"
+import type { CategoryScore } from "../categoryScoring"
 import type { ResultLevelConfig, ResultTranslator } from "../types"
+
+/*
+   Points forts et points faibles (SC-020).
+
+   Quand l'audit a réellement été passé, les deux listes sont construites
+   à partir des scores par thème de l'utilisateur : ce sont ses vrais
+   thèmes, pas un texte générique.
+
+   Si la page est atteinte sans audit (lien direct, résultat partagé), on
+   retombe sur les listes indicatives calées sur le score.
+ */
 
 export function ResultsAssessment({
   score,
   level,
   t,
+  strengths = [],
+  weaknesses = [],
 }: {
   score: number
   level: ResultLevelConfig
   t: ResultTranslator
+  strengths?: CategoryScore[]
+  weaknesses?: CategoryScore[]
 }) {
+  const hasRealData = strengths.length > 0 || weaknesses.length > 0
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <ScCard className="p-4">
@@ -19,7 +37,24 @@ export function ResultsAssessment({
           {t("res.strong")}
         </h2>
         <ul className="space-y-1.5 text-sm text-[color:var(--sc-text-2)]">
-          {level.strengthProfile === "high" ? (
+          {hasRealData ? (
+            strengths.length > 0 ? (
+              strengths.map((strength) => (
+                <li key={strength.category} className="flex items-start gap-2">
+                  <Check className="w-3.5 h-3.5 text-[color:var(--sc-success)] mt-0.5 shrink-0" />
+                  <span>
+                    {strength.category}
+                    <span className="text-[color:var(--sc-text-muted)]"> — {strength.score}%</span>
+                  </span>
+                </li>
+              ))
+            ) : (
+              <li className="text-[color:var(--sc-text-muted)]">
+                Aucun thème n&apos;atteint encore le niveau attendu. C&apos;est justement
+                ce que les recommandations ci-dessous vont t&apos;aider à changer.
+              </li>
+            )
+          ) : level.strengthProfile === "high" ? (
             <>
               <li className="flex items-start gap-2">
                 <Check className="w-3.5 h-3.5 text-[color:var(--sc-success)] mt-0.5 shrink-0" />
@@ -59,35 +94,55 @@ export function ResultsAssessment({
           {t("res.weak")}
         </h2>
         <ul className="space-y-1.5 text-sm text-[color:var(--sc-text-2)]">
-          {score < 80 && (
-            <li className="flex items-start gap-2">
-              <AlertTriangle className="w-3.5 h-3.5 text-[color:var(--sc-warn)] mt-0.5 shrink-0" />
-              {t("res.weak.passwords")}
-            </li>
-          )}
-          {score < 70 && (
-            <li className="flex items-start gap-2">
-              <AlertTriangle className="w-3.5 h-3.5 text-[color:var(--sc-warn)] mt-0.5 shrink-0" />
-              {t("res.weak.2fa")}
-            </li>
-          )}
-          {score < 60 && (
-            <li className="flex items-start gap-2">
-              <AlertTriangle className="w-3.5 h-3.5 text-[color:var(--sc-warn)] mt-0.5 shrink-0" />
-              {t("res.weak.updates")}
-            </li>
-          )}
-          {score < 50 && (
-            <li className="flex items-start gap-2">
-              <AlertTriangle className="w-3.5 h-3.5 text-[color:var(--sc-warn)] mt-0.5 shrink-0" />
-              {t("res.weak.backup")}
-            </li>
-          )}
-          {score < 40 && (
-            <li className="flex items-start gap-2">
-              <AlertTriangle className="w-3.5 h-3.5 text-[color:var(--sc-warn)] mt-0.5 shrink-0" />
-              {t("res.weak.wifi")}
-            </li>
+          {hasRealData ? (
+            weaknesses.length > 0 ? (
+              weaknesses.map((weakness) => (
+                <li key={weakness.category} className="flex items-start gap-2">
+                  <AlertTriangle className="w-3.5 h-3.5 text-[color:var(--sc-warn)] mt-0.5 shrink-0" />
+                  <span>
+                    {weakness.category}
+                    <span className="text-[color:var(--sc-text-muted)]"> — {weakness.score}%</span>
+                  </span>
+                </li>
+              ))
+            ) : (
+              <li className="text-[color:var(--sc-text-muted)]">
+                Aucun thème n&apos;est en difficulté. Continue comme ça.
+              </li>
+            )
+          ) : (
+            <>
+              {score < 80 && (
+                <li className="flex items-start gap-2">
+                  <AlertTriangle className="w-3.5 h-3.5 text-[color:var(--sc-warn)] mt-0.5 shrink-0" />
+                  {t("res.weak.passwords")}
+                </li>
+              )}
+              {score < 70 && (
+                <li className="flex items-start gap-2">
+                  <AlertTriangle className="w-3.5 h-3.5 text-[color:var(--sc-warn)] mt-0.5 shrink-0" />
+                  {t("res.weak.2fa")}
+                </li>
+              )}
+              {score < 60 && (
+                <li className="flex items-start gap-2">
+                  <AlertTriangle className="w-3.5 h-3.5 text-[color:var(--sc-warn)] mt-0.5 shrink-0" />
+                  {t("res.weak.updates")}
+                </li>
+              )}
+              {score < 50 && (
+                <li className="flex items-start gap-2">
+                  <AlertTriangle className="w-3.5 h-3.5 text-[color:var(--sc-warn)] mt-0.5 shrink-0" />
+                  {t("res.weak.backup")}
+                </li>
+              )}
+              {score < 40 && (
+                <li className="flex items-start gap-2">
+                  <AlertTriangle className="w-3.5 h-3.5 text-[color:var(--sc-warn)] mt-0.5 shrink-0" />
+                  {t("res.weak.wifi")}
+                </li>
+              )}
+            </>
           )}
         </ul>
       </ScCard>

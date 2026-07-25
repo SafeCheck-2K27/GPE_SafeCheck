@@ -9,9 +9,19 @@ import { useAuth } from "@/components/safecheck/AuthProvider"
 import { useI18n } from "@/components/safecheck/I18nProvider"
 import { PageSuspenseFallback } from "@/components/safecheck/layout/PageSuspenseFallback"
 import { PageShell } from "@/components/safecheck/layout/PageShell"
+import { auditQuestions } from "@/features/audit/data"
+import { parseAuditAnswersParam } from "@/features/audit/url-payload"
+import {
+  computeCategoryScores,
+  getStrengthCategories,
+  getWeaknessCategories,
+  prioritizeRecommendationsByWeakness,
+} from "@/features/results/categoryScoring"
 import { ResultsAssessment } from "@/features/results/components/ResultsAssessment"
 import { ResultsAuditInfo } from "@/features/results/components/ResultsAuditInfo"
+import { ResultsCategories } from "@/features/results/components/ResultsCategories"
 import { ResultsComparison } from "@/features/results/components/ResultsComparison"
+import { ResultsEssentielsCta } from "@/features/results/components/ResultsEssentielsCta"
 import { ResultsNextSteps } from "@/features/results/components/ResultsNextSteps"
 import { ResultsActionPlan } from "@/features/results/components/ResultsActionPlan"
 import { ResultsScoreHero } from "@/features/results/components/ResultsScoreHero"
@@ -32,9 +42,25 @@ function ResultatsContent() {
 
   const score = getResultScore(searchParams.get("score"))
   const level = getResultLevel(score)
-  const recommendationResolution = getScoreRecommendationsForLevel(level)
-  const scoreRecommendations = recommendationResolution.recommendations
   const metrics = getResultMetrics(score, level)
+
+  /*
+     Les réponses transmises par l'URL (audit -> personnalisation ->
+     résultats) permettent de ventiler le score par thème et d'en tirer
+     points forts, points faibles et priorités. Absentes (lien direct,
+     résultat partagé), la page retombe sur un diagnostic calé sur le
+     score seul.
+   */
+  const answers = parseAuditAnswersParam(searchParams.get("answers"))
+  const categoryScores = answers ? computeCategoryScores(auditQuestions, answers) : []
+  const strengths = getStrengthCategories(categoryScores)
+  const weaknesses = getWeaknessCategories(categoryScores)
+
+  const recommendationResolution = getScoreRecommendationsForLevel(level)
+  const scoreRecommendations = prioritizeRecommendationsByWeakness(
+    recommendationResolution.recommendations,
+    weaknesses,
+  )
 
   const [signupOpen, setSignupOpen] = useState(false)
   const [pendingHref, setPendingHref] = useState<string | undefined>(undefined)
@@ -77,12 +103,23 @@ function ResultatsContent() {
         />
         <ResultsSummary score={score} level={level} />
         <ResultsStats metrics={metrics} />
-        <ResultsAssessment score={score} level={level} t={t} />
+        <ResultsCategories scores={categoryScores} />
+        <ResultsAssessment
+          score={score}
+          level={level}
+          t={t}
+          strengths={strengths}
+          weaknesses={weaknesses}
+        />
         <ResultsActionPlan
           recommendations={scoreRecommendations}
           lang={lang}
           t={t}
           onTutorialClick={handleTutorialClick}
+        />
+        <ResultsEssentielsCta
+          weaknesses={weaknesses}
+          onOpenEssentiels={() => router.push("/essentiels")}
         />
         <ResultsComparison
           score={score}
