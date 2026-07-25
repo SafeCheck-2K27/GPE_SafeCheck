@@ -1,14 +1,19 @@
-import { X } from "lucide-react"
+import { Check, RotateCcw, X } from "lucide-react"
 import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
 import type { Essential } from "../types"
+import type { EssentialStatus } from "../status"
 import { EssentialIcon } from "./EssentialIcon"
 
 export function EssentialDetailModal({
   essential,
+  status,
+  onSetStatus,
   onClose,
 }: {
   essential: Essential
+  status: EssentialStatus
+  onSetStatus: (status: EssentialStatus) => void
   onClose: () => void
 }) {
   return (
@@ -66,6 +71,38 @@ export function EssentialDetailModal({
           <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed">
             {essential.details}
           </p>
+
+          <div className="mt-5">
+            <span className="block text-xs font-semibold text-[color:var(--sc-text-muted)] mb-2 uppercase tracking-wider">
+              Mon statut
+            </span>
+            <div className="flex flex-wrap gap-2">
+              <ScButton
+                variant={status === "a_faire" ? "primary" : "secondary"}
+                size="sm"
+                onClick={() => onSetStatus("a_faire")}
+              >
+                À faire
+              </ScButton>
+              <ScButton
+                variant={status === "fait" ? "primary" : "secondary"}
+                size="sm"
+                onClick={() => onSetStatus("fait")}
+              >
+                <Check className="w-3.5 h-3.5" />
+                Fait
+              </ScButton>
+              <ScButton
+                variant={status === "a_revoir" ? "primary" : "secondary"}
+                size="sm"
+                onClick={() => onSetStatus("a_revoir")}
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                À revoir
+              </ScButton>
+            </div>
+          </div>
+
           <div className="mt-6 flex justify-end">
             <ScButton variant="primary" onClick={onClose}>
               Compris

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { ESSENTIALS } from "../data"
 import { filterEssentials } from "../filters"
+import { useEssentialStatus } from "../useEssentialStatus"
 import type { Essential, EssentialSort } from "../types"
 import { EssentialCard } from "./EssentialCard"
 import { EssentialDetailModal } from "./EssentialDetailModal"
@@ -11,6 +12,7 @@ import { EssentialsFilters } from "./EssentialsFilters"
 
 export function EssentialsCatalog() {
   const params = useSearchParams()
+  const { getStatus, setStatus } = useEssentialStatus()
   const [search, setSearch] = useState(() => params.get("q") ?? "")
   const [priority, setPriority] = useState("all")
   const [os, setOs] = useState("all")
@@ -66,6 +68,7 @@ export function EssentialsCatalog() {
               <EssentialCard
                 key={essential.id}
                 essential={essential}
+                status={getStatus(essential.id)}
                 delay={index * 40}
                 onClick={() => setSelected(essential)}
               />
@@ -77,6 +80,8 @@ export function EssentialsCatalog() {
       {selected && (
         <EssentialDetailModal
           essential={selected}
+          status={getStatus(selected.id)}
+          onSetStatus={(status) => setStatus(selected.id, status)}
           onClose={() => setSelected(null)}
         />
       )}
