@@ -4,6 +4,11 @@ Ce document est la référence pour l'organisation et la maintenance du frontend
 SafeCheck. Le `README.md` reste centré sur l'installation et les commandes ; les
 règles de contribution propres au frontend vivent ici.
 
+Pour une introduction à l'écart entre l'ancien dossier Tony et la baseline LTS,
+lire [`README_FRONTEND_LTS.md`](../README_FRONTEND_LTS.md). Pour une visite
+technique complète des parcours, données, fichiers clés et limites actuelles,
+lire [`frontend-onboarding-lts.md`](frontend-onboarding-lts.md).
+
 ## État du MVP
 
 SafeCheck est actuellement un MVP frontend. L'infrastructure PostgreSQL et
