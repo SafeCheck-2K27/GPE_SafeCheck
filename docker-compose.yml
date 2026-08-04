@@ -17,5 +17,23 @@ services:
       timeout: 5s
       retries: 5
 
+  app:
+    build: .
+    container_name: safecheck-app
+    restart: unless-stopped
+    command: sh -c "npx prisma migrate deploy && npx prisma generate && npx next dev --webpack -H 0.0.0.0"
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-safecheck}:${POSTGRES_PASSWORD:-safecheck}@postgres:5432/${POSTGRES_DB:-safecheck}?schema=public
+      WATCHPACK_POLLING: "true"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   safecheck-pgdata:
