@@ -1,6 +1,8 @@
+import type { ReactNode } from "react"
+import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
-import { CATEGORY_LABEL } from "@/lib/tutoriels-data"
-import type { Tutoriel } from "@/lib/tutoriels-data"
+import { CATEGORY_LABEL } from "../data/catalog"
+import type { Tutoriel } from "../data/catalog"
 import {
   BookOpen,
   Check,
@@ -21,6 +23,8 @@ export function TutorialModal({
   onMarkStep,
   onClose,
   onOpenPrecision,
+  renderStepDescription,
+  precisionLinkPosition = "before-completion",
 }: {
   tuto: Tutoriel
   currentStep: number
@@ -29,15 +33,43 @@ export function TutorialModal({
   onMarkStep: (i: number) => void
   onClose: () => void
   onOpenPrecision: (stepTitle?: string) => void
+  renderStepDescription?: (description: string) => ReactNode
+  precisionLinkPosition?: "before-completion" | "after-completion"
 }) {
   const step = tuto.steps[currentStep]
   const isLast = currentStep === tuto.steps.length - 1
   const allDone = completedSteps.size === tuto.steps.length
+  const precisionLink = (
+    <div
+      className={`mt-4 ${precisionLinkPosition === "after-completion" ? "pt-4" : "pt-3"} border-t border-[color:var(--sc-border)]`}
+    >
+      <button
+        type="button"
+        onClick={() => onOpenPrecision(step.title)}
+        className="inline-flex items-center gap-1.5 text-xs text-[color:var(--sc-text-muted)] hover:text-[color:var(--sc-blue)] transition-colors"
+      >
+        <Flag className="w-3 h-3" />
+        Un probleme avec cette etape ? Signaler une precision
+      </button>
+    </div>
+  )
+  const completionNotice = allDone ? (
+    <div className="mt-5 rounded-xl bg-[color:var(--sc-success)]/10 border border-[color:var(--sc-success)]/30 p-4">
+      <div className="flex items-center gap-2">
+        <CheckCircle2 className="w-5 h-5 text-[color:var(--sc-success)]" />
+        <p className="text-sm font-semibold text-[color:var(--sc-success)]">
+          Tutoriel termine ! Bravo, c&apos;est une etape de moins vers ton prochain niveau.
+        </p>
+      </div>
+    </div>
+  ) : null
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
-      onClick={onClose}
+    <AccessibleModal
+      open
+      onClose={onClose}
+      aria-labelledby="tutorial-modal-title"
+      className="p-4"
     >
       <div
         className="w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl overflow-hidden bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[var(--sc-shadow-lg)]"
@@ -46,7 +78,7 @@ export function TutorialModal({
         <div className="relative p-5 border-b border-[color:var(--sc-border)] bg-[color:var(--sc-bg-soft)]">
           <div
             className="absolute inset-0 opacity-60"
-            style={{ background: "radial-gradient(at 0% 0%, rgba(37,99,235,0.15), transparent 50%)" }}
+            style={{ background: "radial-gradient(at 0% 0%, rgb(var(--sc-blue-rgb)/0.15), transparent 50%)" }}
           />
           <div className="relative flex items-start justify-between">
             <div>
@@ -54,7 +86,12 @@ export function TutorialModal({
                 <BookOpen className="w-3 h-3" />
                 Tutoriel
               </ScBadge>
-              <h2 className="font-bold text-lg text-[color:var(--sc-text)] font-display">{tuto.title}</h2>
+              <h2
+                id="tutorial-modal-title"
+                className="font-bold text-lg text-[color:var(--sc-text)] font-display"
+              >
+                {tuto.title}
+              </h2>
               <div className="flex items-center gap-3 mt-2 flex-wrap">
                 <span className="flex items-center gap-1 text-xs text-[color:var(--sc-text-muted)]">
                   <Clock className="w-3 h-3" /> {tuto.duration}
@@ -86,7 +123,7 @@ export function TutorialModal({
           </div>
           <div className="relative h-2 bg-[color:var(--sc-surface-2)] rounded-full overflow-hidden">
             <div
-              className="absolute inset-y-0 left-0 bg-[linear-gradient(90deg,#3B82F6,#2563EB)] rounded-full transition-all duration-500"
+              className="absolute inset-y-0 left-0 bg-[linear-gradient(90deg,var(--sc-blue-soft),var(--sc-blue))] rounded-full transition-all duration-500"
               style={{ width: `${((currentStep + 1) / tuto.steps.length) * 100}%` }}
             />
           </div>
@@ -94,12 +131,14 @@ export function TutorialModal({
 
         <div className="flex-1 overflow-y-auto p-5">
           <div className="flex items-start gap-3 mb-4">
-            <div className="shrink-0 w-9 h-9 rounded-xl bg-[linear-gradient(135deg,#3B82F6,#2563EB)] text-white flex items-center justify-center font-bold text-sm shadow-[var(--sc-shadow-blue-sm)]">
+            <div className="shrink-0 w-9 h-9 rounded-xl bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] text-[color:var(--sc-text-on-strong)] flex items-center justify-center font-bold text-sm shadow-[var(--sc-shadow-blue-sm)]">
               {currentStep + 1}
             </div>
             <div className="flex-1">
               <h3 className="font-bold text-base text-[color:var(--sc-text)] mb-2">{step.title}</h3>
-              <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed">{step.description}</p>
+              <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed">
+                {renderStepDescription ? renderStepDescription(step.description) : step.description}
+              </p>
             </div>
           </div>
 
@@ -132,28 +171,9 @@ export function TutorialModal({
             </div>
           )}
 
-          {/* Discrete precision link */}
-          <div className="mt-4 pt-3 border-t border-[color:var(--sc-border)]">
-            <button
-              type="button"
-              onClick={() => onOpenPrecision(tuto.steps[currentStep].title)}
-              className="inline-flex items-center gap-1.5 text-xs text-[color:var(--sc-text-muted)] hover:text-[color:var(--sc-blue)] transition-colors"
-            >
-              <Flag className="w-3 h-3" />
-              Un probleme avec cette etape ? Signaler une precision
-            </button>
-          </div>
-
-          {allDone && (
-            <div className="mt-5 rounded-xl bg-[color:var(--sc-success)]/10 border border-[color:var(--sc-success)]/30 p-4">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-[color:var(--sc-success)]" />
-                <p className="text-sm font-semibold text-[color:var(--sc-success)]">
-                  Tutoriel termine ! Bravo, c&apos;est une etape de moins vers ton prochain niveau.
-                </p>
-              </div>
-            </div>
-          )}
+          {precisionLinkPosition === "before-completion" && precisionLink}
+          {completionNotice}
+          {precisionLinkPosition === "after-completion" && precisionLink}
         </div>
 
         <div className="px-5 py-4 border-t border-[color:var(--sc-border)] bg-[color:var(--sc-bg-soft)] flex items-center justify-between gap-3">
@@ -168,9 +188,9 @@ export function TutorialModal({
           </ScButton>
 
           <div className="flex gap-1">
-            {tuto.steps.map((_, i) => (
+            {tuto.steps.map((step, i) => (
               <button
-                key={i}
+                key={step.title}
                 onClick={() => onStepChange(i)}
                 className={`w-2 h-2 rounded-full transition-all ${ i === currentStep ? "bg-[color:var(--sc-blue)] w-6" : completedSteps.has(i) ? "bg-[color:var(--sc-success)]" : "bg-[color:var(--sc-border-strong)]" }`}
                 aria-label={`Aller a l'etape ${i + 1}`}
@@ -191,6 +211,6 @@ export function TutorialModal({
           )}
         </div>
       </div>
-    </div>
+    </AccessibleModal>
   )
 }

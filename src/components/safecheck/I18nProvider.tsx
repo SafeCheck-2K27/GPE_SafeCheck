@@ -15,7 +15,7 @@ import * as React from "react"
  * progressively translate pages without breaking the UI.
  */
 
-export type Lang = "fr" | "en"
+type Lang = "fr" | "en"
 
 const STORAGE_KEY = "safecheck:lang"
 
@@ -249,6 +249,49 @@ interface I18nContextValue {
 
 const I18nContext = React.createContext<I18nContextValue | null>(null)
 
+type LangSnapshot = Lang | null | undefined
+
+const langListeners = new Set<() => void>()
+let memoryLang: Lang | null = null
+
+function getLangSnapshot(): LangSnapshot {
+  if (typeof window === "undefined") return undefined
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY)
+    return saved === "fr" || saved === "en" ? saved : null
+  } catch {
+    return memoryLang
+  }
+}
+
+function getServerLangSnapshot(): LangSnapshot {
+  return undefined
+}
+
+function subscribeToLang(listener: () => void) {
+  langListeners.add(listener)
+
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === STORAGE_KEY) listener()
+  }
+  window.addEventListener("storage", onStorage)
+
+  return () => {
+    langListeners.delete(listener)
+    window.removeEventListener("storage", onStorage)
+  }
+}
+
+function persistLang(next: Lang) {
+  memoryLang = next
+  try {
+    window.localStorage.setItem(STORAGE_KEY, next)
+  } catch {
+    /* ignore - localStorage may be unavailable */
+  }
+  langListeners.forEach((listener) => listener())
+}
+
 function format(template: string, params?: Record<string, string | number>) {
   if (!params) return template
   return template.replace(/\{(\w+)\}/g, (_, k) =>
@@ -257,21 +300,13 @@ function format(template: string, params?: Record<string, string | number>) {
 }
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLangState] = React.useState<Lang>("fr")
-  const [isHydrated, setIsHydrated] = React.useState(false)
-
-  // Load saved preference once on mount.
-  React.useEffect(() => {
-    queueMicrotask(() => {
-      try {
-        const saved = window.localStorage.getItem(STORAGE_KEY)
-        if (saved === "fr" || saved === "en") setLangState(saved)
-      } catch {
-        /* ignore - localStorage may be unavailable */
-      }
-      setIsHydrated(true)
-    })
-  }, [])
+  const snapshot = React.useSyncExternalStore(
+    subscribeToLang,
+    getLangSnapshot,
+    getServerLangSnapshot,
+  )
+  const lang = snapshot ?? "fr"
+  const isHydrated = snapshot !== undefined
 
   // Keep <html lang> in sync for a11y / SEO.
   React.useEffect(() => {
@@ -280,23 +315,8 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     }
   }, [lang])
 
-  // Cross-tab sync.
-  React.useEffect(() => {
-    const onStorage = (e: StorageEvent) => {
-      if (e.key !== STORAGE_KEY || !e.newValue) return
-      if (e.newValue === "fr" || e.newValue === "en") setLangState(e.newValue)
-    }
-    window.addEventListener("storage", onStorage)
-    return () => window.removeEventListener("storage", onStorage)
-  }, [])
-
   const setLang = React.useCallback((next: Lang) => {
-    setLangState(next)
-    try {
-      window.localStorage.setItem(STORAGE_KEY, next)
-    } catch {
-      /* ignore */
-    }
+    persistLang(next)
   }, [])
 
   const toggle = React.useCallback(() => {

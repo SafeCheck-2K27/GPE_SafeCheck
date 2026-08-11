@@ -18,7 +18,7 @@ export function AccountSectionCard({
       <header className="flex items-start justify-between gap-4 px-5 md:px-6 py-4 bg-[color:var(--sc-bg-soft)] border-b border-[color:var(--sc-border)]">
         <div className="flex items-start gap-3 min-w-0">
           {Icon && (
-            <span className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] text-white shadow-[var(--sc-shadow-blue-sm)]">
+            <span className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] text-[color:var(--sc-text-on-strong)] shadow-[var(--sc-shadow-blue-sm)]">
               <Icon className="w-4 h-4" />
             </span>
           )}

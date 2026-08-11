@@ -14,7 +14,7 @@ import {
   Wifi,
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
-import type { Niveau, Tutoriel } from "@/lib/tutoriels-data"
+import type { Niveau, Tutoriel } from "../data/catalog"
 import { mockTutoStatus, POPULAR_IDS } from "../data"
 import { parseDuration } from "../sorting"
 import type {
@@ -54,15 +54,17 @@ export function TutorialLibraryCategory({
   const levelsPresent = (
     ["Debutant", "Intermediaire", "Avance"] as Niveau[]
   ).filter((level) => tutorials.some((tutorial) => tutorial.level === level))
-  const durations = tutorials.map((tutorial) =>
-    parseDuration(tutorial.duration),
-  )
+  const durations = tutorials
+    .map((tutorial) => parseDuration(tutorial.duration))
+    .filter((duration): duration is number => duration !== null)
   const minimumDuration = Math.min(...durations)
   const maximumDuration = Math.max(...durations)
   const durationLabel =
-    minimumDuration === maximumDuration
-      ? `${minimumDuration} min`
-      : `${minimumDuration}-${maximumDuration} min`
+    durations.length === 0
+      ? "Duree indisponible"
+      : minimumDuration === maximumDuration
+        ? `${minimumDuration} min`
+        : `${minimumDuration}-${maximumDuration} min`
   const doneCount = tutorials.filter(
     (tutorial) => (mockTutoStatus[tutorial.id] || "todo") === "done",
   ).length
@@ -107,14 +109,14 @@ export function TutorialLibraryCategory({
             {levelsPresent.map((level) => (
               <span
                 key={level}
-                className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full text-white"
+                className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full text-[color:var(--sc-text-on-strong)]"
                 style={{
                   background:
                     level === "Debutant"
-                      ? "#10B981"
+                      ? "var(--sc-success)"
                       : level === "Intermediaire"
-                        ? "#F59E0B"
-                        : "#8B5CF6",
+                        ? "var(--sc-warn)"
+                        : "var(--sc-violet-soft)",
                 }}
               >
                 {level}

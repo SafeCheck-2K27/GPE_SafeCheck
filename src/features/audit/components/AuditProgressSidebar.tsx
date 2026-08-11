@@ -35,7 +35,7 @@ export function AuditProgressSidebar({
             <X className="h-4 w-4" />
           </button>
           <div className="flex items-center gap-2 mb-2">
-            <span className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] text-white shadow-[var(--sc-shadow-blue-sm)]">
+            <span className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] text-[color:var(--sc-text-on-strong)] shadow-[var(--sc-shadow-blue-sm)]">
               <Sparkles className="w-3.5 h-3.5" strokeWidth={2.4} />
             </span>
             <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--sc-text-muted)]">
@@ -70,7 +70,7 @@ export function AuditProgressSidebar({
                 )}
 
                 <span
-                  className={`shrink-0 w-7 h-7 rounded-md flex items-center justify-center text-[12px] font-bold mt-0.5 transition-all ${isActive ? "bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] text-white shadow-[0_4px_10px_-2px_rgba(37,99,235,0.45)] ring-2 ring-[color:var(--sc-surface)]" : isAnswered ? "bg-[rgba(16,185,129,0.12)] text-[color:var(--sc-success)] border border-[rgba(16,185,129,0.30)] dark:bg-[rgba(16,185,129,0.16)] dark:text-[#6EE7B7] dark:border-[rgba(16,185,129,0.32)]" : "bg-[color:var(--sc-surface-2)] text-[color:var(--sc-text-muted)] border border-[color:var(--sc-border)]"}`}
+                  className={`shrink-0 w-7 h-7 rounded-md flex items-center justify-center text-[12px] font-bold mt-0.5 transition-all ${isActive ? "bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] text-[color:var(--sc-text-on-strong)] shadow-[0_4px_10px_-2px_rgb(var(--sc-blue-rgb)/0.45)] ring-2 ring-[color:var(--sc-surface)]" : isAnswered ? "bg-[rgb(var(--sc-success-rgb)/0.12)] text-[color:var(--sc-success)] border border-[rgb(var(--sc-success-rgb)/0.30)] dark:bg-[rgb(var(--sc-success-rgb)/0.16)] dark:text-[color:var(--sc-success-text)] dark:border-[rgb(var(--sc-success-rgb)/0.32)]" : "bg-[color:var(--sc-surface-2)] text-[color:var(--sc-text-muted)] border border-[color:var(--sc-border)]"}`}
                 >
                   {isAnswered && !isActive ? (
                     <Check className="w-3.5 h-3.5" strokeWidth={3} />
@@ -107,7 +107,7 @@ export function AuditProgressSidebar({
           </div>
           <div className="h-1.5 rounded-full overflow-hidden bg-[color:var(--sc-surface-2)] border border-[color:var(--sc-border)]">
             <div
-              className="h-full rounded-full transition-all duration-500 bg-[linear-gradient(90deg,var(--sc-blue-soft),var(--sc-blue),var(--sc-indigo))] shadow-[0_0_10px_rgba(37,99,235,0.40)]"
+              className="h-full rounded-full transition-all duration-500 bg-[linear-gradient(90deg,var(--sc-blue-soft),var(--sc-blue),var(--sc-indigo))] shadow-[0_0_10px_rgb(var(--sc-blue-rgb)/0.40)]"
               style={{ width: `${progress}%` }}
             />
           </div>

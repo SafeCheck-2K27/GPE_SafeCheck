@@ -2,20 +2,18 @@
 
 import { useState } from "react"
 import { BookOpen, Layers } from "lucide-react"
-import type { Tutoriel } from "@/lib/tutoriels-data"
+import type { Tutoriel } from "../data/catalog"
 import { LIBRARY_CATEGORIES, mockTutoStatus, POPULAR_IDS } from "../data"
 import { matchesLibraryCategory } from "../filters"
 import { TutorialCard } from "./TutorialCards"
 import { TutorialLibraryCategory } from "./TutorialLibraryCategory"
 
 export function TutorialLibrarySection({
-  visible,
   tutorials,
   hasActiveFilters,
   onOpenTutorial,
   onResetFilters,
 }: {
-  visible: boolean
   tutorials: Tutoriel[]
   hasActiveFilters: boolean
   onOpenTutorial: (tutorial: Tutoriel) => void
@@ -27,8 +25,6 @@ export function TutorialLibrarySection({
   const [openCategories, setOpenCategories] = useState<Set<string>>(
     () => new Set([LIBRARY_CATEGORIES[0].id]),
   )
-
-  if (!visible) return null
 
   const toggleCategory = (id: string) => {
     setOpenCategories((previousCategories) => {
@@ -65,7 +61,7 @@ export function TutorialLibrarySection({
           <button
             type="button"
             onClick={() => setLibraryView("organized")}
-            className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md transition-all ${libraryView === "organized" ? "bg-[color:var(--sc-blue)] text-white shadow-sm" : "text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-blue)]"}`}
+            className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md transition-all ${libraryView === "organized" ? "bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)] shadow-sm" : "text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-blue)]"}`}
             aria-pressed={libraryView === "organized"}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -74,7 +70,7 @@ export function TutorialLibrarySection({
           <button
             type="button"
             onClick={() => setLibraryView("full")}
-            className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md transition-all ${libraryView === "full" ? "bg-[color:var(--sc-blue)] text-white shadow-sm" : "text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-blue)]"}`}
+            className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-md transition-all ${libraryView === "full" ? "bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)] shadow-sm" : "text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-blue)]"}`}
             aria-pressed={libraryView === "full"}
           >
             <BookOpen className="w-3.5 h-3.5" />

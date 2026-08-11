@@ -1,6 +1,3 @@
-import type React from "react"
-import { KeyRound, Smartphone, Wifi, Mail } from "lucide-react"
-
 /*
    SafeCheck account - mock data for the demo mockup.
    No real backend yet: this is the seam where a future API /
@@ -10,6 +7,7 @@ import { KeyRound, Smartphone, Wifi, Mail } from "lucide-react"
 
 export type AuditStatus = "termine" | "en-cours" | "disponible"
 export type TutoStatus = "termine" | "en-cours"
+export type AccountTutorialIconKey = "key-round" | "mail" | "smartphone" | "wifi"
 
 export const mockUser = {
   pseudo: "TheAliasMan",
@@ -53,12 +51,12 @@ export const mockTutos: {
   status: TutoStatus
   duree: string
   difficulte: "Débutant" | "Intermédiaire" | "Avancé"
-  icon: React.ComponentType<{ className?: string }>
+  icon: AccountTutorialIconKey
 }[] = [
-  { id: "t1", nom: "Créer un mot de passe fort", categorie: "Mots de passe", date: "14 mars 2026", status: "termine", duree: "8 min", difficulte: "Débutant", icon: KeyRound },
-  { id: "t2", nom: "Activer la double authentification", categorie: "2FA", date: "14 mars 2026", status: "termine", duree: "12 min", difficulte: "Débutant", icon: Smartphone },
-  { id: "t3", nom: "Sécuriser son réseau Wi-Fi", categorie: "Réseaux", date: "-", status: "en-cours", duree: "15 min", difficulte: "Intermédiaire", icon: Wifi },
-  { id: "t4", nom: "Repérer un email de phishing", categorie: "Phishing", date: "13 mars 2026", status: "termine", duree: "10 min", difficulte: "Débutant", icon: Mail },
+  { id: "t1", nom: "Créer un mot de passe fort", categorie: "Mots de passe", date: "14 mars 2026", status: "termine", duree: "8 min", difficulte: "Débutant", icon: "key-round" },
+  { id: "t2", nom: "Activer la double authentification", categorie: "2FA", date: "14 mars 2026", status: "termine", duree: "12 min", difficulte: "Débutant", icon: "smartphone" },
+  { id: "t3", nom: "Sécuriser son réseau Wi-Fi", categorie: "Réseaux", date: "-", status: "en-cours", duree: "15 min", difficulte: "Intermédiaire", icon: "wifi" },
+  { id: "t4", nom: "Repérer un email de phishing", categorie: "Phishing", date: "13 mars 2026", status: "termine", duree: "10 min", difficulte: "Débutant", icon: "mail" },
 ]
 
 export const mockGuides: { id: string; titre: string; categorie: string; date: string }[] = [

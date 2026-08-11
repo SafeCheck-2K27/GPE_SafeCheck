@@ -4,23 +4,18 @@ import { Suspense, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import Footer from "@/components/safecheck/Footer"
 import Navbar from "@/components/safecheck/Navbar"
+import { PageSuspenseFallback } from "@/components/safecheck/layout/PageSuspenseFallback"
 import { PageShell } from "@/components/safecheck/layout/PageShell"
 import { TutorialCatalogView } from "@/features/tutorials/components/TutorialCatalogView"
 import { TutorialLevelView } from "@/features/tutorials/components/TutorialLevelView"
 import { TutorialModal } from "@/features/tutorials/components/TutorialModal"
 import { TutorialPersonalizedView } from "@/features/tutorials/components/TutorialPersonalizedView"
 import { TutorialPrecisionModal } from "@/features/tutorials/components/TutorialPrecisionModal"
-import type { Category, Niveau, Tutoriel } from "@/lib/tutoriels-data"
+import type { Niveau, Tutoriel } from "@/features/tutorials/data/catalog"
 
 export default function TutorielsPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-[color:var(--sc-bg)]">
-          <div className="w-8 h-8 border-2 border-[color:var(--sc-blue)] border-t-transparent rounded-full animate-spin" />
-        </div>
-      }
-    >
+    <Suspense fallback={<PageSuspenseFallback />}>
       <TutorielsContent />
     </Suspense>
   )
@@ -45,9 +40,6 @@ function TutorielsContent() {
   const [precisionStepTitle, setPrecisionStepTitle] = useState<
     string | undefined
   >(undefined)
-
-  const [catFilter, setCatFilter] = useState<"all" | Category>("all")
-  const [levelFilter, setLevelFilter] = useState<"all" | Niveau>("all")
 
   const openPrecision = (stepTitle?: string) => {
     setPrecisionStepTitle(stepTitle)
@@ -90,13 +82,7 @@ function TutorielsContent() {
         )}
 
         {view === "all" && (
-          <TutorialCatalogView
-            catFilter={catFilter}
-            setCatFilter={setCatFilter}
-            levelFilter={levelFilter}
-            setLevelFilter={setLevelFilter}
-            openTuto={openTuto}
-          />
+          <TutorialCatalogView openTuto={openTuto} />
         )}
       </main>
 

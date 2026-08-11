@@ -172,13 +172,13 @@ function ThemeOption({
     >
       <div className="flex items-center gap-2.5 mb-2">
         <span
-          className={`inline-flex items-center justify-center w-9 h-9 rounded-lg ${active ? "bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] text-white shadow-[var(--sc-shadow-blue-sm)]" : "bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue)] border border-[color:var(--sc-border)]" }`}
+          className={`inline-flex items-center justify-center w-9 h-9 rounded-lg ${active ? "bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] text-[color:var(--sc-text-on-strong)] shadow-[var(--sc-shadow-blue-sm)]" : "bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue)] border border-[color:var(--sc-border)]" }`}
         >
           <Icon className="w-4 h-4" />
         </span>
         <span className="font-semibold text-[color:var(--sc-text)]">{label}</span>
         {active && (
-          <span className="ml-auto inline-flex items-center justify-center w-5 h-5 rounded-full bg-[color:var(--sc-blue)] text-white">
+          <span className="ml-auto inline-flex items-center justify-center w-5 h-5 rounded-full bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)]">
             <Check className="w-3 h-3" strokeWidth={3} />
           </span>
         )}
@@ -218,7 +218,7 @@ function NotifToggle({
         className={`shrink-0 relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--sc-blue)]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--sc-surface)] ${checked ? "bg-[linear-gradient(180deg,var(--sc-blue-soft),var(--sc-blue))] shadow-[var(--sc-shadow-blue-sm)]" : "bg-[color:var(--sc-surface-2)] border border-[color:var(--sc-border-strong)]" }`}
       >
         <span
-          className={`inline-block h-5 w-5 rounded-full bg-white shadow-[0_2px_6px_rgba(15,23,42,0.20)] transition-transform duration-200 ${checked ? "translate-x-5" : "translate-x-0.5"}`}
+          className={`inline-block h-5 w-5 rounded-full bg-[color:var(--sc-surface)] shadow-[0_2px_6px_rgb(var(--sc-ink-rgb)/0.20)] transition-transform duration-200 ${checked ? "translate-x-5" : "translate-x-0.5"}`}
         />
       </button>
     </div>

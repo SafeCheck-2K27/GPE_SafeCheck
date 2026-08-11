@@ -11,7 +11,7 @@ import {
 } from "@/components/safecheck/primitives"
 import { useAuth } from "@/components/safecheck/AuthProvider"
 import { useI18n } from "@/components/safecheck/I18nProvider"
-import { ModalBackdrop } from "@/components/safecheck/layout/ModalBackdrop"
+import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 
 /**
  * SignupModal - frictionless account creation overlay used whenever a logged
@@ -29,13 +29,7 @@ import { ModalBackdrop } from "@/components/safecheck/layout/ModalBackdrop"
  * The component is fully self-contained: it owns its own `useState`, traps
  * Escape to close, and locks the page scroll while open.
  */
-export function SignupModal({
-  open,
-  onClose,
-  onSwitchToLogin,
-  pendingHref,
-  reason,
-}: {
+type SignupModalProps = {
   open: boolean
   onClose: () => void
   onSwitchToLogin?: () => void
@@ -49,7 +43,20 @@ export function SignupModal({
    * the modal header so the user understands why they're being asked.
    */
   reason?: string
-}) {
+}
+
+export function SignupModal(props: SignupModalProps) {
+  if (!props.open) return null
+  return <SignupModalContent {...props} />
+}
+
+function SignupModalContent({
+  open,
+  onClose,
+  onSwitchToLogin,
+  pendingHref,
+  reason,
+}: SignupModalProps) {
   const auth = useAuth()
   const router = useRouter()
   const { t } = useI18n()
@@ -59,37 +66,6 @@ export function SignupModal({
   const [showPw, setShowPw] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
   const [submitting, setSubmitting] = React.useState(false)
-
-  // Close on Escape + lock body scroll while open.
-  React.useEffect(() => {
-    if (!open) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose()
-    }
-    window.addEventListener("keydown", onKey)
-    const prevOverflow = document.body.style.overflow
-    document.body.style.overflow = "hidden"
-    return () => {
-      window.removeEventListener("keydown", onKey)
-      document.body.style.overflow = prevOverflow
-    }
-  }, [open, onClose])
-
-  // Reset state whenever the modal is freshly opened so it never reopens
-  // with leftover input from a previous attempt.
-  React.useEffect(() => {
-    if (!open) return
-    queueMicrotask(() => {
-      setEmail("")
-      setPassword("")
-      setPseudo("")
-      setShowPw(false)
-      setError(null)
-      setSubmitting(false)
-    })
-  }, [open])
-
-  if (!open) return null
 
   const finishAndRoute = () => {
     onClose()
@@ -143,17 +119,16 @@ export function SignupModal({
   }
 
   return (
-    <ModalBackdrop
-      className="z-[70]"
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
+    <AccessibleModal
+      open={open}
+      onClose={onClose}
+      zIndex={70}
       aria-labelledby="signup-modal-title"
     >
       <form
         onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgba(15,23,42,0.30)]"
+        className="w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgb(var(--sc-ink-rgb)/0.30)]"
       >
         <div className="flex items-center gap-2 mb-1">
           <SafeCheckMark />
@@ -249,7 +224,7 @@ export function SignupModal({
           {error && (
             <p
               role="alert"
-              className="text-xs font-medium text-[color:var(--sc-danger,#DC2626)]"
+              className="text-xs font-medium text-[color:var(--sc-danger)]"
             >
               {error}
             </p>
@@ -288,6 +263,6 @@ export function SignupModal({
           </button>
         </div>
       </form>
-    </ModalBackdrop>
+    </AccessibleModal>
   )
 }

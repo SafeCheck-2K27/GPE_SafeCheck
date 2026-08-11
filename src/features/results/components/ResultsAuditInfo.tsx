@@ -3,7 +3,7 @@ import { ScButton } from "@/components/safecheck/primitives"
 import { auditQualificationFacts } from "../mock-data"
 
 const auditInfoCardClassName =
-  "rounded-2xl p-5 border bg-[rgba(37,99,235,0.04)] border-[rgba(37,99,235,0.18)] shadow-[var(--sc-shadow-sm)]"
+  "rounded-2xl p-5 border bg-[rgb(var(--sc-blue-rgb)/0.04)] border-[rgb(var(--sc-blue-rgb)/0.18)] shadow-[var(--sc-shadow-sm)]"
 
 export function ResultsAuditInfo({
   onBrowseAudits,
@@ -14,7 +14,7 @@ export function ResultsAuditInfo({
     <div className={auditInfoCardClassName}>
       <div className="flex items-center gap-2 mb-3">
         <span
-          className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 text-white"
+          className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 text-[color:var(--sc-text-on-strong)]"
           style={{ background: "var(--sc-blue)" }}
         >
           <Info className="w-3.5 h-3.5" />

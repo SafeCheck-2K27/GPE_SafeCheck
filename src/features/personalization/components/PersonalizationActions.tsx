@@ -13,7 +13,7 @@ export function PersonalizationActions({
         <button
           type="button"
           onClick={onSubmit}
-          className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] border border-[color:var(--sc-blue-hover)] shadow-[0_8px_20px_-6px_rgba(37,99,235,0.45)] hover:shadow-[0_12px_28px_-8px_rgba(37,99,235,0.55)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+          className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-[color:var(--sc-text-on-strong)] bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] border border-[color:var(--sc-blue-hover)] shadow-[0_8px_20px_-6px_rgb(var(--sc-blue-rgb)/0.45)] hover:shadow-[0_12px_28px_-8px_rgb(var(--sc-blue-rgb)/0.55)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
         >
           <Shield className="w-4 h-4 shrink-0" />
           Voir mes résultats

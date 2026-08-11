@@ -4,6 +4,16 @@ Application web d'accompagnement personnalisé en cybersécurité.
 
 Stack : Next.js 16, React 19, TypeScript, PostgreSQL, Prisma 7, Docker.
 
+## État du projet
+
+Le frontend est un MVP fonctionnel alimenté par des données locales. Le dépôt
+contient l'infrastructure PostgreSQL/Prisma, mais l'authentification, les contenus
+et la progression visibles ne sont pas encore reliés à un backend de production.
+
+L'organisation des sources, les règles de dépendances, le système UI et les
+conventions de contribution sont documentés dans
+[`docs/frontend-architecture.md`](docs/frontend-architecture.md).
+
 ## Prérequis
 
 - Docker (Docker Desktop sur Windows/Mac).
@@ -116,9 +126,20 @@ npm run dev
 | `npm run build` | Build de production |
 | `npm run lint` | Vérification ESLint |
 | `npm run typecheck` | Vérification TypeScript |
+| `npm test` | Tests unitaires et tests de contrats |
 | `npm run db:up` | Démarrer PostgreSQL (Docker) |
 | `npm run db:down` | Arrêter PostgreSQL |
 | `npm run db:logs` | Logs du conteneur PostgreSQL |
 | `npm run db:migrate` | Créer et appliquer les migrations Prisma |
 | `npm run db:generate` | Régénérer le client Prisma |
 | `npm run db:studio` | Ouvrir Prisma Studio |
+
+Avant une pull request, exécuter au minimum :
+
+```bash
+npm run lint
+npm run typecheck
+npm test
+npm run build
+git diff --check
+```

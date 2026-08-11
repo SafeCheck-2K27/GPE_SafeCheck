@@ -18,7 +18,7 @@ export function ResultsSummary({
     <div className={summaryCardClassName}>
       <div className="flex items-center gap-2 mb-3">
         <span
-          className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 text-white"
+          className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 text-[color:var(--sc-text-on-strong)]"
           style={{
             background: "linear-gradient(135deg, var(--sc-blue-soft), var(--sc-blue))",
           }}

@@ -1,10 +1,9 @@
 import { Layers, Search } from "lucide-react"
-import type { Tutoriel } from "@/lib/tutoriels-data"
+import type { Tutoriel } from "../data/catalog"
 import { POPULAR_IDS, SEARCH_SUGGESTIONS, mockTutoStatus } from "../data"
 import { TutorialCard } from "./TutorialCards"
 
 export function TutorialSearchResults({
-  visible,
   query,
   results,
   hasActiveFilters,
@@ -12,7 +11,6 @@ export function TutorialSearchResults({
   onSearchChange,
   onReset,
 }: {
-  visible: boolean
   query: string
   results: Tutoriel[]
   hasActiveFilters: boolean
@@ -20,8 +18,6 @@ export function TutorialSearchResults({
   onSearchChange: (query: string) => void
   onReset: () => void
 }) {
-  if (!visible) return null
-
   return (
     <section aria-label="Resultats de recherche">
       {results.length > 0 ? (
@@ -90,7 +86,7 @@ export function TutorialSearchResults({
           <button
             type="button"
             onClick={onReset}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-lg bg-[color:var(--sc-blue)] text-white hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-lg bg-[color:var(--sc-blue)] text-[color:var(--sc-text-on-strong)] hover:opacity-90 transition-opacity"
           >
             <Layers className="w-3.5 h-3.5" />
             Voir les categories principales

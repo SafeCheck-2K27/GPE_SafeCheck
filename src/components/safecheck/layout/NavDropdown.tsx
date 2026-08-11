@@ -5,6 +5,7 @@ import Link from "next/link"
 import { ChevronDown } from "lucide-react"
 import type { DropdownItem } from "@/components/safecheck/layout/nav-data"
 import { cn } from "@/lib/utils"
+import { NavItemIcon } from "./NavItemIcon"
 
 export function NavDropdown({
   label,
@@ -61,12 +62,11 @@ export function NavDropdown({
         <div
           id={`menu-${id}`}
           className={cn(
-            "absolute top-full left-0 mt-2 rounded-xl z-50 overflow-hidden sc-fade-in border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] shadow-[0_12px_36px_-12px_rgba(15,23,42,0.18),0_4px_12px_-4px_rgba(15,23,42,0.10)] p-1.5",
+            "absolute top-full left-0 mt-2 rounded-xl z-50 overflow-hidden sc-fade-in border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] shadow-[0_12px_36px_-12px_rgb(var(--sc-ink-rgb)/0.18),0_4px_12px_-4px_rgb(var(--sc-ink-rgb)/0.10)] p-1.5",
             wide ? "w-80" : "w-64",
           )}
         >
           {items.map((item) => {
-            const Icon = item.icon
             return (
               <Link
                 key={item.href + item.label}
@@ -74,9 +74,9 @@ export function NavDropdown({
                 onClick={onClose}
                 className="group flex items-start gap-2.5 px-3 py-2.5 rounded-lg text-sm text-[color:var(--sc-text)] hover:bg-[color:var(--sc-bg-soft)] transition-colors"
               >
-                {withIcons && Icon && (
-                  <span className="mt-0.5 inline-flex items-center justify-center w-7 h-7 rounded-md bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue)] group-hover:bg-[color:var(--sc-blue)] group-hover:text-white transition-colors">
-                    <Icon className="w-3.5 h-3.5" />
+                {withIcons && item.icon && (
+                  <span className="mt-0.5 inline-flex items-center justify-center w-7 h-7 rounded-md bg-[color:var(--sc-bg-soft)] text-[color:var(--sc-blue)] group-hover:bg-[color:var(--sc-blue)] group-hover:text-[color:var(--sc-text-on-strong)] transition-colors">
+                    <NavItemIcon icon={item.icon} className="w-3.5 h-3.5" />
                   </span>
                 )}
                 <div className="flex-1 min-w-0">

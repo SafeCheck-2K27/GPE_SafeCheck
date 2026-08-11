@@ -29,8 +29,8 @@ export function AuditQuestionPanel({
                 className="absolute inset-0 -m-3 rounded-full sc-halo opacity-50 sc-pulse-soft pointer-events-none"
                 aria-hidden
               />
-              <div className="relative w-20 h-20 rounded-full sc-avatar-gradient flex items-center justify-center ring-4 ring-[color:var(--sc-surface)] shadow-[0_14px_30px_-10px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.30)]">
-                <Shield className="w-9 h-9 text-white" strokeWidth={2.2} />
+              <div className="relative w-20 h-20 rounded-full sc-avatar-gradient flex items-center justify-center ring-4 ring-[color:var(--sc-surface)] shadow-[0_14px_30px_-10px_rgb(var(--sc-blue-rgb)/0.55),inset_0_1px_0_rgb(var(--sc-white-rgb)/0.30)]">
+                <Shield className="w-9 h-9 text-[color:var(--sc-text-on-strong)]" strokeWidth={2.2} />
               </div>
             </div>
           </div>
@@ -62,13 +62,13 @@ export function AuditQuestionPanel({
               <button
                 key={option.value}
                 onClick={() => onSelect(option.value)}
-                className={`group relative flex items-start gap-3.5 text-left px-4 py-3.5 rounded-xl border transition-all duration-200 cursor-pointer ${selected ? "border-[color:var(--sc-blue)] bg-[color:var(--sc-bg-soft)] shadow-[0_8px_24px_-8px_rgba(37,99,235,0.40)] ring-1 ring-[color:var(--sc-blue)]/40" : "border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] hover:border-[color:var(--sc-blue)]/55 hover:-translate-y-0.5 hover:shadow-[var(--sc-shadow)] hover:bg-[color:var(--sc-bg-soft)]/40"}`}
+                className={`group relative flex items-start gap-3.5 text-left px-4 py-3.5 rounded-xl border transition-all duration-200 cursor-pointer ${selected ? "border-[color:var(--sc-blue)] bg-[color:var(--sc-bg-soft)] shadow-[0_8px_24px_-8px_rgb(var(--sc-blue-rgb)/0.40)] ring-1 ring-[color:var(--sc-blue)]/40" : "border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] hover:border-[color:var(--sc-blue)]/55 hover:-translate-y-0.5 hover:shadow-[var(--sc-shadow)] hover:bg-[color:var(--sc-bg-soft)]/40"}`}
                 aria-pressed={selected}
               >
                 <span
-                  className={`shrink-0 mt-0.5 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${selected ? "border-[color:var(--sc-blue)] bg-[color:var(--sc-blue)] shadow-[0_4px_10px_-2px_rgba(37,99,235,0.45)]" : "border-[color:var(--sc-border-strong)] bg-[color:var(--sc-surface)] group-hover:border-[color:var(--sc-blue)]/60"}`}
+                  className={`shrink-0 mt-0.5 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${selected ? "border-[color:var(--sc-blue)] bg-[color:var(--sc-blue)] shadow-[0_4px_10px_-2px_rgb(var(--sc-blue-rgb)/0.45)]" : "border-[color:var(--sc-border-strong)] bg-[color:var(--sc-surface)] group-hover:border-[color:var(--sc-blue)]/60"}`}
                 >
-                  {selected && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+                  {selected && <Check className="w-3 h-3 text-[color:var(--sc-text-on-strong)]" strokeWidth={3} />}
                 </span>
 
                 <span

@@ -1,4 +1,4 @@
-import type { Niveau, Tutoriel } from "@/lib/tutoriels-data"
+import type { Niveau, Tutoriel } from "./data/catalog"
 import type { PersonalizedTutorialGroup } from "./types"
 
 export function getPersonalizedTutorialGroups(

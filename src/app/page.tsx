@@ -12,6 +12,7 @@ import {
   ReassuranceBand,
 } from "@/features/home/components/PreHomeSections"
 import { PreHomeLoginModal } from "@/features/home/components/PreHomeLoginModal"
+import { PageShell } from "@/components/safecheck/layout/PageShell"
 
 export default function PreHomePage() {
   const router = useRouter()
@@ -28,7 +29,7 @@ export default function PreHomePage() {
   const explorePlatform = () => router.push("/accueil")
 
   return (
-    <div className="min-h-screen flex flex-col font-sans bg-[color:var(--sc-bg)]">
+    <PageShell>
       <Navbar
         onLoginClick={() => setShowLogin(true)}
         onSignupClick={() => router.push("/compte/creer")}
@@ -57,6 +58,6 @@ export default function PreHomePage() {
           }}
         />
       )}
-    </div>
+    </PageShell>
   )
 }

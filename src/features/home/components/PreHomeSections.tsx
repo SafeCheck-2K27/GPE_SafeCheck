@@ -24,10 +24,10 @@ const finalCopyClassName =
   "text-base text-[color:var(--sc-text-2)] mb-8 max-w-xl mx-auto text-pretty"
 
 const valueCardClassName =
-  "group relative rounded-[18px] p-6 bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[color:var(--sc-blue)]/40 hover:shadow-[0_20px_40px_-16px_rgba(37,99,235,0.25),0_8px_16px_-8px_rgba(15,23,42,0.10)] shadow-[0_2px_6px_-2px_rgba(15,23,42,0.06)] sc-fade-in"
+  "group relative rounded-[18px] p-6 bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[color:var(--sc-blue)]/40 hover:shadow-[0_20px_40px_-16px_rgb(var(--sc-blue-rgb)/0.25),0_8px_16px_-8px_rgb(var(--sc-ink-rgb)/0.10)] shadow-[0_2px_6px_-2px_rgb(var(--sc-ink-rgb)/0.06)] sc-fade-in"
 
 const valueIconClassName =
-  "w-11 h-11 rounded-xl flex items-center justify-center mb-4 text-white bg-[linear-gradient(135deg,#3B82F6_0%,#2563EB_60%,#6366F1_100%)] shadow-[0_8px_18px_-6px_rgba(37,99,235,0.55)] group-hover:scale-105 transition-transform"
+  "w-11 h-11 rounded-xl flex items-center justify-center mb-4 text-[color:var(--sc-text-on-strong)] bg-[linear-gradient(135deg,var(--sc-blue-soft)_0%,var(--sc-blue)_60%,var(--sc-indigo)_100%)] shadow-[0_8px_18px_-6px_rgb(var(--sc-blue-rgb)/0.55)] group-hover:scale-105 transition-transform"
 
 const reassureIconClassName =
   "shrink-0 w-10 h-10 rounded-xl flex items-center justify-center bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] text-[color:var(--sc-blue)]"
@@ -150,7 +150,7 @@ function ValueCard({
         className="absolute inset-x-6 top-0 h-[2px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
         style={{
           background:
-            "linear-gradient(90deg, transparent, rgba(37,99,235,0.7), rgba(99,102,241,0.7), transparent)",
+            "linear-gradient(90deg, transparent, rgb(var(--sc-blue-rgb)/0.7), rgb(var(--sc-indigo-rgb)/0.7), transparent)",
         }}
         aria-hidden
       />

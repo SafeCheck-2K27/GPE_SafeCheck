@@ -1,15 +1,14 @@
-import type React from "react"
-import { BookText, Gamepad2, BookOpen, ShieldAlert, Trophy } from "lucide-react"
-
 /* Navigation data for the SafeCheck top navbar. Pure data so it can be reused
    by both the desktop dropdowns and the mobile menu, and later be driven by an
    API/config without touching the layout components. */
+
+export type NavIconKey = "book-open" | "book-text" | "gamepad-2" | "shield-alert" | "trophy"
 
 export interface DropdownItem {
   label: string
   href: string
   desc?: string
-  icon?: React.ComponentType<{ className?: string }>
+  icon?: NavIconKey
 }
 
 export const auditLinks: DropdownItem[] = [
@@ -48,9 +47,9 @@ export const recommandationLinks: DropdownItem[] = [
 ]
 
 export const decouvrirLinks: DropdownItem[] = [
-  { label: "Lexique cyber", href: "/lexique", icon: BookText },
-  { label: "Simulations / CTF / Jeux", href: "/simulations", icon: Gamepad2 },
-  { label: "Culture cyber", href: "/culture-cyber", icon: BookOpen },
-  { label: "Tester ma vulnérabilité", href: "/vulnerabilite", icon: ShieldAlert },
-  { label: "Hall of Fame", href: "/hall-of-fame", icon: Trophy },
+  { label: "Lexique cyber", href: "/lexique", icon: "book-text" },
+  { label: "Simulations / CTF / Jeux", href: "/simulations", icon: "gamepad-2" },
+  { label: "Culture cyber", href: "/culture-cyber", icon: "book-open" },
+  { label: "Tester ma vulnérabilité", href: "/vulnerabilite", icon: "shield-alert" },
+  { label: "Hall of Fame", href: "/hall-of-fame", icon: "trophy" },
 ]

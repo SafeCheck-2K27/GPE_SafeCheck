@@ -4,7 +4,12 @@ import { Suspense, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Footer from "@/components/safecheck/Footer"
 import Navbar from "@/components/safecheck/Navbar"
+import { PageSuspenseFallback } from "@/components/safecheck/layout/PageSuspenseFallback"
 import { PageShell } from "@/components/safecheck/layout/PageShell"
+import {
+  parseAuditAnswersParam,
+  serializeAuditAnswers,
+} from "@/features/audit/url-payload"
 import { PersonalizationActions } from "@/features/personalization/components/PersonalizationActions"
 import { PersonalizationHero } from "@/features/personalization/components/PersonalizationHero"
 import { PersonalizationQuestionnaire } from "@/features/personalization/components/PersonalizationQuestionnaire"
@@ -20,12 +25,12 @@ function PersonalisationContent() {
   const searchParams = useSearchParams()
 
   const scoreParam = searchParams.get("score") ?? ""
-  const answersParam = searchParams.get("answers") ?? ""
+  const auditAnswers = parseAuditAnswersParam(searchParams.get("answers"))
 
   const buildResultsUrl = () => {
     const params = new URLSearchParams()
     if (scoreParam) params.set("score", scoreParam)
-    if (answersParam) params.set("answers", answersParam)
+    if (auditAnswers) params.set("answers", serializeAuditAnswers(auditAnswers))
     return `/resultats?${params.toString()}`
   }
 
@@ -90,7 +95,7 @@ function PersonalisationContent() {
 
 export default function PersonalisationPage() {
   return (
-    <Suspense>
+    <Suspense fallback={<PageSuspenseFallback />}>
       <PersonalisationContent />
     </Suspense>
   )

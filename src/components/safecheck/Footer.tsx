@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { SafeCheckMark } from "@/components/safecheck/primitives"
 
+const COPYRIGHT_YEAR = 2026
+
 export default function Footer() {
   return (
     <footer className="bg-[color:var(--sc-surface)] border-t border-[color:var(--sc-border)]">
@@ -102,7 +104,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-[color:var(--sc-border)]">
         <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-[color:var(--sc-text-muted)]">
-          <span>© {new Date().getFullYear()} SafeCheck - Maquette pédagogique</span>
+          <span>© {COPYRIGHT_YEAR} SafeCheck - Maquette pédagogique</span>
           <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
             {[
               "Mentions légales",

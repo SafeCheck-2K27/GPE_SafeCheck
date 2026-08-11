@@ -30,6 +30,10 @@ interface NavbarProps {
    * /compte/creer.
    */
   onSignupClick?: () => void
+  /** Serializable navigation override for Server Component parents. */
+  signupHref?: string
+  /** Keep the sign-up controls inert on the dedicated sign-up route. */
+  disableSignupAction?: boolean
 }
 
 const logoTextClassName =
@@ -60,10 +64,10 @@ const mobileProfileLinkClassName =
   "text-sm font-medium text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-blue)]"
 
 const mobileLogoutClassName =
-  "text-sm font-medium text-[color:var(--sc-text-2)] hover:text-white hover:bg-[linear-gradient(180deg,#F87171_0%,#DC2626_100%)] px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+  "text-sm font-medium text-[color:var(--sc-text-2)] hover:text-[color:var(--sc-text-on-strong)] hover:bg-[linear-gradient(180deg,var(--sc-danger-light)_0%,var(--sc-danger-deep)_100%)] px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
 
 
-export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSignupClick }: NavbarProps) {
+export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSignupClick, signupHref, disableSignupAction }: NavbarProps) {
   const [openMenu, setOpenMenu] = useState<string | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [loginOpen, setLoginOpen] = useState(false)
@@ -101,8 +105,12 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
   // to the long-form /compte/creer flow instead).
   const handleSignupClick = () => {
     closeMenus()
-    if (onSignupClick) {
+    if (disableSignupAction) {
+      return
+    } else if (onSignupClick) {
       onSignupClick()
+    } else if (signupHref) {
+      router.push(signupHref)
     } else {
       setLoginOpen(false)
       setSignupOpen(true)
@@ -212,7 +220,7 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
                 variant="destructive"
                 size="sm"
                 onClick={handleLogout}
-                ariaLabel={t("nav.deconnexion")}
+                aria-label={t("nav.deconnexion")}
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">{t("nav.deconnexion")}</span>
@@ -231,7 +239,7 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
                 variant="primary"
                 size="sm"
                 onClick={handleSignupClick}
-                ariaLabel={t("nav.creerCompte")}
+                aria-label={t("nav.creerCompte")}
               >
                 <UserPlus className="w-3.5 h-3.5 sm:hidden" />
                 <span className="hidden sm:inline whitespace-nowrap">{t("nav.creerCompte")}</span>

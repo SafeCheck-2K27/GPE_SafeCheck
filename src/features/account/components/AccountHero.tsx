@@ -50,15 +50,15 @@ export function AccountHero({
               className="absolute inset-0 -m-3 rounded-full sc-halo opacity-50 sc-pulse-soft pointer-events-none"
               aria-hidden
             />
-            <div className="relative w-24 h-24 rounded-full p-[3px] bg-[linear-gradient(135deg,#3B82F6,#6366F1_50%,#06B6D4)] shadow-[0_18px_40px_-14px_rgba(37,99,235,0.50)]">
-              <div className="w-full h-full rounded-full sc-avatar-gradient flex items-center justify-center text-white font-display text-3xl font-bold shadow-[inset_0_1px_0_rgba(255,255,255,0.30)]">
+            <div className="relative w-24 h-24 rounded-full p-[3px] bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-indigo)_50%,var(--sc-cyan))] shadow-[0_18px_40px_-14px_rgb(var(--sc-blue-rgb)/0.50)]">
+              <div className="w-full h-full rounded-full sc-avatar-gradient flex items-center justify-center text-[color:var(--sc-text-on-strong)] font-display text-3xl font-bold shadow-[inset_0_1px_0_rgb(var(--sc-white-rgb)/0.30)]">
                 {form.pseudo[0]}
               </div>
             </div>
             <button
               type="button"
               onClick={onAvatarClick}
-              className="absolute bottom-0 right-0 w-8 h-8 rounded-full flex items-center justify-center text-white bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] border-2 border-[color:var(--sc-surface)] shadow-[0_6px_14px_-4px_rgba(37,99,235,0.55)] hover:scale-105 transition-transform cursor-pointer"
+              className="absolute bottom-0 right-0 w-8 h-8 rounded-full flex items-center justify-center text-[color:var(--sc-text-on-strong)] bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] border-2 border-[color:var(--sc-surface)] shadow-[0_6px_14px_-4px_rgb(var(--sc-blue-rgb)/0.55)] hover:scale-105 transition-transform cursor-pointer"
               aria-label="Changer la photo de profil"
             >
               <Camera className="w-3.5 h-3.5" />
@@ -106,7 +106,7 @@ export function AccountHero({
             </div>
             <div className="h-2 rounded-full overflow-hidden bg-[color:var(--sc-surface-2)] border border-[color:var(--sc-border)]">
               <div
-                className="h-full rounded-full transition-all duration-500 bg-[linear-gradient(90deg,var(--sc-blue-soft),var(--sc-blue),var(--sc-indigo))] shadow-[0_0_12px_rgba(37,99,235,0.45)]"
+                className="h-full rounded-full transition-all duration-500 bg-[linear-gradient(90deg,var(--sc-blue-soft),var(--sc-blue),var(--sc-indigo))] shadow-[0_0_12px_rgb(var(--sc-blue-rgb)/0.45)]"
                 style={{ width: `${form.score}%` }}
               />
             </div>

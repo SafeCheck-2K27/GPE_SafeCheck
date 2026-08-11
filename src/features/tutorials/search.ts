@@ -1,5 +1,5 @@
-import { CATEGORY_LABEL } from "@/lib/tutoriels-data"
-import type { Category, Tutoriel } from "@/lib/tutoriels-data"
+import { CATEGORY_LABEL } from "./data/catalog"
+import type { Category, Tutoriel } from "./data/catalog"
 import type { TutorialFilters } from "./types"
 import { matchesTutorialFilters } from "./filters"
 
