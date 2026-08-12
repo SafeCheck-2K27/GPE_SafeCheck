@@ -2,18 +2,18 @@ name: CI
 
 on:
   pull_request:
-    branches:
-      - main
-      - dev
+    branches: [staging, main]
+  push:
+    branches: [staging, main]
 
 jobs:
-  ci:
-    name: Lint · Typecheck · Build
+  quality:
+    name: Lint · Typecheck · Test · Build
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -31,5 +31,11 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Unit tests
+        run: npm run test
+
       - name: Build
         run: npm run build
+
+      - name: Security audit
+        run: npm audit --audit-level=critical
