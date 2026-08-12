@@ -1,5 +1,4 @@
-import assert from "node:assert/strict"
-import { test } from "node:test"
+import { test, expect } from "vitest"
 import {
   VULNERABILITY_EXAMPLES,
   VULNERABILITY_FACTORS,
@@ -24,20 +23,20 @@ function assertSerializable(value: unknown, path = "root", ancestors = new Set<o
   }
 
   if (typeof value !== "object") {
-    assert.fail(`${path} contains a non-serializable ${typeof value}`)
+    expect.fail(`${path} contains a non-serializable ${typeof value}`)
   }
 
-  assert.ok(!ancestors.has(value), `${path} contains a circular reference`)
+  expect(ancestors.has(value), `${path} contains a circular reference`).toBe(false)
   ancestors.add(value)
 
   if (Array.isArray(value)) {
     value.forEach((item, index) => assertSerializable(item, `${path}[${index}]`, ancestors))
   } else {
     const prototype = Object.getPrototypeOf(value)
-    assert.ok(
+    expect(
       prototype === Object.prototype || prototype === null,
       `${path} contains a non-plain ${prototype?.constructor?.name ?? "object"}`,
-    )
+    ).toBe(true)
     Object.entries(value).forEach(([key, item]) =>
       assertSerializable(item, `${path}.${key}`, ancestors),
     )
@@ -64,6 +63,6 @@ test("exported content catalogs remain JSON-serializable", () => {
     vulnerability: { examples: VULNERABILITY_EXAMPLES, factors: VULNERABILITY_FACTORS },
   }
 
-  assert.doesNotThrow(() => assertSerializable(catalogs))
-  assert.doesNotThrow(() => JSON.stringify(catalogs))
+  expect(() => assertSerializable(catalogs)).not.toThrow()
+  expect(() => JSON.stringify(catalogs)).not.toThrow()
 })

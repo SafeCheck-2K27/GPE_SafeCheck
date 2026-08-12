@@ -1,5 +1,4 @@
-import assert from "node:assert/strict"
-import { test } from "node:test"
+import { test, expect } from "vitest"
 import { calculateAuditScore } from "../../src/features/audit/scoring"
 import {
   parseAuditAnswersParam,
@@ -32,20 +31,20 @@ const questions: AuditQuestion[] = [
 ]
 
 test("calculateAuditScore converts selected option scores to a percentage", () => {
-  assert.equal(calculateAuditScore(questions, { 1: "a", 2: "d" }), 50)
-  assert.equal(calculateAuditScore(questions, { 1: "b", 2: "a" }), 75)
+  expect(calculateAuditScore(questions, { 1: "a", 2: "d" })).toBe(50)
+  expect(calculateAuditScore(questions, { 1: "b", 2: "a" })).toBe(75)
 })
 
 test("calculateAuditScore ignores missing and unknown answers", () => {
-  assert.equal(calculateAuditScore(questions, { 1: "a" }), 50)
-  assert.equal(calculateAuditScore(questions, { 1: "c", 2: "d" }), 0)
+  expect(calculateAuditScore(questions, { 1: "a" })).toBe(50)
+  expect(calculateAuditScore(questions, { 1: "c", 2: "d" })).toBe(0)
 })
 
 test("audit answer payloads serialize and parse without changing values", () => {
   const answers: AuditAnswers = { 1: "a", 2: "d" }
   const serialized = serializeAuditAnswers(answers)
 
-  assert.deepEqual(parseAuditAnswersParam(serialized), answers)
+  expect(parseAuditAnswersParam(serialized)).toEqual(answers)
 })
 
 test("audit answer parsing rejects malformed or unsupported payloads", () => {
@@ -60,6 +59,6 @@ test("audit answer parsing rejects malformed or unsupported payloads", () => {
   ]
 
   invalidPayloads.forEach((payload) => {
-    assert.equal(parseAuditAnswersParam(payload), null)
+    expect(parseAuditAnswersParam(payload)).toBe(null)
   })
 })
