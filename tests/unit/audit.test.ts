@@ -1,5 +1,4 @@
-import assert from "node:assert/strict"
-import { test } from "node:test"
+import { describe, expect, it } from "vitest"
 import { calculateAuditScore } from "../../src/features/audit/scoring"
 import {
   parseAuditAnswersParam,
@@ -31,35 +30,37 @@ const questions: AuditQuestion[] = [
   },
 ]
 
-test("calculateAuditScore converts selected option scores to a percentage", () => {
-  assert.equal(calculateAuditScore(questions, { 1: "a", 2: "d" }), 50)
-  assert.equal(calculateAuditScore(questions, { 1: "b", 2: "a" }), 75)
-})
+describe("audit scoring and payloads", () => {
+  it("calculateAuditScore converts selected option scores to a percentage", () => {
+    expect(calculateAuditScore(questions, { 1: "a", 2: "d" })).toBe(50)
+    expect(calculateAuditScore(questions, { 1: "b", 2: "a" })).toBe(75)
+  })
 
-test("calculateAuditScore ignores missing and unknown answers", () => {
-  assert.equal(calculateAuditScore(questions, { 1: "a" }), 50)
-  assert.equal(calculateAuditScore(questions, { 1: "c", 2: "d" }), 0)
-})
+  it("calculateAuditScore ignores missing and unknown answers", () => {
+    expect(calculateAuditScore(questions, { 1: "a" })).toBe(50)
+    expect(calculateAuditScore(questions, { 1: "c", 2: "d" })).toBe(0)
+  })
 
-test("audit answer payloads serialize and parse without changing values", () => {
-  const answers: AuditAnswers = { 1: "a", 2: "d" }
-  const serialized = serializeAuditAnswers(answers)
+  it("audit answer payloads serialize and parse without changing values", () => {
+    const answers: AuditAnswers = { 1: "a", 2: "d" }
+    const serialized = serializeAuditAnswers(answers)
 
-  assert.deepEqual(parseAuditAnswersParam(serialized), answers)
-})
+    expect(parseAuditAnswersParam(serialized)).toEqual(answers)
+  })
 
-test("audit answer parsing rejects malformed or unsupported payloads", () => {
-  const invalidPayloads = [
-    null,
-    "",
-    "not-json",
-    "[]",
-    JSON.stringify({ unknown: "a" }),
-    JSON.stringify({ 1: "unknown" }),
-    JSON.stringify({ 1: 1 }),
-  ]
+  it("audit answer parsing rejects malformed or unsupported payloads", () => {
+    const invalidPayloads = [
+      null,
+      "",
+      "not-json",
+      "[]",
+      JSON.stringify({ unknown: "a" }),
+      JSON.stringify({ 1: "unknown" }),
+      JSON.stringify({ 1: 1 }),
+    ]
 
-  invalidPayloads.forEach((payload) => {
-    assert.equal(parseAuditAnswersParam(payload), null)
+    invalidPayloads.forEach((payload) => {
+      expect(parseAuditAnswersParam(payload)).toBeNull()
+    })
   })
 })

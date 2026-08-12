@@ -1,5 +1,4 @@
-import assert from "node:assert/strict"
-import { test } from "node:test"
+import { describe, expect, it } from "vitest"
 import {
   DEFAULT_TUTORIAL_FILTERS,
   hasActiveTutorialFilters,
@@ -65,51 +64,53 @@ function filters(overrides: Partial<TutorialFilters>): TutorialFilters {
   return { ...DEFAULT_TUTORIAL_FILTERS, ...overrides }
 }
 
-test("normalizeSearch handles accents, case and repeated punctuation", () => {
-  assert.equal(normalizeSearch("  SÉCURITÉ... Wi-Fi  "), "securite wi-fi")
-})
+describe("tutorial search, filters, and sorting", () => {
+  it("normalizeSearch handles accents, case and repeated punctuation", () => {
+    expect(normalizeSearch("  SÉCURITÉ... Wi-Fi  ")).toBe("securite wi-fi")
+  })
 
-test("searchTutorials matches synonyms and applies active filters", () => {
-  assert.deepEqual(
-    searchTutorials(tutorials, "mdp", DEFAULT_TUTORIAL_FILTERS).map(({ id }) => id),
-    [1],
-  )
-  assert.deepEqual(
-    searchTutorials(tutorials, "arnaque", filters({ levelFilter: "Intermediaire" })).map(({ id }) => id),
-    [40],
-  )
-})
+  it("searchTutorials matches synonyms and applies active filters", () => {
+    expect(
+      searchTutorials(tutorials, "mdp", DEFAULT_TUTORIAL_FILTERS).map(({ id }) => id),
+    ).toEqual([1])
+    expect(
+      searchTutorials(tutorials, "arnaque", filters({ levelFilter: "Intermediaire" })).map(
+        ({ id }) => id,
+      ),
+    ).toEqual([40])
+  })
 
-test("tutorial filters cover category, level, status, duration and type", () => {
-  assert.equal(matchesTutorialFilters(tutorials[1], filters({ catFilter: "phishing" })), true)
-  assert.equal(matchesTutorialFilters(tutorials[1], filters({ levelFilter: "Avance" })), false)
-  assert.equal(matchesTutorialFilters(tutorials[0], filters({ statusFilter: "done" })), true)
-  assert.equal(matchesTutorialFilters(tutorials[0], filters({ durationFilter: "quick" })), true)
-  assert.equal(matchesTutorialFilters(tutorials[1], filters({ durationFilter: "medium" })), true)
-  assert.equal(matchesTutorialFilters(tutorials[2], filters({ durationFilter: "long" })), true)
-  assert.equal(matchesTutorialFilters(tutorials[3], filters({ durationFilter: "long" })), false)
-  assert.equal(matchesTutorialFilters(tutorials[0], filters({ typeFilter: "essentiel" })), true)
-  assert.equal(matchesTutorialFilters(tutorials[2], filters({ typeFilter: "technique" })), true)
-  assert.equal(hasActiveTutorialFilters(DEFAULT_TUTORIAL_FILTERS), false)
-  assert.equal(hasActiveTutorialFilters(filters({ typeFilter: "technique" })), true)
-})
+  it("tutorial filters cover category, level, status, duration and type", () => {
+    expect(matchesTutorialFilters(tutorials[1], filters({ catFilter: "phishing" }))).toBe(true)
+    expect(matchesTutorialFilters(tutorials[1], filters({ levelFilter: "Avance" }))).toBe(false)
+    expect(matchesTutorialFilters(tutorials[0], filters({ statusFilter: "done" }))).toBe(true)
+    expect(matchesTutorialFilters(tutorials[0], filters({ durationFilter: "quick" }))).toBe(true)
+    expect(matchesTutorialFilters(tutorials[1], filters({ durationFilter: "medium" }))).toBe(true)
+    expect(matchesTutorialFilters(tutorials[2], filters({ durationFilter: "long" }))).toBe(true)
+    expect(matchesTutorialFilters(tutorials[3], filters({ durationFilter: "long" }))).toBe(false)
+    expect(matchesTutorialFilters(tutorials[0], filters({ typeFilter: "essentiel" }))).toBe(true)
+    expect(matchesTutorialFilters(tutorials[2], filters({ typeFilter: "technique" }))).toBe(true)
+    expect(hasActiveTutorialFilters(DEFAULT_TUTORIAL_FILTERS)).toBe(false)
+    expect(hasActiveTutorialFilters(filters({ typeFilter: "technique" }))).toBe(true)
+  })
 
-test("parseDuration accepts supported labels and rejects ambiguous values", () => {
-  assert.equal(parseDuration("5 min"), 5)
-  assert.equal(parseDuration("15 minutes"), 15)
-  assert.equal(parseDuration(" 20 MIN "), 20)
-  assert.equal(parseDuration("0 min"), null)
-  assert.equal(parseDuration("about 10 min"), null)
-  assert.equal(parseDuration(""), null)
-})
+  it("parseDuration accepts supported labels and rejects ambiguous values", () => {
+    expect(parseDuration("5 min")).toBe(5)
+    expect(parseDuration("15 minutes")).toBe(15)
+    expect(parseDuration(" 20 MIN ")).toBe(20)
+    expect(parseDuration("0 min")).toBeNull()
+    expect(parseDuration("about 10 min")).toBeNull()
+    expect(parseDuration("")).toBeNull()
+  })
 
-test("sortTutorials covers every mode without mutating the source array", () => {
-  const originalIds = tutorials.map(({ id }) => id)
+  it("sortTutorials covers every mode without mutating the source array", () => {
+    const originalIds = tutorials.map(({ id }) => id)
 
-  assert.deepEqual(sortTutorials(tutorials, "fastest").map(({ id }) => id), [1, 40, 50, 60])
-  assert.equal(sortTutorials(tutorials, "recommended")[0].id, 1)
-  assert.equal(sortTutorials(tutorials, "popular")[0].id, 1)
-  assert.deepEqual(sortTutorials(tutorials, "level_asc").map(({ id }) => id), [1, 60, 40, 50])
-  assert.deepEqual(sortTutorials(tutorials, "newest").map(({ id }) => id), [60, 50, 40, 1])
-  assert.deepEqual(tutorials.map(({ id }) => id), originalIds)
+    expect(sortTutorials(tutorials, "fastest").map(({ id }) => id)).toEqual([1, 40, 50, 60])
+    expect(sortTutorials(tutorials, "recommended")[0].id).toBe(1)
+    expect(sortTutorials(tutorials, "popular")[0].id).toBe(1)
+    expect(sortTutorials(tutorials, "level_asc").map(({ id }) => id)).toEqual([1, 60, 40, 50])
+    expect(sortTutorials(tutorials, "newest").map(({ id }) => id)).toEqual([60, 50, 40, 1])
+    expect(tutorials.map(({ id }) => id)).toEqual(originalIds)
+  })
 })
