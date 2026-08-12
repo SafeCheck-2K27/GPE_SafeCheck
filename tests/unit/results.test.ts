@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { test } from "node:test"
+import { test, expect } from "vitest"
 import { scoreRecommendations } from "../../src/features/results/data"
 import { getResultLevel } from "../../src/features/results/logic"
 import {

@@ -1,5 +1,4 @@
-import assert from "node:assert/strict"
-import { test } from "node:test"
+import { test, expect } from "vitest"
 import { ModalStack } from "../../src/components/safecheck/layout/modal-stack"
 
 test("modal stack keeps the most recently opened modal on top", () => {
@@ -10,12 +9,9 @@ test("modal stack keeps the most recently opened modal on top", () => {
   stack.add(first, "first modal")
   stack.add(second, "second modal")
 
-  assert.equal(stack.isTop(first), false)
-  assert.equal(stack.isTop(second), true)
-  assert.deepEqual(
-    stack.entries.map(({ value }) => value),
-    ["first modal", "second modal"],
-  )
+  expect(stack.isTop(first)).toBe(false)
+  expect(stack.isTop(second)).toBe(true)
+  expect(stack.entries.map(({ value }) => value)).toEqual(["first modal", "second modal"])
 })
 
 test("modal stack restores the previous top after ordered or abrupt removal", () => {
@@ -29,11 +25,11 @@ test("modal stack restores the previous top after ordered or abrupt removal", ()
   stack.add(third, "third modal")
   stack.remove(second)
 
-  assert.equal(stack.isTop(third), true)
-  assert.equal(stack.size, 2)
+  expect(stack.isTop(third)).toBe(true)
+  expect(stack.size).toBe(2)
 
   stack.remove(third)
 
-  assert.equal(stack.isTop(first), true)
-  assert.equal(stack.size, 1)
+  expect(stack.isTop(first)).toBe(true)
+  expect(stack.size).toBe(1)
 })
