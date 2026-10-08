@@ -1,9 +1,11 @@
 "use client"
 
+import { getTutorialCardStatus, type TutorialProgressById } from "../session"
+
 import { useMemo, useState } from "react"
 import { tutoriels } from "../data/catalog"
 import type { Tutoriel } from "../data/catalog"
-import { mockTutoStatus, RECOMMENDED_IDS } from "../data"
+import { RECOMMENDED_IDS } from "../data"
 import {
   DEFAULT_TUTORIAL_FILTERS,
   hasActiveTutorialFilters,
@@ -21,8 +23,10 @@ import { TutorialLibrarySection } from "./TutorialLibrarySection"
 import { TutorialSearchResults } from "./TutorialSearchResults"
 
 export function TutorialCatalogView({
+  progressById,
   openTuto,
 }: {
+  progressById: TutorialProgressById
   openTuto: (tutorial: Tutoriel) => void
 }) {
   const [searchQuery, setSearchQuery] = useState("")
@@ -39,26 +43,26 @@ export function TutorialCatalogView({
   const inProgressTutorials = useMemo(
     () =>
       tutoriels.filter(
-        (tutorial) => mockTutoStatus[tutorial.id] === "inprogress",
+        (tutorial) => getTutorialCardStatus(tutorial, progressById) === "inprogress",
       ),
-    [],
+    [progressById],
   )
   const catalogTutorials = useMemo(
     () =>
       sortTutorials(
         tutoriels.filter((tutorial) =>
-          matchesTutorialFilters(tutorial, filters),
+          matchesTutorialFilters(tutorial, filters, progressById),
         ),
         sortBy,
       ),
-    [filters, sortBy],
+    [filters, sortBy, progressById],
   )
   const searchResults = useMemo(
     () =>
       isSearching
-        ? searchTutorials(tutoriels, searchQuery, filters)
+        ? searchTutorials(tutoriels, searchQuery, filters, progressById)
         : [],
-    [filters, isSearching, searchQuery],
+    [filters, isSearching, searchQuery, progressById],
   )
 
   const resetFilters = () => setFilters({ ...DEFAULT_TUTORIAL_FILTERS })
@@ -80,6 +84,7 @@ export function TutorialCatalogView({
 
       {isSearching && (
         <TutorialSearchResults
+          progressById={progressById}
           query={searchQuery}
           results={searchResults}
           hasActiveFilters={hasActiveFilters}
@@ -91,6 +96,7 @@ export function TutorialCatalogView({
 
       {!isSearching && !hasActiveFilters && (
         <TutorialFeaturedSections
+          progressById={progressById}
           recommendedTutorials={recommendedTutorials}
           inProgressTutorials={inProgressTutorials}
           onOpenTutorial={openTuto}
@@ -99,6 +105,7 @@ export function TutorialCatalogView({
 
       <div hidden={isSearching}>
         <TutorialLibrarySection
+          progressById={progressById}
           tutorials={catalogTutorials}
           hasActiveFilters={hasActiveFilters}
           onOpenTutorial={openTuto}

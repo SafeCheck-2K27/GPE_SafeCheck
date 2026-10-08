@@ -21,22 +21,20 @@ export default function VulnerabilitePage() {
           <div className="max-w-5xl mx-auto px-4 py-12 md:py-16">
             <ScBadge tone="warn" className="mb-4">
               <ShieldAlert className="w-3 h-3" />
-              Test pédagogique d'exposition
+              Test pédagogique d'exposition · À venir
             </ScBadge>
 
             <h1 className="text-3xl md:text-5xl font-extrabold text-[color:var(--sc-text)] mb-4 text-balance">
-              Tester ma vulnérabilité&nbsp;: comprendre votre niveau d'exposition.
+              Comprendre l'exposition aux risques numériques.
             </h1>
             <p className="text-base md:text-lg text-[color:var(--sc-text)] max-w-3xl leading-relaxed text-pretty">
-              Ce test s'appuie sur des rapports officiels, des statistiques publiques et plusieurs critères pour
-              estimer votre niveau d'exposition potentiel à différents types d'attaques numériques. Il ne s'agit pas
-              d'un diagnostic technique, mais d'un repère personnalisé&nbsp;: comprendre où vous vous situez et
-              pourquoi.
+              Le test de vulnérabilité est prévu pour une prochaine version. Cette page présente
+              son principe et des exemples pédagogiques ; elle ne calcule pas votre exposition personnelle.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <ScLinkButton variant="primary" size="lg" href="/wip?feature=test-vulnerabilite">
-                Lancer le test
+                Voir le test à venir
                 <ArrowRight className="w-4 h-4 ml-1" />
               </ScLinkButton>
               <ScLinkButton variant="secondary" size="lg" href="/audits">
@@ -49,10 +47,10 @@ export default function VulnerabilitePage() {
         {/* Comment ça marche */}
         <section className="max-w-5xl mx-auto px-4 py-10 md:py-14">
           <div className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-[color:var(--sc-text)] mb-2">Comment fonctionne ce test ?</h2>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-[color:var(--sc-text)] mb-2">Principe envisagé pour le test</h2>
             <p className="text-sm text-[color:var(--sc-text-2)] max-w-2xl mx-auto">
-              Le calcul d'exposition combine plusieurs critères, croisés avec des rapports publics et des données
-              sectorielles, pour produire une estimation lisible de votre profil de risque.
+              Le futur calcul d'exposition combinerait plusieurs critères avec des rapports publics.
+              Les critères ci-dessous illustrent le projet ; aucun calcul individuel n'est disponible actuellement.
             </p>
           </div>
 
@@ -80,9 +78,9 @@ export default function VulnerabilitePage() {
               <div>
                 <h3 className="font-bold text-[color:var(--sc-text)] mb-1">Sources & méthodologie</h3>
                 <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed">
-                  Le test s'appuie notamment sur des rapports publics&nbsp;:
+                  Les sources envisagées pour le futur test sont des rapports publics&nbsp;:
                   ANSSI (panorama de la menace), ENISA (Threat Landscape), Verizon (Data Breach Investigations Report),
-                  CERT-FR. Les estimations sont fournies à titre pédagogique pour vous aider à mieux vous protéger.
+                  CERT-FR. Les exemples présentés sont pédagogiques et ne constituent pas une estimation de votre risque.
                   Elles ne constituent pas un audit de sécurité professionnel.
                 </p>
               </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useState } from "react"
+import { Suspense, useRef, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import Footer from "@/components/safecheck/Footer"
 import Navbar from "@/components/safecheck/Navbar"
@@ -10,8 +10,9 @@ import { TutorialCatalogView } from "@/features/tutorials/components/TutorialCat
 import { TutorialLevelView } from "@/features/tutorials/components/TutorialLevelView"
 import { TutorialModal } from "@/features/tutorials/components/TutorialModal"
 import { TutorialPersonalizedView } from "@/features/tutorials/components/TutorialPersonalizedView"
-import { TutorialPrecisionModal } from "@/features/tutorials/components/TutorialPrecisionModal"
 import type { Niveau, Tutoriel } from "@/features/tutorials/data/catalog"
+import { useTutorialProgress } from "@/features/tutorials/useTutorialProgress"
+import { TutorialProgressSyncStatus } from "@/features/tutorials/components/TutorialProgressSyncStatus"
 
 export default function TutorielsPage() {
   return (
@@ -33,31 +34,28 @@ function TutorielsContent() {
       : "personalized"
 
   const [selectedTuto, setSelectedTuto] = useState<Tutoriel | null>(null)
-  const [currentStep, setCurrentStep] = useState(0)
-  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set())
+  const { progressById, updateProgress, state, canInteract, sessionKey, retryHydration, retrySaves } = useTutorialProgress()
+  const [readerSessionKey, setReaderSessionKey] = useState<string | null>(null)
+  const syncStatus = <TutorialProgressSyncStatus state={state} retryHydration={retryHydration} retrySaves={retrySaves} />
+  const catalogRef = useRef<HTMLElement>(null)
+  const readerTriggerRef = useRef<HTMLElement | null>(null)
 
-  const [precisionOpen, setPrecisionOpen] = useState(false)
-  const [precisionStepTitle, setPrecisionStepTitle] = useState<
-    string | undefined
-  >(undefined)
-
-  const openPrecision = (stepTitle?: string) => {
-    setPrecisionStepTitle(stepTitle)
-    setPrecisionOpen(true)
-  }
 
   const openTuto = (tuto: Tutoriel) => {
+    if (!updateProgress(tuto)) return
+    setReaderSessionKey(sessionKey)
+    readerTriggerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
     setSelectedTuto(tuto)
-    setCurrentStep(0)
-    setCompletedSteps(new Set())
   }
 
-  const markStep = (stepIndex: number) => {
-    setCompletedSteps((previousSteps) => {
-      const nextSteps = new Set(previousSteps)
-      if (nextSteps.has(stepIndex)) nextSteps.delete(stepIndex)
-      else nextSteps.add(stepIndex)
-      return nextSteps
+  const closeReader = () => {
+    setSelectedTuto(null)
+    // A status filter or the resume section can remove the original trigger.
+    requestAnimationFrame(() => {
+      const trigger = readerTriggerRef.current
+      if (!trigger?.isConnected || trigger.getClientRects().length === 0 || trigger.closest("[hidden]")) {
+        catalogRef.current?.focus({ preventScroll: true })
+      }
     })
   }
 
@@ -72,38 +70,30 @@ function TutorielsContent() {
     <PageShell>
       <Navbar />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-6">
-        {view === "personalized" && (
-          <TutorialPersonalizedView openTuto={openTuto} />
+      <main ref={catalogRef} tabIndex={-1} aria-label="Catalogue des tutoriels" className="flex-1 max-w-7xl mx-auto w-full px-4 py-6 focus-visible:outline-2 focus-visible:outline-[color:var(--sc-blue)]">
+        {syncStatus}
+        {canInteract && view === "personalized" && (
+          <TutorialPersonalizedView openTuto={openTuto} progressById={progressById} />
         )}
 
-        {view === "level" && niveauParam && (
-          <TutorialLevelView niveau={level} openTuto={openTuto} />
+        {canInteract && view === "level" && niveauParam && (
+          <TutorialLevelView niveau={level} openTuto={openTuto} progressById={progressById} />
         )}
 
-        {view === "all" && (
-          <TutorialCatalogView openTuto={openTuto} />
+        {canInteract && view === "all" && (
+          <TutorialCatalogView openTuto={openTuto} progressById={progressById} />
         )}
       </main>
 
       <Footer />
 
-      {selectedTuto && (
+      {canInteract && readerSessionKey === sessionKey && selectedTuto && progressById[selectedTuto.id] && (
         <TutorialModal
           tuto={selectedTuto}
-          currentStep={currentStep}
-          completedSteps={completedSteps}
-          onStepChange={setCurrentStep}
-          onMarkStep={markStep}
-          onClose={() => setSelectedTuto(null)}
-          onOpenPrecision={openPrecision}
-        />
-      )}
-
-      {precisionOpen && (
-        <TutorialPrecisionModal
-          onClose={() => setPrecisionOpen(false)}
-          stepTitle={precisionStepTitle}
+          progress={progressById[selectedTuto.id]!}
+          onProgressChange={(update) => updateProgress(selectedTuto, update)}
+          onClose={closeReader}
+          syncStatus={syncStatus}
         />
       )}
     </PageShell>

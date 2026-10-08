@@ -22,6 +22,16 @@ const STORAGE_KEY = "safecheck:lang"
 type Dict = Record<string, string>
 
 const fr: Dict = {
+  "session.title": "Vérification de la session",
+  "session.failed": "Ta session n’a pas pu être vérifiée. Réessaie pour accéder à ton compte et à tes données.",
+  "session.retry": "Réessayer la vérification",
+  "session.verify": "Vérifier ma session",
+  "session.retrying": "Vérification de la session…",
+  "claim.title": "Rattachement des audits invités",
+  "claim.failed": "Tu es connecté, mais tes audits invités n’ont pas pu être rattachés à ton compte. Réessaie pour les retrouver dans ton historique.",
+  "claim.pending": "Rattachement de tes audits invités en cours…",
+  "claim.retry": "Réessayer le rattachement",
+  "claim.retrying": "Rattachement en cours…",
   // Navbar - top level
   "nav.audits": "Audits",
   "nav.tutoriels": "Tutoriels",
@@ -57,18 +67,15 @@ const fr: Dict = {
   "login.createOne": "Créer un compte",
   "login.cancel": "Annuler",
   "login.errorEmpty": "Renseigne ton email et ton mot de passe.",
+  "login.errorCredentials": "Email ou mot de passe incorrect.",
+  "login.errorNetwork": "Connexion au serveur impossible. Réessaie.",
   "login.errorGeneric": "Connexion impossible. Réessaie.",
-
-  // Auth providers (mock OAuth)
-  "auth.googleConnect": "Continuer avec Google",
-  "auth.googleSignup": "S'inscrire avec Google",
-  "auth.or": "ou",
 
   // Sign-up modal (used when a logged-out user tries to open a tutorial,
   // save progress, etc.)
   "signup.title": "Créer un compte",
-  "signup.subtitle": "Sauvegarde ton profil et tes tutoriels en quelques secondes.",
-  "signup.savePerk": "Avec un compte, tes tutoriels recommandés et ta progression sont sauvegardés sur tous tes appareils.",
+  "signup.subtitle": "Crée un compte pour rattacher tes audits à ton identité.",
+  "signup.savePerk": "Ton audit invité sera rattaché à ton compte après inscription.",
   "signup.pseudo": "Pseudo",
   "signup.pseudoPh": "TheAliasMan",
   "signup.passwordPh": "8 caractères minimum",
@@ -76,9 +83,10 @@ const fr: Dict = {
   "signup.submitting": "Création…",
   "signup.haveAccount": "Déjà un compte ?",
   "signup.signInInstead": "Se connecter",
-  "signup.errorMissing": "Renseigne ton email et un mot de passe d'au moins 8 caractères.",
+  "signup.errorMissing": "Renseigne un pseudo, ton email et un mot de passe d'au moins 8 caractères.",
+  "signup.errorNetwork": "Connexion au serveur impossible. Réessaie.",
   "signup.errorGeneric": "Création impossible. Réessaie.",
-  "signup.reasonTutorial": "Crée un compte pour ouvrir ce tutoriel et le sauvegarder dans ton parcours.",
+  "signup.reasonTutorial": "Crée un compte pour ouvrir ce tutoriel et rattacher ton audit.",
 
   // Resultats page
   "res.yourLevel": "Ton niveau actuel :",
@@ -86,7 +94,7 @@ const fr: Dict = {
   "res.badge": "Badge {n} obtenu",
   "res.strong": "Points forts",
   "res.weak": "Points à améliorer",
-  "res.priorityRecos": "Tes recommandations prioritaires",
+  "res.priorityRecos": "Pistes d’action selon ton score",
   "res.priority": "Priorité {n} : {title}",
   "res.urgency": "Urgence : {value}",
   "res.impact": "Impact : {value}",
@@ -108,13 +116,13 @@ const fr: Dict = {
   "level.scarabee": "Petit Scarabée",
   "level.novice": "Novice Connecté",
   "level.sentinelle.desc":
-    "Impressionnant ! Tu appliques déjà la plupart des bonnes pratiques de cybersécurité. Quelques ajustements supplémentaires te permettront d'atteindre un niveau expert.",
+    "Ton score se situe entre 80 et 100/100 dans la grille de cet audit.",
   "level.gardien.desc":
-    "Ta sécurité numérique est correcte, mais plusieurs habitudes importantes peuvent être améliorées. Les priorités sont la double authentification, la gestion des mots de passe et les sauvegardes.",
+    "Ton score se situe entre 60 et 79/100 dans la grille de cet audit.",
   "level.scarabee.desc":
-    "Il te manque beaucoup d'acquis pour te promener sans risque sur internet. À la première arnaque, tu risques de tomber dans un piège et de ne plus pouvoir en ressortir. Mais pas de panique, on est là pour t'aider.",
+    "Ton score se situe entre 35 et 59/100 dans la grille de cet audit.",
   "level.novice.desc":
-    "Tu fais tes premiers pas dans le monde numérique. C'est parfaitement normal ! Commence par les essentiels de SafeCheck pour construire des fondations solides étape par étape.",
+    "Ton score se situe entre 0 et 34/100 dans la grille de cet audit.",
 
   // Strong points
   "res.strong.high.1": "Bonne compréhension des bases de la cybersécurité",
@@ -133,6 +141,16 @@ const fr: Dict = {
 }
 
 const en: Dict = {
+  "session.title": "Session verification",
+  "session.failed": "Your session could not be verified. Retry to access your account and your data.",
+  "session.retry": "Retry session verification",
+  "session.verify": "Verify my session",
+  "session.retrying": "Verifying your session…",
+  "claim.title": "Guest audit recovery",
+  "claim.failed": "You are signed in, but your guest audits could not be added to your account. Retry to find them in your history.",
+  "claim.pending": "Adding your guest audits to your account…",
+  "claim.retry": "Retry adding guest audits",
+  "claim.retrying": "Adding audits…",
   // Navbar - top level
   "nav.audits": "Audits",
   "nav.tutoriels": "Tutorials",
@@ -167,17 +185,14 @@ const en: Dict = {
   "login.createOne": "Create one",
   "login.cancel": "Cancel",
   "login.errorEmpty": "Please enter your email and password.",
+  "login.errorCredentials": "Incorrect email or password.",
+  "login.errorNetwork": "Cannot reach the server. Please try again.",
   "login.errorGeneric": "Sign-in failed. Please try again.",
-
-  // Auth providers (mock OAuth)
-  "auth.googleConnect": "Continue with Google",
-  "auth.googleSignup": "Sign up with Google",
-  "auth.or": "or",
 
   // Sign-up modal
   "signup.title": "Create an account",
-  "signup.subtitle": "Save your profile and tutorials in seconds.",
-  "signup.savePerk": "With an account, your recommended tutorials and progress are saved across every device.",
+  "signup.subtitle": "Create an account to link your audits to your identity.",
+  "signup.savePerk": "Your guest audit will be linked to your account after sign-up.",
   "signup.pseudo": "Username",
   "signup.pseudoPh": "TheAliasMan",
   "signup.passwordPh": "8 characters minimum",
@@ -185,9 +200,10 @@ const en: Dict = {
   "signup.submitting": "Creating…",
   "signup.haveAccount": "Already have an account?",
   "signup.signInInstead": "Sign in",
-  "signup.errorMissing": "Please enter your email and a password of at least 8 characters.",
+  "signup.errorMissing": "Enter a username, email and password of at least 8 characters.",
+  "signup.errorNetwork": "Cannot reach the server. Please try again.",
   "signup.errorGeneric": "Sign-up failed. Please try again.",
-  "signup.reasonTutorial": "Create an account to open this tutorial and save it to your learning path.",
+  "signup.reasonTutorial": "Create an account to open this tutorial and link your audit.",
 
   // Resultats page
   "res.yourLevel": "Your current level:",
@@ -195,7 +211,7 @@ const en: Dict = {
   "res.badge": "Badge {n} earned",
   "res.strong": "Strengths",
   "res.weak": "Areas to improve",
-  "res.priorityRecos": "Your top recommendations",
+  "res.priorityRecos": "Suggested actions based on your score",
   "res.priority": "Priority {n}: {title}",
   "res.urgency": "Urgency: {value}",
   "res.impact": "Impact: {value}",
@@ -215,13 +231,13 @@ const en: Dict = {
   "level.scarabee": "Little Beetle",
   "level.novice": "Connected Novice",
   "level.sentinelle.desc":
-    "Impressive! You already follow most cybersecurity best practices. A few extra adjustments will get you to expert level.",
+    "Your score falls between 80 and 100/100 on this audit's scale.",
   "level.gardien.desc":
-    "Your digital security is decent, but several important habits could be improved. Focus on two-factor authentication, password management and backups.",
+    "Your score falls between 60 and 79/100 on this audit's scale.",
   "level.scarabee.desc":
-    "You're missing key fundamentals to safely roam the web. The first scam could trap you for good. Don't worry - we're here to help.",
+    "Your score falls between 35 and 59/100 on this audit's scale.",
   "level.novice.desc":
-    "You're taking your first steps in the digital world - that's perfectly fine! Start with SafeCheck's essentials to build solid foundations step by step.",
+    "Your score falls between 0 and 34/100 on this audit's scale.",
 
   "res.strong.high.1": "Solid understanding of cybersecurity basics",
   "res.strong.high.2": "Regular internet use",

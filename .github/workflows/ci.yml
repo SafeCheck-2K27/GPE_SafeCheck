@@ -8,7 +8,7 @@ on:
 
 jobs:
   ci:
-    name: Lint · Typecheck · Build
+    name: Lint · Typecheck · Tests · Build
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -19,11 +19,69 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Start disposable PostgreSQL 17
+        shell: bash
+        run: |
+          set -euo pipefail
+          export POSTGRES_PASSWORD="$(openssl rand -hex 32)"
+          APP_DB_PASSWORD="$(openssl rand -hex 32)"
+          COOKIE_SECRET="$(openssl rand -hex 32)"
+          BETTER_AUTH_SECRET="$(openssl rand -hex 32)"
+          for value in "$POSTGRES_PASSWORD" "$APP_DB_PASSWORD" "$COOKIE_SECRET" "$BETTER_AUTH_SECRET"; do
+            echo "::add-mask::$value"
+          done
+          DATABASE_URL="postgresql://safecheck_app:$APP_DB_PASSWORD@127.0.0.1:5432/safecheck_ci?schema=public"
+          MIGRATION_DATABASE_URL="postgresql://safecheck_admin:$POSTGRES_PASSWORD@127.0.0.1:5432/safecheck_ci?schema=public"
+          echo "::add-mask::$DATABASE_URL"
+          echo "::add-mask::$MIGRATION_DATABASE_URL"
+          docker run --detach --name safecheck-ci-db \
+            --publish 127.0.0.1:5432:5432 \
+            --env POSTGRES_USER=safecheck_admin --env POSTGRES_DB=safecheck_ci \
+            --env POSTGRES_PASSWORD postgres:17
+          ready=false
+          for attempt in {1..30}; do
+            if docker exec safecheck-ci-db pg_isready -h 127.0.0.1 -U safecheck_admin -d safecheck_ci > /dev/null 2>&1; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" != true ]; then echo "PostgreSQL did not become ready"; exit 1; fi
+          docker exec -i safecheck-ci-db psql -X -v ON_ERROR_STOP=1 -U safecheck_admin -d safecheck_ci <<SQL
+          CREATE ROLE safecheck_app LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD '$APP_DB_PASSWORD';
+          REVOKE ALL ON DATABASE safecheck_ci FROM PUBLIC;
+          GRANT CONNECT ON DATABASE safecheck_ci TO safecheck_app;
+          REVOKE ALL ON SCHEMA public FROM PUBLIC;
+          GRANT USAGE ON SCHEMA public TO safecheck_app;
+          ALTER DEFAULT PRIVILEGES FOR ROLE safecheck_admin IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO safecheck_app;
+          ALTER DEFAULT PRIVILEGES FOR ROLE safecheck_admin IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO safecheck_app;
+          SQL
+          {
+            echo "DATABASE_URL=$DATABASE_URL"
+            echo "MIGRATION_DATABASE_URL=$MIGRATION_DATABASE_URL"
+            echo "COOKIE_SECRET=$COOKIE_SECRET"
+            echo "BETTER_AUTH_SECRET=$BETTER_AUTH_SECRET"
+            echo "BETTER_AUTH_URL=http://localhost:3001"
+            echo "NEXT_PUBLIC_API_URL=http://localhost:3001"
+            echo "WEB_ORIGIN=http://localhost:3000"
+          } >> "$GITHUB_ENV"
+
+      - name: Deploy migrations to the empty database
+        run: npx prisma migrate deploy
+
+      - name: Grant existing application tables
+        run: |
+          docker exec -i safecheck-ci-db psql -X -v ON_ERROR_STOP=1 -U safecheck_admin -d safecheck_ci <<'SQL'
+          GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO safecheck_app;
+          GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO safecheck_app;
+          REVOKE ALL ON TABLE public._prisma_migrations FROM safecheck_app;
+          SQL
 
       - name: Lint
         run: npm run lint
@@ -31,5 +89,12 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Unit and integration tests (no skips)
+        run: npm run test:ci
+
       - name: Build
         run: npm run build
+
+      - name: Remove disposable PostgreSQL
+        if: always()
+        run: docker rm --force safecheck-ci-db > /dev/null 2>&1 || true

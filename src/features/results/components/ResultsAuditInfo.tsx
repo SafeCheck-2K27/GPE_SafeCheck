@@ -1,6 +1,6 @@
 import { ArrowRight, Check, Info } from "lucide-react"
 import { ScButton } from "@/components/safecheck/primitives"
-import { auditQualificationFacts } from "../mock-data"
+import { auditQualificationFacts } from "../data"
 
 const auditInfoCardClassName =
   "rounded-2xl p-5 border bg-[rgb(var(--sc-blue-rgb)/0.04)] border-[rgb(var(--sc-blue-rgb)/0.18)] shadow-[var(--sc-shadow-sm)]"

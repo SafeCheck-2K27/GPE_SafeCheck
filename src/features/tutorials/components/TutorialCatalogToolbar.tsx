@@ -104,7 +104,7 @@ export function TutorialCatalogToolbar({
 
         <div className="flex flex-wrap items-center gap-2 mb-4">
           <ScChip onClick={() => router.push("/tutoriels")}>
-            <Sparkles className="w-3.5 h-3.5" /> Mes tutoriels
+            <Sparkles className="w-3.5 h-3.5" /> Sélection pour débuter
           </ScChip>
           <ScChip active>
             <BookOpen className="w-3.5 h-3.5" /> Tous

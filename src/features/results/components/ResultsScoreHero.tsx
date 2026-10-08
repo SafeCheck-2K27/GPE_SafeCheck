@@ -1,4 +1,3 @@
-import { Star } from "lucide-react"
 import type {
   ResultLevelConfig,
   ResultRiskStyle,
@@ -13,9 +12,6 @@ const scoreCircleClassName =
 
 const riskBadgeBaseClassName =
   "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border"
-
-const resultBadgeClassName =
-  "inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-[color:var(--sc-surface-2)] border border-[color:var(--sc-border)] text-[color:var(--sc-text)]"
 
 export function ResultsScoreHero({
   score,
@@ -55,13 +51,13 @@ export function ResultsScoreHero({
             style={{ background: riskStyle.dot }}
             aria-hidden
           />
-          Risque {riskLabel}
+          Risque estimé : {riskLabel}
         </span>
       </div>
 
       <div className="flex-1 text-center md:text-left">
         <p className="text-xs font-semibold uppercase tracking-widest text-[color:var(--sc-blue)] mb-1">
-          Ton niveau actuel
+          Niveau selon ton score
         </p>
         <h1 className="text-2xl md:text-3xl font-extrabold text-[color:var(--sc-text)] mb-2 font-display text-balance">
           {t(level.labelKey)}
@@ -70,18 +66,6 @@ export function ResultsScoreHero({
           {t(level.descKey)}
         </p>
 
-        <div className="flex items-center gap-2 mt-3 flex-wrap justify-center md:justify-start">
-          <span className={resultBadgeClassName}>
-            <Star className="w-3 h-3 text-[color:var(--sc-warn)]" />
-            Badge 1 obtenu
-          </span>
-          {level.hasSecondBadge && (
-            <span className={resultBadgeClassName}>
-              <Star className="w-3 h-3 text-[color:var(--sc-warn)]" />
-              Badge 2 obtenu
-            </span>
-          )}
-        </div>
       </div>
     </div>
   )

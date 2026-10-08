@@ -103,7 +103,7 @@ export function TutorialDetailSidebar({
                 key={tag}
                 className="text-[10px] uppercase tracking-wider font-semibold px-2 py-1 rounded bg-[color:var(--sc-surface-2)] text-[color:var(--sc-text-muted)] border border-[color:var(--sc-border)]"
               >
-                {tag}
+                {tag === "populaire" ? "Mis en avant" : tag}
               </span>
             ))}
           </div>

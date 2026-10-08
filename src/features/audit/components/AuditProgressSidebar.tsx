@@ -5,6 +5,7 @@ export function AuditProgressSidebar({
   questions,
   currentQuestionIndex,
   answers,
+  busy,
   progress,
   open,
   onClose,
@@ -13,6 +14,7 @@ export function AuditProgressSidebar({
   questions: AuditQuestion[]
   currentQuestionIndex: number
   answers: AuditAnswers
+  busy: boolean
   progress: number
   open: boolean
   onClose: () => void
@@ -59,6 +61,7 @@ export function AuditProgressSidebar({
               <button
                 key={question.id}
                 onClick={() => onQuestionSelect(index)}
+                disabled={busy}
                 className={`group relative w-full flex items-start gap-3 text-left px-3 py-2.5 rounded-lg transition-all duration-200 cursor-pointer ${isActive ? "bg-[color:var(--sc-bg-soft)] border border-[color:var(--sc-blue)]/30 shadow-[var(--sc-shadow-blue-sm)]" : "border border-transparent hover:bg-[color:var(--sc-bg-soft)]/60 hover:border-[color:var(--sc-border)]"}`}
                 aria-current={isActive ? "step" : undefined}
               >

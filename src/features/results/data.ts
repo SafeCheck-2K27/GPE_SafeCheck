@@ -117,11 +117,11 @@ export const scoreRecommendationCopy: Record<
   phishing: {
     fr: {
       title: "Apprendre à identifier les emails de phishing",
-      desc: "Le phishing représente 90% des cyberattaques. Apprends à vérifier l'adresse de l'expéditeur, à repérer les fautes d'orthographe et à ne jamais cliquer sur les liens suspects.",
+      desc: "Apprends à repérer les tentatives de phishing : vérifie l'adresse de l'expéditeur et la destination des liens, et méfie-toi des demandes urgentes ou inhabituelles.",
     },
     en: {
       title: "Learn to spot phishing emails",
-      desc: "Phishing accounts for 90% of cyberattacks. Check the sender address, watch for typos, and never click suspicious links.",
+      desc: "Learn to spot phishing attempts: check the sender address and link destination, and be wary of urgent or unusual requests.",
     },
   },
 }
@@ -172,3 +172,10 @@ export const scoreRecommendationImpactTranslationKeys: Record<ScoreRecommendatio
   Moyen: "value.moyen",
   Faible: "value.faible",
 }
+
+export const auditQualificationFacts = [
+  "L'audit de qualification sert à t'orienter rapidement.",
+  "Son score est calculé à partir de tes réponses aux 10 questions.",
+  "Les pistes d'action sont sélectionnées selon la tranche de score global.",
+  "Ce questionnaire ne vérifie pas la configuration de tes appareils ou de tes comptes et ne remplace pas un audit complet.",
+] as const

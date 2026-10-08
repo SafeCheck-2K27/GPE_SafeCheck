@@ -86,7 +86,7 @@ export function TutorialCatalogFilters({
           >
             <option value="recommended">Recommandes d&apos;abord</option>
             <option value="fastest">Les plus rapides</option>
-            <option value="popular">Les plus populaires</option>
+            <option value="popular">Sélection éditoriale</option>
             <option value="level_asc">Niveau croissant</option>
             <option value="newest">Derniers ajoutes</option>
           </select>
@@ -216,7 +216,7 @@ export function TutorialCatalogFilters({
                         : type === "recommande"
                           ? "Recommande"
                           : type === "populaire"
-                            ? "Populaire"
+                            ? "Mis en avant"
                             : "Technique"}
                   </ScChip>
                 ))}

@@ -46,8 +46,6 @@ export interface ResultRiskStyle {
 
 type ResultLevelId = "novice" | "scarabee" | "gardien" | "sentinelle"
 
-type ResultStrengthProfile = "low" | "high"
-
 export interface ResultLevelConfig {
   readonly id: ResultLevelId
   readonly min: number | null
@@ -59,23 +57,6 @@ export interface ResultLevelConfig {
   readonly riskStyle: ResultRiskStyle
   readonly summary: string
   readonly scoreRecommendationIds: readonly ScoreRecommendationId[]
-  readonly metrics: {
-    readonly gainPoints: string
-    readonly gainActions: number
-    readonly gainTime: string
-    readonly gainAfterTutorials: string
-  }
-  readonly strengthProfile: ResultStrengthProfile
-  readonly hasSecondBadge: boolean
-}
-
-export interface ResultMetrics {
-  gainPoints: string
-  gainActions: number
-  gainTime: string
-  averageScore: number
-  similarProfilePercentage: number
-  gainAfterTutorials: string
 }
 
 export type ScoreRecommendationsByCategory = Partial<

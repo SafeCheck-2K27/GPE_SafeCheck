@@ -89,11 +89,7 @@
   --sc-ink-rgb: 15 23 42;
   --sc-white-rgb: 255 255 255;
 
-  /* Third-party and illustration colors are intentionally stable */
-  --sc-google-blue: #4285F4;
-  --sc-google-red: #EA4335;
-  --sc-google-yellow: #FBBC05;
-  --sc-google-green: #34A853;
+  /* Illustration colors are intentionally stable */
   --sc-illustration-ink: #000000;
   --sc-illustration-skin: #FDE3CD;
   --sc-illustration-yellow: #FACC15;

@@ -26,7 +26,7 @@ export function ResultsSummary({
           <BookOpen className="w-3.5 h-3.5" />
         </span>
         <h2 className="font-bold text-sm text-[color:var(--sc-text)]">
-          Résumé de ton diagnostic rapide
+          Lecture de ton score
         </h2>
       </div>
       <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed">
@@ -42,7 +42,7 @@ export function ResultsSummary({
             audit de qualification rapide
           </strong>
           {
-            " (10 questions). Il permet d'identifier tes priorités immédiates, mais ne remplace pas un audit complet. Pour un diagnostic plus précis, tu pourras lancer un audit standard ou complet."
+            " (10 questions), calculé à partir de tes réponses. Le score global ne permet pas d'identifier à lui seul tes points forts ou les protections manquantes. Il ne remplace pas un audit complet."
           }
         </span>
       </div>

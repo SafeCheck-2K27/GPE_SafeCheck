@@ -8,7 +8,6 @@ import { AccueilHero } from "@/features/home/components/AccueilHero"
 import { AccueilJourney } from "@/features/home/components/AccueilJourney"
 import { AccueilDiscovery } from "@/features/home/components/AccueilDiscovery"
 import { AccueilAccountBanner } from "@/features/home/components/AccueilAccountBanner"
-import { AccueilTestimonials } from "@/features/home/components/AccueilTestimonials"
 import { PageShell } from "@/components/safecheck/layout/PageShell"
 
 export default function AccueilPage() {
@@ -37,13 +36,12 @@ export default function AccueilPage() {
         {isHydrated && (
           <AccueilAccountBanner
             isLoggedIn={isLoggedIn}
-            firstName={user?.prenom}
+            firstName={user?.pseudo}
             onDashboard={() => router.push("/compte")}
             onProfile={() => router.push("/compte")}
             onSignup={() => router.push("/compte/creer")}
           />
         )}
-        <AccueilTestimonials />
       </main>
 
       <Footer />

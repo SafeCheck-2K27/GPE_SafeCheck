@@ -9,8 +9,7 @@ export function PersonalizationHero() {
             className="w-1.5 h-1.5 rounded-full shrink-0 bg-[color:var(--sc-success)]"
             aria-hidden
           />
-          Votre score est déjà calculé. Cette étape sert seulement à affiner
-          votre parcours.
+          Votre audit est terminé. Cette étape facultative précède vos résultats.
         </div>
 
         <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-[color:var(--sc-text-on-strong)] bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue),var(--sc-indigo))] shadow-[var(--sc-shadow-blue)]">
@@ -19,11 +18,12 @@ export function PersonalizationHero() {
 
         <div>
           <h1 className="font-display text-2xl md:text-3xl font-extrabold text-[color:var(--sc-text)] text-balance leading-tight">
-            Personnalisez vos résultats
+            Aperçu du questionnaire facultatif
           </h1>
           <p className="mt-2 text-sm md:text-base text-[color:var(--sc-text-2)] leading-relaxed text-pretty max-w-lg mx-auto">
-            Ces questions sont optionnelles. Elles nous aident à mieux adapter
-            les ressources, tutoriels et recommandations à vos objectifs.
+            Vous pouvez essayer ces questions à titre de démonstration. Vos réponses
+            restent temporaires dans cette page : elles ne sont ni enregistrées ni
+            transmises, et ne modifient pas votre score ou vos recommandations.
           </p>
         </div>
 

@@ -1,4 +1,4 @@
-import { BookOpen, Cog, Heart, Sparkles, Target } from "lucide-react"
+import { BookOpen, Cog, Heart, ShieldCheck, Sparkles, Target } from "lucide-react"
 import { ScBadge } from "@/components/safecheck/primitives"
 
 export function EssentialsHero() {
@@ -11,11 +11,10 @@ export function EssentialsHero() {
       <div className="relative max-w-6xl mx-auto px-4 py-14 md:py-20 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 items-center">
         <div>
           <ScBadge tone="info" className="mb-4">
-            <Sparkles className="w-3 h-3" /> Loi du 80/20
+            <Sparkles className="w-3 h-3" /> Les bases utiles
           </ScBadge>
           <h1 className="font-display text-3xl md:text-5xl font-bold text-[color:var(--sc-text)] mb-4 text-balance leading-[1.08]">
-            Les essentiels&nbsp;: 20% des efforts,{" "}
-            <span className="sc-gradient-text">80% de la sécurité</span>.
+            <span className="sc-gradient-text">Les essentiels pour renforcer votre sécurité.</span>
           </h1>
           <p className="text-base text-[color:var(--sc-text-2)] leading-relaxed max-w-2xl text-pretty">
             Cette section regroupe les actions, guides, réflexes et paramètres
@@ -48,10 +47,10 @@ export function EssentialsHero() {
             <div className="w-[154px] h-[154px] rounded-full bg-[color:var(--sc-surface)] flex items-center justify-center border border-[color:var(--sc-border)] shadow-inner">
               <div className="text-center">
                 <div className="font-display text-5xl font-bold sc-gradient-text leading-none">
-                  80%
+                  <ShieldCheck className="w-10 h-10 mx-auto text-[color:var(--sc-blue)]" />
                 </div>
                 <div className="text-[11px] text-[color:var(--sc-text-muted)] mt-1.5 px-3 leading-tight">
-                  de la sécurité atteinte
+                  Des repères pour agir
                 </div>
               </div>
             </div>
