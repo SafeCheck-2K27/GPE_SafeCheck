@@ -1,5 +1,10 @@
 # Audit des dépendances - PATCH 6.7
 
+> **HISTORICAL SNAPSHOT — audit du checkpoint PATCH 6.7.**
+> Les versions, alertes et résultats ci-dessous concernent la date de ce rapport.
+> Pour l’état actuel du dépôt, lire le [README](../../README.md) et
+> l’[architecture](../frontend-architecture.md) ; voir l’[index historique](../qa/README.md).
+
 Date de l'analyse : 21 juillet 2026
 
 ## Périmètre et méthode

@@ -6,28 +6,24 @@ import { Eye, EyeOff, BookmarkPlus, Check } from "lucide-react"
 import {
   ScButton,
   SafeCheckMark,
-  GoogleAuthButton,
-  AuthDivider,
 } from "@/components/safecheck/primitives"
 import { useAuth } from "@/components/safecheck/AuthProvider"
+import {
+  getSignupErrorKey,
+  hasValidSignupCredentials,
+  hasValidSignupProfile,
+} from "@/components/safecheck/auth-form"
 import { useI18n } from "@/components/safecheck/I18nProvider"
 import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
+import { getAuthDestination } from "./auth-navigation"
+import { getAuthFormRecovery, submitAuthForm, type AuthFormRecovery } from "./auth-form-recovery"
 
 /**
  * SignupModal - frictionless account creation overlay used whenever a logged
  * out user tries to perform an action that needs a saved profile (e.g. opening
  * a tutorial from the audit results page).
  *
- * UX:
- *   1. Mock "Sign up with Google" button at the top (one-click path).
- *   2. "ou" / "or" divider.
- *   3. Compact email + password + pseudo form (single step - we keep the long
- *      multi-step flow on /compte/creer for users who want to fill everything).
- *   4. After signup, optionally navigates to `pendingHref` (e.g. the tutorial
- *      the user was trying to open) so the flow feels seamless.
- *
- * The component is fully self-contained: it owns its own `useState`, traps
- * Escape to close, and locks the page scroll while open.
+ * After signup, optionally navigates to `pendingHref`.
  */
 type SignupModalProps = {
   open: boolean
@@ -66,54 +62,44 @@ function SignupModalContent({
   const [showPw, setShowPw] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
   const [submitting, setSubmitting] = React.useState(false)
+  const submittingRef = React.useRef(false)
+  const recoveryRef = React.useRef<AuthFormRecovery | null>(null)
+  const [recoveringSession, setRecoveringSession] = React.useState(false)
+  const busy = submitting || auth.authChanging
+  const handleClose = () => {
+    if (!submittingRef.current && !auth.authChanging) onClose()
+  }
 
   const finishAndRoute = () => {
+    const destination = getAuthDestination(pendingHref, "signup")
     onClose()
-    if (pendingHref) {
-      router.push(pendingHref)
-    } else {
-      router.push("/compte")
-    }
+    router.push(destination)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (submittingRef.current || auth.authChanging) return
     setError(null)
-    if (!email.trim() || password.length < 8) {
+    if (!recoveryRef.current && (!hasValidSignupCredentials(email, password) || !hasValidSignupProfile(pseudo))) {
       setError(t("signup.errorMissing"))
       return
     }
+    submittingRef.current = true
     setSubmitting(true)
     try {
-      await auth.signup({
+      await submitAuthForm(() => auth.signup({
         email: email.trim(),
         password,
-        pseudo: pseudo.trim() || email.split("@")[0] || "Utilisateur",
-      })
+        pseudo: pseudo.trim(),
+      }), recoveryRef.current)
+      recoveryRef.current = null
       finishAndRoute()
-    } catch {
-      setError(t("signup.errorGeneric"))
+    } catch (failure) {
+      recoveryRef.current = getAuthFormRecovery(failure, recoveryRef.current)
+      setRecoveringSession(!!recoveryRef.current)
+      setError(t(recoveryRef.current ? "session.failed" : getSignupErrorKey(failure)))
     } finally {
-      setSubmitting(false)
-    }
-  }
-
-  // Mock Google sign-up: same shortcut as the login modal but creates an
-  // account record so the rest of the app sees a fresh user.
-  const handleGoogle = async () => {
-    if (submitting) return
-    setError(null)
-    setSubmitting(true)
-    try {
-      await auth.signup({
-        email: "demo.google@safecheck.app",
-        password: "google-mock",
-        pseudo: "Demo Google",
-      })
-      finishAndRoute()
-    } catch {
-      setError(t("signup.errorGeneric"))
-    } finally {
+      submittingRef.current = false
       setSubmitting(false)
     }
   }
@@ -121,14 +107,17 @@ function SignupModalContent({
   return (
     <AccessibleModal
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
+      closeOnBackdrop={!busy}
+      closeOnEscape={!busy}
       zIndex={70}
       aria-labelledby="signup-modal-title"
     >
       <form
         onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgb(var(--sc-ink-rgb)/0.30)]"
+        aria-busy={busy}
+        className="w-full max-w-sm max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgb(var(--sc-ink-rgb)/0.30)]"
       >
         <div className="flex items-center gap-2 mb-1">
           <SafeCheckMark />
@@ -152,13 +141,6 @@ function SignupModalContent({
           <span>{t("signup.savePerk")}</span>
         </div>
 
-        <GoogleAuthButton
-          label={t("auth.googleSignup")}
-          onClick={handleGoogle}
-          disabled={submitting}
-        />
-        <AuthDivider label={t("auth.or")} />
-
         <div className="space-y-3.5">
           <div>
             <label
@@ -169,6 +151,7 @@ function SignupModalContent({
             </label>
             <input
               id="signup-modal-pseudo"
+              disabled={recoveringSession}
               type="text"
               autoComplete="nickname"
               value={pseudo}
@@ -186,6 +169,7 @@ function SignupModalContent({
             </label>
             <input
               id="signup-modal-email"
+              disabled={recoveringSession}
               type="email"
               autoComplete="email"
               value={email}
@@ -204,6 +188,7 @@ function SignupModalContent({
             <div className="relative">
               <input
                 id="signup-modal-password"
+                disabled={recoveringSession}
                 type={showPw ? "text" : "password"}
                 autoComplete="new-password"
                 value={password}
@@ -237,15 +222,18 @@ function SignupModalContent({
             variant="primary"
             size="md"
             className="w-full"
-            disabled={submitting}
+            disabled={busy}
           >
             <Check className="w-3.5 h-3.5" />
-            {submitting ? t("signup.submitting") : t("signup.submit")}
+            {recoveringSession ? t(busy ? "session.retrying" : "session.verify") : submitting ? t("signup.submitting") : t("signup.submit")}
           </ScButton>
           {onSwitchToLogin && (
             <button
               type="button"
-              onClick={onSwitchToLogin}
+              disabled={busy || recoveringSession}
+              onClick={() => {
+                if (!submittingRef.current && !auth.authChanging && !recoveryRef.current) onSwitchToLogin()
+              }}
               className="text-xs text-center text-[color:var(--sc-text-muted)] hover:text-[color:var(--sc-blue)] transition-colors mt-1 cursor-pointer"
             >
               {t("signup.haveAccount")}{" "}
@@ -256,7 +244,8 @@ function SignupModalContent({
           )}
           <button
             type="button"
-            onClick={onClose}
+            disabled={busy}
+            onClick={handleClose}
             className="text-xs text-center text-[color:var(--sc-text-muted)] hover:text-[color:var(--sc-text)] transition-colors cursor-pointer"
           >
             {t("login.cancel")}

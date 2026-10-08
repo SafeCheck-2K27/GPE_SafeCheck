@@ -15,6 +15,7 @@ import {
 } from "@/components/safecheck/primitives"
 import { getLexiconDomain } from "../categories"
 import { NIVEAU_TONE, getTerm, type LexiqueTerm } from "../data"
+import { resolveLexiconTutorial } from "../tutorials"
 
 export function LexiconTermDetailModal({
   term,
@@ -137,33 +138,37 @@ export function LexiconTermDetailModal({
               </p>
             ) : (
               <div className="flex flex-col gap-2.5">
-                {term.tutoriels.map((tutorial) => (
-                  <div
-                    key={tutorial.id}
-                    className="rounded-xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] p-3.5 flex items-start gap-3 hover:border-[color:var(--sc-blue)]/45 transition-colors"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-semibold text-[color:var(--sc-text)] leading-tight">
-                        {tutorial.title}
-                      </h4>
-                      <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 mt-1.5">
-                        <ScBadge tone={NIVEAU_TONE[tutorial.difficulty]}>
-                          {tutorial.difficulty}
-                        </ScBadge>
-                        <span className="inline-flex items-center gap-1 text-xs text-[color:var(--sc-text-muted)]">
-                          <Clock className="w-3 h-3" /> {tutorial.duration}
-                        </span>
-                      </div>
-                    </div>
-                    <ScLinkButton
-                      variant="ghost"
-                      size="sm"
-                      href={`/tutoriels/${tutorial.id}`}
+                {term.tutoriels.map((reference) => {
+                  const tutorial = resolveLexiconTutorial(reference)
+                  if (!tutorial) return null
+                  return (
+                    <div
+                      key={tutorial.id}
+                      className="rounded-xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] p-3.5 flex items-start gap-3 hover:border-[color:var(--sc-blue)]/45 transition-colors"
                     >
-                      Voir <ArrowRight className="w-3 h-3" />
-                    </ScLinkButton>
-                  </div>
-                ))}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-semibold text-[color:var(--sc-text)] leading-tight">
+                          {tutorial.title}
+                        </h4>
+                        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 mt-1.5">
+                          <ScBadge tone={NIVEAU_TONE[tutorial.difficulty]}>
+                            {tutorial.difficulty}
+                          </ScBadge>
+                          <span className="inline-flex items-center gap-1 text-xs text-[color:var(--sc-text-muted)]">
+                            <Clock className="w-3 h-3" /> {tutorial.duration}
+                          </span>
+                        </div>
+                      </div>
+                      <ScLinkButton
+                        variant="ghost"
+                        size="sm"
+                        href={`/tutoriels/${tutorial.id}`}
+                      >
+                        Voir <ArrowRight className="w-3 h-3" />
+                      </ScLinkButton>
+                    </div>
+                  )
+                })}
               </div>
             )}
           </div>

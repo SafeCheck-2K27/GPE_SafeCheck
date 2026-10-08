@@ -2,7 +2,6 @@ import type {
   Habit,
   HabitTag,
   RecommendationIconKey,
-  RecommendationStatus,
   TechnicalCategory,
   TechnicalRecommendation,
 } from "./types"
@@ -14,10 +13,10 @@ export const HABITUDES: Habit[] = [
     title: "Ne pas brancher une clé USB inconnue",
     pitch: "Une clé USB trouvée par hasard peut contenir un malware déclenché à l'insertion.",
     detail:
-      "Une attaque dite « rubber ducky » suffit à compromettre un poste en quelques secondes. Si vous trouvez une clé USB, ne la branchez pas - donnez-la à un service IT ou jetez-la.",
-    whyImportant: "Un simple script sur une clé USB peut exécuter du code malveillant en moins de 10 secondes après branchement, sans aucun clic de votre part.",
-    commonMistake: "Brancher une clé « pour voir ce qu'elle contient » depuis le gestionnaire de fichiers. C'est déjà trop tard.",
-    benefit: "Zéro risque d'infection par clé USB",
+      "Certains périphériques USB peuvent présenter des risques. Si vous trouvez une clé, ne la branchez pas sur un appareil personnel ; remettez-la au service informatique ou suivez les consignes de votre organisation.",
+    whyImportant: "Une clé USB inconnue peut contenir des fichiers malveillants ou se comporter comme un périphérique de saisie. Évitez de la connecter à vos appareils.",
+    commonMistake: "Brancher une clé inconnue par curiosité, même sans ouvrir de fichier.",
+    benefit: "Réduire le risque lié aux clés USB inconnues",
     timeEstimate: "Immédiat - un seul réflexe à adopter",
     icon: "usb",
     level: "Débutant",
@@ -30,9 +29,9 @@ export const HABITUDES: Habit[] = [
     pitch: "Survolez les liens. Lisez l'URL réelle, pas seulement le texte.",
     detail:
       "Les attaques de phishing reposent sur des URL qui imitent une marque connue (ex. : « paypaI.com » avec un i majuscule). Survol = lecture du vrai lien en bas du navigateur.",
-    whyImportant: "80 % des compromissions débutent par un simple clic sur un lien frauduleux. L'URL réelle est toujours visible dans la barre de statut en bas de l'écran.",
+    whyImportant: "Les liens frauduleux peuvent imiter un site connu. Vérifiez l'adresse avant d'ouvrir un lien ; selon l'application, vous pouvez la prévisualiser en le survolant ou en ouvrant son menu.",
     commonMistake: "Cliquer sans regarder parce que le texte du lien semble légitime (ex. : « Cliquez ici pour valider votre commande »).",
-    benefit: "Élimination du risque de phishing par URL trompeuse",
+    benefit: "Réduire le risque lié aux URL trompeuses",
     timeEstimate: "2 secondes par lien - réflexe à automatiser",
     icon: "eye",
     level: "Débutant",
@@ -52,7 +51,7 @@ export const HABITUDES: Habit[] = [
     icon: "lock",
     level: "Débutant",
     tag: "comptes",
-    linkedTutorials: [{ id: 1, title: "Créer un mot de passe fort" }],
+    linkedTutorials: [{ id: 2, title: "Créer un mot de passe fort" }],
   },
   {
     id: "mdp-reuse",
@@ -60,16 +59,16 @@ export const HABITUDES: Habit[] = [
     pitch: "Un mot de passe = un compte. Toujours.",
     detail:
       "Quand un site fuit (et ils fuient), votre mot de passe se retrouve testé sur tous vos autres comptes via le credential stuffing. Un seul mot de passe unique par service stoppe net cette propagation.",
-    whyImportant: "Des milliards de couples email/mot de passe circulent sur le dark web. Si vous réutilisez le même, une seule fuite compromet tous vos comptes.",
+    whyImportant: "Après une fuite, des identifiants réutilisés peuvent être essayés sur d'autres services. Un mot de passe unique limite l'impact d'une fuite à un compte.",
     commonMistake: "Utiliser le même mot de passe avec des variantes légères (monMdp1, monMdp2) que les scripts d'attaque testent automatiquement.",
-    benefit: "Containment total : une fuite n'affecte qu'un seul service",
+    benefit: "Limiter l'impact d'une fuite à un seul service",
     timeEstimate: "30 min pour installer Bitwarden et migrer",
     icon: "key-square",
     level: "Débutant",
     tag: "comptes",
     linkedTutorials: [
-      { id: 1, title: "Créer un mot de passe fort" },
-      { id: 2, title: "Installer Bitwarden" },
+      { id: 2, title: "Créer un mot de passe fort" },
+      { id: 3, title: "Installer Bitwarden" },
     ],
   },
   {
@@ -80,7 +79,7 @@ export const HABITUDES: Habit[] = [
       "Même si l'expéditeur semble connu, un compte peut avoir été piraté. Vérifiez par un autre canal avant d'ouvrir un fichier .zip, .exe ou un document Office demandant l'activation de macros.",
     whyImportant: "Les malwares se propagent massivement via les pièces jointes. Un document Word avec macros peut installer un ransomware en un clic.",
     commonMistake: "Activer les macros dans un document Office reçu par mail parce qu'un message intégré le demande.",
-    benefit: "Immunité contre la majorité des vecteurs d'infection par email",
+    benefit: "Réduire le risque lié aux pièces jointes inattendues",
     timeEstimate: "Immédiat - vérification systématique avant ouverture",
     icon: "mail",
     level: "Débutant",
@@ -92,10 +91,10 @@ export const HABITUDES: Habit[] = [
     title: "Vérifier l'expéditeur d'un mail sensible",
     pitch: "Le nom affiché ne dit rien. C'est l'adresse complète qui compte.",
     detail:
-      "Les pirates utilisent des noms d'expéditeur crédibles avec des adresses délirantes : « Banque de France <noreply@smtp123.ru> ». Cliquez toujours sur le nom pour voir l'adresse complète.",
-    whyImportant: "Le nom affiché d'un expéditeur est librement falsifiable. L'adresse réelle derrière ne l'est pas.",
+      "Un expéditeur peut afficher un nom crédible avec une adresse qui ne correspond pas. Consultez les détails du message pour vérifier l'adresse complète ; l'emplacement de cette option dépend de votre messagerie.",
+    whyImportant: "Le nom affiché peut être choisi par l'expéditeur ; vérifiez aussi l'adresse complète et le contexte du message.",
     commonMistake: "Ne regarder que le nom affiché et non l'adresse email complète, surtout sur mobile où elle est masquée par défaut.",
-    benefit: "Détection immédiate des usurpations d'identité par email",
+    benefit: "Mieux repérer les adresses d'expéditeur suspectes",
     timeEstimate: "2 secondes par mail sensible",
     icon: "mail",
     level: "Débutant",
@@ -135,13 +134,13 @@ export const HABITUDES: Habit[] = [
   {
     id: "support",
     title: "Se méfier des faux supports techniques",
-    pitch: "Microsoft et Apple n'appellent jamais.",
+    pitch: "Méfiez-vous des appels et alertes inattendus au sujet d'un appareil.",
     detail:
-      "Un pop-up qui crie « Votre PC est infecté, appelez ce numéro » est toujours une arnaque. Ne décrochez pas, ne rappelez pas. Fermez le navigateur ou redémarrez l'ordinateur si nécessaire.",
-    whyImportant: "Les arnaques au faux support technique coûtent des centaines de millions d'euros par an. Les victimes donnent souvent un accès distant complet à leur machine.",
+      "Un pop-up alarmiste qui demande d'appeler un numéro ou d'installer un outil d'accès à distance est suspect. Ne rappelez pas le numéro affiché ; fermez l'onglet ou le navigateur et contactez le support depuis son site officiel si besoin.",
+    whyImportant: "Les fraudeurs peuvent se faire passer pour un support technique afin d'obtenir des informations, un paiement ou un accès à distance.",
     commonMistake: "Rappeler le numéro affiché dans le pop-up, ou pire, laisser l'« agent » prendre le contrôle à distance.",
-    benefit: "Protection contre les arnaques au faux support (100 % évitables)",
-    timeEstimate: "Immédiat - un seul principe : ils n'appellent jamais",
+    benefit: "Repérer les demandes suspectes de support technique",
+    timeEstimate: "Immédiat - vérifier par un canal officiel",
     icon: "headphones",
     level: "Débutant",
     tag: "phishing",
@@ -162,7 +161,7 @@ export const HABITUDES: Habit[] = [
     icon: "wifi",
     level: "Intermédiaire",
     tag: "réseau",
-    linkedTutorials: [{ id: 12, title: "Sécuriser sa navigation web" }],
+    linkedTutorials: [{ id: 13, title: "Sécuriser sa navigation web" }],
   },
   {
     id: "extensions",
@@ -200,7 +199,7 @@ export const HABITUDES: Habit[] = [
     pitch: "Un jeu de cartes n'a pas besoin de votre micro.",
     detail:
       "Tous les 3 mois, ouvrez Réglages > Confidentialité et passez en revue les permissions caméra, micro, contacts, localisation. Révoquer ce qui n'est pas indispensable réduit votre surface d'exposition.",
-    whyImportant: "Des centaines d'applications abusent de l'accès au micro, à la caméra ou à la localisation pour du profilage publicitaire ou de l'espionnage.",
+    whyImportant: "Une permission accordée à une application lui donne accès à certaines données ou fonctions. Vérifiez qu'elle correspond à l'usage prévu et révoquez celles qui ne sont pas nécessaires.",
     commonMistake: "Accepter toutes les permissions au premier lancement sans y réfléchir.",
     benefit: "Réduction de la collecte de données et de l'espionnage passif",
     timeEstimate: "15 min tous les 3 mois",
@@ -311,14 +310,14 @@ export const TECH: TechnicalRecommendation[] = [
     benefit: "Mots de passe uniques et solides sur tous vos comptes",
     whyImportant: "Sans gestionnaire, on réutilise inévitablement des mots de passe. Un credential stuffing suffit alors à compromettre tous vos comptes en cascade.",
     commonMistake: "Continuer à utiliser le gestionnaire du navigateur qui n'est pas protégé par une authentification forte.",
-    linkedTutorials: [{ id: 2, title: "Installer Bitwarden" }],
+    linkedTutorials: [{ id: 3, title: "Installer Bitwarden" }],
   },
   {
     id: 2,
     title: "Configurer un antivirus moderne",
-    subtitle: "Microsoft Defender suffit dans 90% des cas",
+    subtitle: "Vérifier que la protection intégrée est active",
     description:
-      "Sur Windows 10/11, Defender est compétitif. Sur macOS, gardez la protection système active et n'ajoutez pas plusieurs antivirus simultanément.",
+      "Sur Windows, vérifiez l'état de la protection intégrée dans Sécurité Windows. Sur macOS, gardez les protections système à jour. Évitez d'installer plusieurs antivirus en même temps.",
     urgency: "Haute",
     level: "Débutant",
     category: "logiciels",
@@ -331,7 +330,7 @@ export const TECH: TechnicalRecommendation[] = [
     ],
     timeEstimate: "10 min",
     benefit: "Protection en temps réel contre malwares et ransomwares",
-    whyImportant: "Un antivirus actif détecte et bloque la majorité des malwares connus avant qu'ils s'exécutent. Sur Windows 11, Defender est compétitif face aux solutions tierces.",
+    whyImportant: "Une protection active peut aider à détecter certains logiciels malveillants. Maintenez le système et ses protections à jour, et restez prudent avec les fichiers et liens inattendus.",
     commonMistake: "Installer plusieurs antivirus simultanément, ce qui crée des conflits et ralentit la machine.",
     linkedTutorials: [],
   },
@@ -355,7 +354,7 @@ export const TECH: TechnicalRecommendation[] = [
     benefit: "Confidentialité sur les réseaux non maîtrisés",
     whyImportant: "Sur un Wi-Fi ouvert ou étranger, sans VPN vos requêtes peuvent être interceptées. Un VPN chiffre le tunnel et masque votre adresse IP réelle.",
     commonMistake: "Utiliser un VPN gratuit qui revend lui-même vos données au lieu de les protéger.",
-    linkedTutorials: [{ id: 12, title: "Sécuriser sa navigation web" }],
+    linkedTutorials: [{ id: 13, title: "Sécuriser sa navigation web" }],
   },
   {
     id: 10,
@@ -374,8 +373,8 @@ export const TECH: TechnicalRecommendation[] = [
       "Changez immédiatement le mot de passe d'un compte qui apparaît dans une fuite",
     ],
     timeEstimate: "5 min",
-    benefit: "Alerte immédiate si vos identifiants fuient",
-    whyImportant: "Des milliards d'identifiants circulent sur le dark web après des fuites. Savoir rapidement que le vôtre est compromis permet de réagir avant qu'il soit exploité.",
+    benefit: "Être averti si vos identifiants apparaissent dans une fuite connue",
+    whyImportant: "Les services de notification peuvent signaler que votre adresse apparaît dans une fuite connue. Changez alors le mot de passe concerné, ainsi que tout mot de passe réutilisé.",
     commonMistake: "Ne vérifier qu'une seule fois et oublier de s'inscrire aux alertes automatiques.",
     linkedTutorials: [],
   },
@@ -386,7 +385,7 @@ export const TECH: TechnicalRecommendation[] = [
     title: "Mettre à jour Windows / macOS",
     subtitle: "Les mises à jour ferment les portes ouvertes",
     description:
-      "Windows 10 perd son support en octobre 2025. La mise à jour Windows 11 est gratuite et corrige des centaines de failles.",
+      "Installez les mises à jour de sécurité proposées pour votre système. Si votre version n'est plus prise en charge, consultez les options de mise à niveau ou de remplacement compatibles avec votre appareil.",
     urgency: "Haute",
     level: "Débutant",
     category: "os",
@@ -400,7 +399,7 @@ export const TECH: TechnicalRecommendation[] = [
     ],
     timeEstimate: "15-30 min",
     benefit: "Fermeture des failles exploitées activement",
-    whyImportant: "Des milliers de failles sont publiées chaque année. Un OS non patché devient une cible facile pour les scripts d'exploitation automatisés.",
+    whyImportant: "Les mises à jour corrigent notamment des failles de sécurité. Un système qui ne les reçoit plus peut rester exposé à des vulnérabilités connues.",
     commonMistake: "Repousser les mises à jour pour éviter les redémarrages et finir avec un système en retard de plusieurs mois.",
     linkedTutorials: [],
   },
@@ -514,7 +513,7 @@ export const TECH: TechnicalRecommendation[] = [
     ],
     timeEstimate: "20 min",
     benefit: "Fermeture des failles connues sur la box / le routeur",
-    whyImportant: "La box internet est exposée en permanence sur internet. Un firmware non mis à jour peut contenir des failles permettant d'intercepter tout le trafic du foyer.",
+    whyImportant: "Le logiciel de la box peut aussi nécessiter des mises à jour de sécurité. Consultez les recommandations et options de mise à jour de votre fournisseur d'accès.",
     commonMistake: "Ne jamais vérifier les mises à jour de la box parce qu'elle « fonctionne bien ».",
     linkedTutorials: [],
   },
@@ -547,7 +546,7 @@ export const TECH: TechnicalRecommendation[] = [
     title: "Installer uBlock Origin",
     subtitle: "Bloqueur de pubs et de traceurs",
     description:
-      "uBlock Origin (extension navigateur, gratuite, open source) bloque les pubs et la majorité des traceurs publicitaires sans ralentir votre navigation.",
+      "uBlock Origin est une extension libre qui filtre des publicités et des requêtes selon ses listes et réglages. Son effet varie selon le navigateur, la configuration et les pages consultées.",
     urgency: "Moyenne",
     level: "Débutant",
     category: "navigateur",
@@ -584,7 +583,7 @@ export const TECH: TechnicalRecommendation[] = [
     benefit: "Navigateur orienté vie privée par défaut",
     whyImportant: "Chrome envoie par défaut des données de navigation à Google. Firefox et Brave offrent une protection contre le tracking beaucoup plus solide sans configuration avancée.",
     commonMistake: "Conserver Chrome avec ses réglages par défaut tout en pensant naviguer de façon privée.",
-    linkedTutorials: [{ id: 12, title: "Sécuriser sa navigation web" }],
+    linkedTutorials: [{ id: 13, title: "Sécuriser sa navigation web" }],
   },
   {
     id: 14,
@@ -817,26 +816,3 @@ export const HABIT_TAGS: Array<{
   { key: "appareils", label: "Appareils" },
   { key: "données", label: "Données" },
 ]
-
-export const STATUS_LABELS: Record<
-  RecommendationStatus,
-  { label: string; color: string }
-> = {
-  todo: {
-    label: "À faire",
-    color:
-      "text-[color:var(--sc-text-muted)] bg-[color:var(--sc-surface-2)] border-[color:var(--sc-border)]",
-  },
-  "en-cours": {
-    label: "En cours",
-    color: "text-[color:var(--sc-warn-text)] bg-[color:var(--sc-warn-soft)] border-[color:var(--sc-warn-border)]",
-  },
-  fait: {
-    label: "Fait",
-    color: "text-[color:var(--sc-success-text)] bg-[color:var(--sc-success-soft)] border-[color:var(--sc-success-border)]",
-  },
-  sauvegarde: {
-    label: "Sauvegardé",
-    color: "text-[color:var(--sc-blue)] bg-[color:var(--sc-bg-soft)] border-[color:var(--sc-info-border)]",
-  },
-}

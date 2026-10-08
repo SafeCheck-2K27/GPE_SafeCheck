@@ -1,3 +1,4 @@
+import { getTutorialCardStatus, type TutorialProgressById } from "../session"
 import Link from "next/link"
 import {
   ArrowRight,
@@ -9,25 +10,24 @@ import {
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
 import type { Tutoriel } from "../data/catalog"
 import { TutorialIcon } from "./TutorialIcon"
-import {
-  RECOMMENDED_REASONS,
-  mockTutoLastStep,
-  mockTutoStatus,
-} from "../data"
+import { RECOMMENDED_REASONS } from "../data"
 import { TutorialCard } from "./TutorialCards"
+import { getTutorialProgressPercent } from "../progress"
 
 export function TutorialFeaturedSections({
+  progressById,
   recommendedTutorials,
   inProgressTutorials,
   onOpenTutorial,
 }: {
+  progressById: TutorialProgressById
   recommendedTutorials: Tutoriel[]
   inProgressTutorials: Tutoriel[]
   onOpenTutorial: (tutorial: Tutoriel) => void
 }) {
   return (
     <>
-      <section className="mb-8" aria-label="Recommande pour vous">
+      <section className="mb-8" aria-label="Suggestions pour commencer">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-[linear-gradient(135deg,var(--sc-blue-soft),var(--sc-blue))] text-[color:var(--sc-text-on-strong)] shadow-[var(--sc-shadow-blue-sm)]">
@@ -35,10 +35,10 @@ export function TutorialFeaturedSections({
             </div>
             <div>
               <h2 className="font-bold text-base md:text-lg text-[color:var(--sc-text)] font-display">
-                Recommande pour vous
+                Suggestions pour commencer
               </h2>
               <p className="text-xs text-[color:var(--sc-text-muted)]">
-                Base sur votre profil et votre dernier audit
+                Selection generale de tutoriels utiles pour demarrer
               </p>
             </div>
           </div>
@@ -54,7 +54,7 @@ export function TutorialFeaturedSections({
               key={tutorial.id}
               tuto={tutorial}
               onStart={() => onOpenTutorial(tutorial)}
-              status={mockTutoStatus[tutorial.id] || "todo"}
+              status={getTutorialCardStatus(tutorial, progressById)}
               recommendationReason={RECOMMENDED_REASONS[tutorial.id]}
             />
           ))}
@@ -80,10 +80,8 @@ export function TutorialFeaturedSections({
 
           <div className="flex flex-col gap-3">
             {inProgressTutorials.map((tutorial) => {
-              const progress = mockTutoLastStep[tutorial.id]
-              const progressPercentage = progress
-                ? Math.round((progress.step / tutorial.steps.length) * 100)
-                : 0
+              const progress = progressById[tutorial.id] ?? null
+              const progressPercentage = getTutorialProgressPercent(progress, tutorial.steps.length)
 
               return (
                 <div
@@ -111,7 +109,7 @@ export function TutorialFeaturedSections({
                       <p className="text-xs text-[color:var(--sc-text-muted)] truncate mt-0.5">
                         Derniere etape :{" "}
                         <span className="text-[color:var(--sc-text-2)]">
-                          {progress.label}
+                          {tutorial.steps[progress.currentStep].title}
                         </span>
                       </p>
                     )}
@@ -123,7 +121,7 @@ export function TutorialFeaturedSections({
                         />
                       </div>
                       <span className="text-[10px] font-bold text-[color:var(--sc-blue)] shrink-0">
-                        {progressPercentage}%
+                        {Math.round(progressPercentage)}%
                       </span>
                     </div>
                   </div>

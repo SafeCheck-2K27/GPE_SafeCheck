@@ -1,7 +1,6 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import type { MouseEvent } from "react"
 import {
   AlertTriangle,
   ArrowLeft,
@@ -10,15 +9,13 @@ import {
   Filter as FilterIcon,
 } from "lucide-react"
 import { ScBadge, ScChip } from "@/components/safecheck/primitives"
-import { CATEGORY_LABELS, STATUS_LABELS, TECH } from "../data"
+import { CATEGORY_LABELS, TECH } from "../data"
 import { filterTechnicalRecommendations } from "../filters"
 import type {
   HabitLevel,
-  RecommendationStatus,
   TechnicalRecommendation,
   TechnicalUrgency,
 } from "../types"
-import { getNextRecommendationStatus } from "../utils"
 import { RecommendationIcon } from "./RecommendationIcon"
 import { TechnicalRecommendationDetail } from "./TechnicalRecommendationDetail"
 
@@ -27,7 +24,6 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
   const [levelFilter, setLevelFilter] = useState<"all" | HabitLevel>("all")
   const [urgencyFilter, setUrgencyFilter] = useState<"all" | TechnicalUrgency>("all")
   const [selected, setSelected] = useState<TechnicalRecommendation | null>(null)
-  const [statuses, setStatuses] = useState<Record<number, RecommendationStatus>>({})
 
   const filtered = useMemo(
     () =>
@@ -38,15 +34,6 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
       }),
     [cat, levelFilter, urgencyFilter],
   )
-
-  const cycleStatus = (id: number, e: MouseEvent) => {
-    e.stopPropagation()
-    const current = statuses[id] ?? "todo"
-    setStatuses((currentStatuses) => ({
-      ...currentStatuses,
-      [id]: getNextRecommendationStatus(current),
-    }))
-  }
 
   return (
     <>
@@ -143,8 +130,6 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filtered.map((t, i) => {
-              const status = statuses[t.id] ?? "todo"
-              const { label: statusLabel, color: statusColor } = STATUS_LABELS[status]
               return (
                 <article
                   key={t.id}
@@ -174,15 +159,6 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
                         {t.level}
                       </ScBadge>
                     </div>
-                    <button
-                      type="button"
-                      onClick={(e) => cycleStatus(t.id, e)}
-                      className={`relative z-20 shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border transition-colors ${statusColor}`}
-                      title="Changer le statut"
-                      aria-label={`Changer le statut de ${t.title}. Statut actuel : ${statusLabel}`}
-                    >
-                      {statusLabel}
-                    </button>
                   </div>
 
                   <h3 className="font-bold text-base text-[color:var(--sc-text)]">{t.title}</h3>
@@ -212,8 +188,6 @@ export function TechnicalRecommendationsView({ onBack, initialCat }: { onBack: (
         <TechnicalRecommendationDetail
           t={selected}
           onClose={() => setSelected(null)}
-          status={statuses[selected.id] ?? "todo"}
-          onStatusChange={(s) => setStatuses((prev) => ({ ...prev, [selected.id]: s }))}
         />
       )}
     </>

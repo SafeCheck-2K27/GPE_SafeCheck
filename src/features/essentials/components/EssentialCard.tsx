@@ -1,4 +1,4 @@
-import { ArrowRight, TrendingUp } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { ScBadge } from "@/components/safecheck/primitives"
 import type { Essential } from "../types"
 import { EssentialIcon } from "./EssentialIcon"
@@ -46,9 +46,6 @@ export function EssentialCard({
         {essential.description}
       </p>
       <div className="flex items-center justify-between text-xs text-[color:var(--sc-text-muted)] pt-2 border-t border-[color:var(--sc-border)]">
-        <span className="inline-flex items-center gap-1">
-          <TrendingUp className="w-3 h-3" /> {essential.popularity}% utile
-        </span>
         <span className="inline-flex items-center gap-1 text-[color:var(--sc-blue)] font-semibold">
           Lire <ArrowRight className="w-3 h-3" />
         </span>

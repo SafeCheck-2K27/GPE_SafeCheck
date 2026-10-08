@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { ESSENTIALS } from "../data"
+import { ESSENTIAL_CATEGORY_LABELS } from "../categories"
 import { filterEssentials } from "../filters"
 import type { Essential, EssentialSort } from "../types"
 import { EssentialCard } from "./EssentialCard"
@@ -11,13 +12,34 @@ import { EssentialsFilters } from "./EssentialsFilters"
 
 export function EssentialsCatalog() {
   const params = useSearchParams()
-  const [search, setSearch] = useState(() => params.get("q") ?? "")
+  const queryParam = params.get("q") ?? ""
+  const categoryParam = params.get("cat") ?? "all"
+  const normalizedCategory = Object.hasOwn(ESSENTIAL_CATEGORY_LABELS, categoryParam)
+    ? categoryParam
+    : "all"
+  return (
+    <EssentialsCatalogView
+      key={JSON.stringify([queryParam, normalizedCategory])}
+      initialSearch={queryParam}
+      initialCategory={normalizedCategory}
+    />
+  )
+}
+
+function EssentialsCatalogView({
+  initialSearch,
+  initialCategory,
+}: {
+  initialSearch: string
+  initialCategory: string
+}) {
+  const [search, setSearch] = useState(initialSearch)
   const [priority, setPriority] = useState("all")
   const [os, setOs] = useState("all")
   const [difficulty, setDifficulty] = useState("all")
   const [type, setType] = useState("all")
   const [sortBy, setSortBy] = useState<EssentialSort>("priority")
-  const [category, setCategory] = useState(() => params.get("cat") ?? "all")
+  const [category, setCategory] = useState(initialCategory)
   const [selected, setSelected] = useState<Essential | null>(null)
 
   const filteredEssentials = useMemo(

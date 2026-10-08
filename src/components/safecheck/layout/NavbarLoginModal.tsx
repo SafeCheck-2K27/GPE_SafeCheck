@@ -1,20 +1,25 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
-import { ScButton, SafeCheckMark, GoogleAuthButton, AuthDivider } from "@/components/safecheck/primitives"
+import { ScButton, SafeCheckMark } from "@/components/safecheck/primitives"
 import { useAuth } from "@/components/safecheck/AuthProvider"
+import { getLoginErrorKey } from "@/components/safecheck/auth-form"
 import { useI18n } from "@/components/safecheck/I18nProvider"
 import { AccessibleModal } from "./AccessibleModal"
+import { getAuthDestination } from "../auth-navigation"
+import { getAuthFormRecovery, submitAuthForm, type AuthFormRecovery } from "../auth-form-recovery"
 
 /* Built-in login modal used by the Navbar */
 export function NavbarLoginModal({
   onClose,
   onSwitchToSignup,
+  pendingHref,
 }: {
   onClose: () => void
   onSwitchToSignup: () => void
+  pendingHref?: string
 }) {
   const auth = useAuth()
   const router = useRouter()
@@ -24,40 +29,36 @@ export function NavbarLoginModal({
   const [showPw, setShowPw] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const submittingRef = useRef(false)
+  const recoveryRef = useRef<AuthFormRecovery | null>(null)
+  const [recoveringSession, setRecoveringSession] = useState(false)
+  const busy = submitting || auth.authChanging
+  const handleClose = () => {
+    if (!submittingRef.current && !auth.authChanging) onClose()
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (submittingRef.current || auth.authChanging) return
     setError(null)
-    if (!email.trim() || !password) {
+    if (!recoveryRef.current && (!email.trim() || !password)) {
       setError(t("login.errorEmpty"))
       return
     }
+    submittingRef.current = true
     setSubmitting(true)
     try {
-      await auth.login(email.trim(), password)
+      await submitAuthForm(() => auth.login(email.trim(), password), recoveryRef.current)
+      recoveryRef.current = null
+      const destination = getAuthDestination(pendingHref, "login")
       onClose()
-      router.push("/accueil")
-    } catch {
-      setError(t("login.errorGeneric"))
+      router.push(destination)
+    } catch (failure) {
+      recoveryRef.current = getAuthFormRecovery(failure, recoveryRef.current)
+      setRecoveringSession(!!recoveryRef.current)
+      setError(t(recoveryRef.current ? "session.failed" : getLoginErrorKey(failure)))
     } finally {
-      setSubmitting(false)
-    }
-  }
-
-  // Mock Google sign-in - in the frontend prototype we just create a fake
-  // session keyed on a Google-flavoured email so the rest of the app behaves
-  // exactly like a real OAuth callback.
-  const handleGoogle = async () => {
-    if (submitting) return
-    setError(null)
-    setSubmitting(true)
-    try {
-      await auth.login("demo.google@safecheck.app", "google-mock")
-      onClose()
-      router.push("/accueil")
-    } catch {
-      setError(t("login.errorGeneric"))
-    } finally {
+      submittingRef.current = false
       setSubmitting(false)
     }
   }
@@ -65,14 +66,17 @@ export function NavbarLoginModal({
   return (
     <AccessibleModal
       open
-      onClose={onClose}
+      onClose={handleClose}
+      closeOnBackdrop={!busy}
+      closeOnEscape={!busy}
       zIndex={60}
       aria-labelledby="navbar-login-title"
     >
       <form
         onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgb(var(--sc-ink-rgb)/0.30)]"
+        aria-busy={busy}
+        className="w-full max-w-sm max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgb(var(--sc-ink-rgb)/0.30)]"
       >
         <div className="flex items-center gap-2 mb-1">
           <SafeCheckMark />
@@ -87,9 +91,6 @@ export function NavbarLoginModal({
           {t("login.subtitle")}
         </p>
 
-        <GoogleAuthButton label={t("auth.googleConnect")} onClick={handleGoogle} disabled={submitting} />
-        <AuthDivider label={t("auth.or")} />
-
         <div className="space-y-4">
           <div>
             <label
@@ -100,6 +101,7 @@ export function NavbarLoginModal({
             </label>
             <input
               id="navbar-login-email"
+              disabled={recoveringSession}
               type="email"
               autoComplete="email"
               value={email}
@@ -118,6 +120,7 @@ export function NavbarLoginModal({
             <div className="relative">
               <input
                 id="navbar-login-password"
+                disabled={recoveringSession}
                 type={showPw ? "text" : "password"}
                 autoComplete="current-password"
                 value={password}
@@ -151,13 +154,16 @@ export function NavbarLoginModal({
             variant="primary"
             size="md"
             className="w-full"
-            disabled={submitting}
+            disabled={busy}
           >
-            {submitting ? t("login.submitting") : t("login.submit")}
+            {recoveringSession ? t(busy ? "session.retrying" : "session.verify") : submitting ? t("login.submitting") : t("login.submit")}
           </ScButton>
           <button
             type="button"
-            onClick={onSwitchToSignup}
+            disabled={busy || recoveringSession}
+            onClick={() => {
+              if (!submittingRef.current && !auth.authChanging && !recoveryRef.current) onSwitchToSignup()
+            }}
             className="text-xs text-center text-[color:var(--sc-text-muted)] hover:text-[color:var(--sc-blue)] transition-colors mt-1 cursor-pointer"
           >
             {t("login.noAccount")}{" "}
@@ -165,7 +171,8 @@ export function NavbarLoginModal({
           </button>
           <button
             type="button"
-            onClick={onClose}
+            disabled={busy}
+            onClick={handleClose}
             className="text-xs text-center text-[color:var(--sc-text-muted)] hover:text-[color:var(--sc-text)] transition-colors cursor-pointer"
           >
             {t("login.cancel")}

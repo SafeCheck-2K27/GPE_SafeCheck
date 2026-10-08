@@ -33,22 +33,22 @@ export function RecommendationsHub({ onSelect }: { onSelect: (view: Exclude<Reco
             Centre d&apos;action SafeCheck
           </ScBadge>
           <h1 className="text-3xl md:text-5xl font-extrabold text-[color:var(--sc-text)] mb-4 text-balance">
-            Des recommandations concrètes, priorisées selon votre profil.
+            Des conseils éditoriaux et des recommandations liées au score de votre audit.
           </h1>
           <p className="text-base md:text-lg text-[color:var(--sc-text)] max-w-3xl mx-auto leading-relaxed text-pretty">
-            Ces recommandations sont utiles à tous. Mais c&apos;est l&apos;audit SafeCheck qui vous indique lesquelles
-            appliquer en priorité, selon votre situation réelle.
+            Explorez nos recommandations éditoriales, utiles à tous. Après un audit, consultez aussi les conseils
+            correspondant à la tranche de score obtenue.
           </p>
           <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
             {isLoggedIn ? (
               <ScButton variant="primary" onClick={() => router.push("/compte")}>
                 <BarChart2 className="w-4 h-4" />
-                Voir mon plan d&apos;action personnalisé
+                Voir mes audits et tutoriels
               </ScButton>
             ) : (
               <ScButton variant="primary" onClick={() => router.push("/audits")}>
                 <TrendingUp className="w-4 h-4" />
-                Passer l&apos;audit pour mes recommandations personnalisées
+                Passer un audit et consulter les recommandations liées à mon score
               </ScButton>
             )}
             <ScButton variant="secondary" onClick={() => onSelect("habitudes")}>
@@ -75,7 +75,7 @@ export function RecommendationsHub({ onSelect }: { onSelect: (view: Exclude<Reco
                 step: "1",
                 icon: Brain,
                 title: "Comprendre les bons réflexes",
-                desc: "Commencez par les habitudes du quotidien. Pas d\u2019installation, pas de technique : juste les attitudes qui éliminent 80\u00a0% des risques.",
+                desc: "Commencez par les habitudes du quotidien. Pas d\u2019installation, pas de technique : des gestes simples pour réduire certains risques.",
                 tone: "success" as const,
                 label: "Bonnes habitudes",
               },
@@ -91,7 +91,7 @@ export function RecommendationsHub({ onSelect }: { onSelect: (view: Exclude<Reco
                 step: "3",
                 icon: Target,
                 title: "Prioriser avec l\u2019audit SafeCheck",
-                desc: "L\u2019audit analyse votre profil et génère un plan d\u2019action personnalisé. Vous savez exactement quoi faire en premier.",
+                desc: "Consultez les recommandations associées à la tranche de score de votre audit, puis retrouvez vos audits et tutoriels dans votre compte.",
                 tone: "premium" as const,
                 label: "Audit SafeCheck",
               },
@@ -174,7 +174,7 @@ export function RecommendationsHub({ onSelect }: { onSelect: (view: Exclude<Reco
             Les configurations qui renforcent durablement votre posture.
           </h2>
           <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed">
-            Logiciels, OS, hardware, navigateurs, confidentialité, sauvegarde, réseau\u00a0: les actions concrètes à
+            Logiciels, OS, hardware, navigateurs, confidentialité, sauvegarde, réseau : les actions concrètes à
             appliquer pour un impact durable.
           </p>
 

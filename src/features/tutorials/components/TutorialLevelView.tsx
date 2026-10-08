@@ -1,5 +1,7 @@
 "use client"
 
+import { getTutorialCardStatus, type TutorialProgressById } from "../session"
+
 import { useMemo } from "react"
 import type { ReactNode } from "react"
 import { useRouter } from "next/navigation"
@@ -13,13 +15,14 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react"
-import { mockTutoStatus } from "../data"
 import { TutorialCard } from "./TutorialCards"
 
 export function TutorialLevelView({
+  progressById,
   niveau,
   openTuto,
 }: {
+  progressById: TutorialProgressById
   niveau: Niveau
   openTuto: (t: Tutoriel) => void
 }) {
@@ -94,7 +97,7 @@ export function TutorialLevelView({
           {/* Quick switcher */}
           <div className="flex flex-wrap items-center gap-2">
             <ScChip onClick={() => router.push("/tutoriels")}>
-              <Sparkles className="w-3.5 h-3.5" /> Mes tutoriels
+              <Sparkles className="w-3.5 h-3.5" /> Sélection pour débuter
             </ScChip>
             <ScChip onClick={() => router.push("/tutoriels?vue=tous")}>
               <BookOpen className="w-3.5 h-3.5" /> Tous
@@ -128,7 +131,7 @@ export function TutorialLevelView({
             key={tuto.id}
             tuto={tuto}
             onStart={() => openTuto(tuto)}
-            status={mockTutoStatus[tuto.id] || "todo"}
+            status={getTutorialCardStatus(tuto, progressById)}
           />
         ))}
       </div>

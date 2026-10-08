@@ -2,7 +2,6 @@ import {
   AlertTriangle,
   BookOpen,
   BookMarked,
-  CheckCircle2,
   Clock,
   ExternalLink,
   ShieldCheck,
@@ -11,20 +10,15 @@ import {
 } from "lucide-react"
 import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
-import { STATUS_LABELS } from "../data"
-import type { Habit, RecommendationStatus } from "../types"
+import type { Habit } from "../types"
 import { RecommendationIcon } from "./RecommendationIcon"
 
 export function HabitDetail({
   h,
   onClose,
-  status,
-  onStatusChange,
 }: {
   h: Habit
   onClose: () => void
-  status: RecommendationStatus
-  onStatusChange: (s: RecommendationStatus) => void
 }) {
   return (
     <AccessibleModal
@@ -127,32 +121,8 @@ export function HabitDetail({
             </div>
           )}
 
-          {/* Status picker */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs text-[color:var(--sc-text-muted)] font-medium">Statut :</span>
-            {(["todo", "en-cours", "fait", "sauvegarde"] as RecommendationStatus[]).map((s) => {
-              const { label, color } = STATUS_LABELS[s]
-              return (
-                <button
-                  key={s}
-                  onClick={() => onStatusChange(s)}
-                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold border transition-all ${ status === s ? color : "text-[color:var(--sc-text-muted)] bg-[color:var(--sc-bg)] border-[color:var(--sc-border)] hover:border-[color:var(--sc-border)]" }`}
-                >
-                  {label}
-                </button>
-              )
-            })}
-          </div>
-
           {/* CTAs */}
           <div className="flex justify-end gap-2 mt-1">
-            <ScButton
-              variant="secondary"
-              onClick={() => { onStatusChange("fait"); onClose() }}
-            >
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              Marquer comme fait
-            </ScButton>
             <ScButton variant="primary" onClick={onClose}>
               Compris
             </ScButton>

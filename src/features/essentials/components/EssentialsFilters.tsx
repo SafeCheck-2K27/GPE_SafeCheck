@@ -68,7 +68,7 @@ export function EssentialsFilters({
               className="sc-input px-3 py-2 text-sm"
             >
               <option value="priority">Priorité absolue</option>
-              <option value="popularity">Popularité</option>
+              <option value="popularity">Sélection éditoriale</option>
             </select>
           </div>
         </div>

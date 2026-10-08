@@ -1,19 +1,23 @@
 "use client"
 
+import { getTutorialCardStatus, type TutorialProgressById } from "../session"
+
 import { useState } from "react"
 import { BookOpen, Layers } from "lucide-react"
 import type { Tutoriel } from "../data/catalog"
-import { LIBRARY_CATEGORIES, mockTutoStatus, POPULAR_IDS } from "../data"
+import { LIBRARY_CATEGORIES, POPULAR_IDS } from "../data"
 import { matchesLibraryCategory } from "../filters"
 import { TutorialCard } from "./TutorialCards"
 import { TutorialLibraryCategory } from "./TutorialLibraryCategory"
 
 export function TutorialLibrarySection({
+  progressById,
   tutorials,
   hasActiveFilters,
   onOpenTutorial,
   onResetFilters,
 }: {
+  progressById: TutorialProgressById
   tutorials: Tutoriel[]
   hasActiveFilters: boolean
   onOpenTutorial: (tutorial: Tutoriel) => void
@@ -105,6 +109,7 @@ export function TutorialLibrarySection({
 
             return (
               <TutorialLibraryCategory
+                progressById={progressById}
                 key={category.id}
                 category={category}
                 tutorials={categoryTutorials}
@@ -123,7 +128,7 @@ export function TutorialLibrarySection({
               key={tutorial.id}
               tuto={tutorial}
               onStart={() => onOpenTutorial(tutorial)}
-              status={mockTutoStatus[tutorial.id] || "todo"}
+              status={getTutorialCardStatus(tutorial, progressById)}
               showPopularBadge={POPULAR_IDS.has(tutorial.id)}
             />
           ))}

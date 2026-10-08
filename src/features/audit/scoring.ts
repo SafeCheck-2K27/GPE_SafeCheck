@@ -1,17 +1,16 @@
-import type { AuditAnswers, AuditQuestion } from "./types"
+import type { AuditAnswers } from "./types"
+import { getAuditQuestions, UnsupportedAuditVersionError, type AuditVersions } from "./versions"
+import { calculateAuditScoreV1 } from "./versions/scoring-v1"
 
-export function calculateAuditScore(
-  questions: AuditQuestion[],
-  answers: AuditAnswers,
-): number {
-  let totalScore = 0
+export { calculateAuditScoreV1 as calculateAuditScore } from "./versions/scoring-v1"
 
-  questions.forEach((question) => {
-    const answerValue = answers[question.id]
-    const option = question.options.find((candidate) => candidate.value === answerValue)
-    if (option) totalScore += option.score
-  })
-
-  const maxScore = questions.length * 10
-  return Math.round((totalScore / maxScore) * 100)
+export function calculateVersionedAuditScore(versions: AuditVersions, answers: AuditAnswers): number {
+  // This dispatch is pinned to v1, independently of future current-version constants.
+  const questions = getAuditQuestions(versions)
+  switch (versions.scoringVersion) {
+    case 1:
+      return calculateAuditScoreV1(questions, answers)
+    default:
+      throw new UnsupportedAuditVersionError(versions)
+  }
 }

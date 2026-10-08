@@ -1,11 +1,15 @@
 import type { SignupFormData } from "./types"
+import {
+  hasValidSignupCredentials,
+  hasValidSignupProfile,
+} from "@/components/safecheck/auth-form"
 
 export function canContinueSignup(form: SignupFormData): boolean {
-  return form.email.trim().length > 0 && form.password.length >= 8
+  return hasValidSignupCredentials(form.email, form.password)
 }
 
 export function canSubmitSignupProfile(form: SignupFormData): boolean {
-  return form.pseudo.trim().length > 0
+  return hasValidSignupProfile(form.pseudo)
 }
 
 export function getPasswordStrengthColor(

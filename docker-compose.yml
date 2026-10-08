@@ -5,10 +5,10 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-safecheck}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-safecheck}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run npm run db:secure to configure local credentials}
       POSTGRES_DB: ${POSTGRES_DB:-safecheck}
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
     volumes:
       - safecheck-pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -25,7 +25,8 @@ services:
     ports:
       - "${APP_PORT:-3000}:3000"
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-safecheck}:${POSTGRES_PASSWORD:-safecheck}@postgres:5432/${POSTGRES_DB:-safecheck}?schema=public
+      DATABASE_URL: postgresql://${APP_DB_USER:-safecheck_app}:${APP_DB_PASSWORD:?Run npm run db:secure}@postgres:5432/${POSTGRES_DB:-safecheck}?schema=public
+      MIGRATION_DATABASE_URL: postgresql://${POSTGRES_USER:-safecheck}:${POSTGRES_PASSWORD:?Run npm run db:secure}@postgres:5432/${POSTGRES_DB:-safecheck}?schema=public
       WATCHPACK_POLLING: "true"
     volumes:
       - .:/app

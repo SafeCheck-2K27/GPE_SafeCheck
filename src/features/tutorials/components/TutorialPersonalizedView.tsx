@@ -1,5 +1,7 @@
 "use client"
 
+import { getTutorialCardStatus, type TutorialProgressById } from "../session"
+
 import { useRouter } from "next/navigation"
 import { ScBadge, ScButton, ScChip } from "@/components/safecheck/primitives"
 import { tutoriels } from "../data/catalog"
@@ -12,40 +14,39 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react"
-import { mockTutoStatus, userProgress } from "../data"
 import { getPersonalizedTutorialGroups } from "../personalization"
 import { TutorialCard } from "./TutorialCards"
-import { TutorialProgressionHero } from "./TutorialProgressionHero"
 
 export function TutorialPersonalizedView({
+  progressById,
   openTuto,
 }: {
+  progressById: TutorialProgressById
   openTuto: (t: Tutoriel) => void
 }) {
   const router = useRouter()
-  // Personalize content based on user level (here: Debutant)
-  const userLevel = userProgress.levelKey
-
-  // Pick recommended tuto
-  const recommendedTuto =
-    tutoriels.find((t) => t.isRecommended && t.level === userLevel) ||
-    tutoriels.find((t) => t.level === userLevel) ||
-    tutoriels[0]
-
-  const grouped = getPersonalizedTutorialGroups(userLevel, tutoriels)
+  const grouped = getPersonalizedTutorialGroups("Debutant", tutoriels)
 
   return (
     <>
-      {/* Hero + progression banner */}
-      <TutorialProgressionHero recommendedTuto={recommendedTuto} openTuto={openTuto} />
+      <header className="rounded-2xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] p-6 md:p-8 mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold text-[color:var(--sc-text)] font-display mb-2">
+          Sélection pour débuter
+        </h1>
+        <p className="text-sm md:text-base text-[color:var(--sc-text-2)] leading-relaxed max-w-3xl">
+          Une sélection éditoriale de tutoriels de niveau débutant pour protéger vos comptes,
+          reconnaître les menaces et sécuriser vos données. Explorez aussi la bibliothèque
+          complète ou choisissez un autre niveau.
+        </p>
+      </header>
 
       {/* Quick switcher */}
       <div className="mb-6 flex flex-wrap items-center gap-2">
         <span className="text-xs font-semibold text-[color:var(--sc-text-muted)] uppercase tracking-wider mr-1">
           Vue
         </span>
-        <ScChip active onClick={() => {}}>
-          <Sparkles className="w-3.5 h-3.5" /> Mes tutoriels
+        <ScChip active>
+          <Sparkles className="w-3.5 h-3.5" /> Sélection pour débuter
         </ScChip>
         <ScChip onClick={() => router.push("/tutoriels?vue=tous")}>
           <BookOpen className="w-3.5 h-3.5" /> Tous les tutoriels
@@ -99,7 +100,7 @@ export function TutorialPersonalizedView({
                     key={tuto.id}
                     tuto={tuto}
                     onStart={() => openTuto(tuto)}
-                    status={mockTutoStatus[tuto.id] || "todo"}
+                    status={getTutorialCardStatus(tuto, progressById)}
                   />
                 ))}
               </div>

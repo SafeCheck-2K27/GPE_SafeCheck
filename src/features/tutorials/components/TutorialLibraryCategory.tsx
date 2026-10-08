@@ -1,3 +1,4 @@
+import { getTutorialCardStatus, type TutorialProgressById } from "../session"
 import {
   AlertTriangle,
   Check,
@@ -15,7 +16,7 @@ import {
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import type { Niveau, Tutoriel } from "../data/catalog"
-import { mockTutoStatus, POPULAR_IDS } from "../data"
+import { POPULAR_IDS } from "../data"
 import { parseDuration } from "../sorting"
 import type {
   LibraryCategoryDefinition,
@@ -36,6 +37,7 @@ const LIBRARY_CATEGORY_ICONS: Record<LibraryCategoryIcon, LucideIcon> = {
 }
 
 export function TutorialLibraryCategory({
+  progressById,
   category,
   tutorials,
   open,
@@ -43,6 +45,7 @@ export function TutorialLibraryCategory({
   onToggle,
   onOpenTutorial,
 }: {
+  progressById: TutorialProgressById
   category: LibraryCategoryDefinition
   tutorials: Tutoriel[]
   open: boolean
@@ -66,7 +69,7 @@ export function TutorialLibraryCategory({
         ? `${minimumDuration} min`
         : `${minimumDuration}-${maximumDuration} min`
   const doneCount = tutorials.filter(
-    (tutorial) => (mockTutoStatus[tutorial.id] || "todo") === "done",
+    (tutorial) => (getTutorialCardStatus(tutorial, progressById)) === "done",
   ).length
 
   return (
@@ -143,7 +146,7 @@ export function TutorialLibraryCategory({
               key={tutorial.id}
               tuto={tutorial}
               onStart={() => onOpenTutorial(tutorial)}
-              status={mockTutoStatus[tutorial.id] || "todo"}
+              status={getTutorialCardStatus(tutorial, progressById)}
               showPopularBadge={POPULAR_IDS.has(tutorial.id)}
             />
           ))}

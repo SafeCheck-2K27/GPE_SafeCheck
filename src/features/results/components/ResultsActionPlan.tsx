@@ -44,6 +44,12 @@ export function ResultsActionPlan({
         </span>
       </div>
 
+      <p className="mb-4 text-sm text-[color:var(--sc-text-muted)]">
+        {lang === "fr"
+          ? "Ces pistes sont sélectionnées selon ton score global. Elles ne prouvent pas qu'une protection te manque : choisis celles qui correspondent à ta situation."
+          : "These suggestions are selected from your overall score. They do not establish that a protection is missing: choose those that fit your situation."}
+      </p>
+
       <div className="flex flex-col gap-3 mb-3">
         {topRecommendations.map((recommendation, index) => (
           <ScoreRecommendationCard
@@ -101,11 +107,11 @@ export function ResultsActionPlan({
                         </span>
                       </div>
                       <div className="p-3 flex flex-col gap-3">
-                        {categoryRecommendations.map((recommendation, index) => (
+                        {categoryRecommendations.map((recommendation) => (
                           <ScoreRecommendationCard
                             key={recommendation.id}
                             recommendation={recommendation}
-                            index={topRecommendations.length + index}
+                            index={recommendations.indexOf(recommendation)}
                             lang={lang}
                             t={t}
                             onTutorialClick={onTutorialClick}

@@ -1,5 +1,11 @@
 # Champs obligatoires - Page Tutoriel SafeCheck
 
+> **FUTURE / ROADMAP — proposition historique non implémentée comme schéma DB.**
+> Le MVP actuel utilise un catalogue TypeScript et une table de progression User,
+> sans table `Tutorial` et sans progression Guest dans localStorage. Cette liste
+> conserve une intention de conception ; elle ne prescrit pas le schéma actuel.
+> Voir l’[architecture actuelle](docs/frontend-architecture.md) et l’[index des archives](docs/qa/README.md).
+
 Spécification des champs du modèle de données `Tutorial`, à utiliser comme base pour le schéma Prisma (SC-BDD-009) et la documentation éditoriale (SC-029 / SC-056).
 
 | # | Champ | Type | Obligatoire | Notes |
