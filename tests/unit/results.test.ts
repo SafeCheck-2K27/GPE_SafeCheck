@@ -1,5 +1,4 @@
-import assert from "node:assert/strict"
-import { test } from "node:test"
+import { test, expect } from "vitest"
 import { scoreRecommendations } from "../../src/features/results/data"
 import { getResultLevel } from "../../src/features/results/logic"
 import {
@@ -28,7 +27,7 @@ test("getResultScore applies the documented fallback and clamps valid integers",
   ]
 
   cases.forEach(([value, expected]) => {
-    assert.equal(getResultScore(value), expected)
+    expect(getResultScore(value)).toBe(expected)
   })
 })
 
@@ -45,7 +44,7 @@ test("getResultLevel respects every score boundary", () => {
   ]
 
   cases.forEach(([score, expected]) => {
-    assert.equal(getResultLevel(score).id, expected)
+    expect(getResultLevel(score).id).toBe(expected)
   })
 })
 
@@ -55,11 +54,8 @@ test("recommendations are resolved by stable ids in configured order", () => {
     scoreRecommendations,
   )
 
-  assert.deepEqual(
-    resolution.recommendations.map(({ id }) => id),
-    [3, 1, 6],
-  )
-  assert.deepEqual(resolution.missingIds, [])
+  expect(resolution.recommendations.map(({ id }) => id)).toEqual([3, 1, 6])
+  expect(resolution.missingIds).toEqual([])
 })
 
 test("unknown recommendation ids are reported without hiding valid entries", () => {
@@ -68,9 +64,6 @@ test("unknown recommendation ids are reported without hiding valid entries", () 
     scoreRecommendations,
   )
 
-  assert.deepEqual(
-    resolution.recommendations.map(({ id }) => id),
-    [3, 1],
-  )
-  assert.deepEqual(resolution.missingIds, [999])
+  expect(resolution.recommendations.map(({ id }) => id)).toEqual([3, 1])
+  expect(resolution.missingIds).toEqual([999])
 })
