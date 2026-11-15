@@ -1,11 +1,10 @@
 import { ShieldCheck } from "lucide-react"
 import type { SafeCheckUser } from "@/components/safecheck/AuthProvider"
 import { ScCard } from "@/components/safecheck/primitives"
-import type { AccountAudit } from "../api"
-import { calculateAuditCounters } from "../audit-summary"
+import type { AccountAuditCountsDto } from "@/lib/contracts/audit"
 
-export function AccountHero({ user, audits }: { user: SafeCheckUser; audits: AccountAudit[] | null }) {
-  const total = audits === null ? "—" : calculateAuditCounters(audits).total
+export function AccountHero({ user, counts }: { user: SafeCheckUser; counts: AccountAuditCountsDto | null }) {
+  const total = counts === null ? "—" : counts.total
   return (
     <div className="rounded-2xl border border-[color:var(--sc-border)] sc-mesh-soft p-6 md:p-8 mb-6 flex items-center gap-5">
       <div className="w-20 h-20 shrink-0 rounded-full sc-avatar-gradient flex items-center justify-center text-[color:var(--sc-text-on-strong)] font-display text-3xl font-bold" aria-hidden="true">

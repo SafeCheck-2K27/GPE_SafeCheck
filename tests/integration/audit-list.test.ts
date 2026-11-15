@@ -46,6 +46,7 @@ test("GET /audits lists only the signed-in user's summaries", async (t) => {
 
   await prisma.audit.update({ where: { id: older.id }, data: { createdAt: new Date("2026-01-01T00:00:00.000Z") } })
   await prisma.audit.update({ where: { id: newer.id }, data: { createdAt: new Date("2026-01-02T00:00:00.000Z") } })
+  await prisma.audit.update({ where: { id: otherUser.id }, data: { createdAt: new Date("2026-01-01T12:00:00.000Z") } })
 
   for (const question of auditQuestions) {
     const response = await app.inject({
@@ -77,6 +78,25 @@ test("GET /audits lists only the signed-in user's summaries", async (t) => {
     assert.equal(item.scoringVersion, 1)
     assert.equal(typeof item.createdAt, "string")
     assert.equal(typeof item.updatedAt, "string")
+  }
+
+  const firstPage = await app.inject({ method: "GET", url: "/audits?limit=1", headers: { cookie: userA } })
+  assert.equal(firstPage.statusCode, 200)
+  const firstPageBody = firstPage.json<{ items: Array<{ id: string }>; nextCursor: string | null; counts: { total: number; completed: number; inProgress: number } }>()
+  assert.deepEqual(firstPageBody.items.map((item) => item.id), [newer.id])
+  assert.ok(firstPageBody.nextCursor)
+  assert.deepEqual(firstPageBody.counts, { total: 2, completed: 1, inProgress: 1 })
+  const secondPage = await app.inject({ method: "GET", url: `/audits?limit=1&cursor=${encodeURIComponent(firstPageBody.nextCursor!)}`, headers: { cookie: userA } })
+  assert.equal(secondPage.statusCode, 200)
+  const secondPageBody = secondPage.json<{ items: Array<{ id: string }>; nextCursor: string | null }>()
+  assert.deepEqual(secondPageBody.items.map((item) => item.id), [older.id])
+  assert.equal(secondPageBody.nextCursor, null)
+
+  const otherOwnerCursor = await app.inject({ method: "GET", url: `/audits?limit=1&cursor=${encodeURIComponent(firstPageBody.nextCursor!)}`, headers: { cookie: userB } })
+  assert.equal(otherOwnerCursor.statusCode, 200)
+  assert.deepEqual(otherOwnerCursor.json<{ items: Array<{ id: string }> }>().items.map((item) => item.id), [otherUser.id])
+  for (const query of ["?limit=0", "?limit=51", "?limit=01", "?limit=1&limit=2", "?cursor=bad", "?cursor=bad&cursor=worse"]) {
+    assert.equal((await app.inject({ method: "GET", url: `/audits${query}`, headers: { cookie: userA } })).statusCode, 400)
   }
 
   const bList = await app.inject({ method: "GET", url: "/audits", headers: { cookie: userB } })

@@ -65,6 +65,17 @@ correspond à `User.name`. Les sessions sont stockées en DB et utilisées via
 cookies ; aucun parcours JWT ou OAuth n'est implémenté. Le relais Auth conserve
 les `Set-Cookie` et retire le token des JSON réussis signup, login et get-session.
 
+L'adaptateur Prisma de Better Auth active les transactions (`transaction: true`)
+pour rendre atomiques les écritures de l'inscription. La fabrique `createAuth`
+permet notamment de tester le rollback lors d'un échec de création Account ou Session.
+Les routes Audit et Progression utilisent `authenticatedUserId` : ce helper
+demande aussi les headers de session et relaie les cookies renouvelés au navigateur,
+y compris lorsqu'un claim retire le cookie Guest dans la même réponse.
+Sources : [configuration Auth](../server/auth/auth.ts),
+[résolution de session](../server/auth/session.ts),
+[test transaction](../tests/integration/auth-transaction.test.ts),
+[test renouvellement](../tests/integration/session-refresh.test.ts).
+
 `AuthProvider` distingue User confirmé, Guest confirmé et identité indéterminée
 (chargement, changement Auth ou erreur de session). Une panne de session masque
 les données du compte et propose un retry ; elle ne déclenche pas la redirection
@@ -121,8 +132,22 @@ ID filtre aussi le propriétaire ; absence et autre propriétaire donnent le mê
 | Lire/reprendre | `GET /audits/:id` | Réponses et versions du propriétaire |
 | Enregistrer | `PUT /audits/:id/answers/:questionId` | Upsert d'une réponse validée |
 | Terminer | `POST /audits/:id/submit` | Vérifie toutes les questions puis `COMPLETED` |
-| Historique User | `GET /audits` | Création décroissante puis ID décroissant |
+| Historique User | `GET /audits` | Page de résumés, création décroissante puis ID décroissant |
 | Rattacher | `POST /audits/claim-guest` | Transfère tous les audits du sujet au User |
+
+L'historique accepte `limit` (20 par défaut, de 1 à 50) et un curseur opaque
+`cursor` fondé sur `(createdAt, id)`. La réponse contient `items`, `nextCursor`
+et les compteurs globaux User `counts` (total, terminés, en cours), indépendants
+de la page. Le compte charge explicitement la suite et conserve ces compteurs
+pour éviter de confondre taille de page et nombre total d'audits.
+
+Les mutations Audit sont limitées à 10 créations et 180 réponses/soumissions/claims
+par dix minutes et par clé IP résolue (IPv4 /32, IPv6 /64). Le limiteur conserve
+au plus 4096 clés en mémoire par instance de limiteur ; un refus renvoie 429
+`RATE_LIMITED` avec `Retry-After`. Les quotas ne sont pas partagés entre processus.
+Sources : [limiteur](../server/audits/rate-limit.ts),
+[tests unitaires](../tests/unit/audit-rate-limit.test.ts),
+[test API](../tests/integration/audit-rate-limit.test.ts).
 
 Le claim efface `guestSubject`, avance `updatedAt` et retire le cookie après
 succès. Répéter sans sujet ne rattache rien. Il transfère les audits en cours et
@@ -221,7 +246,8 @@ Sources : [progression pure](../src/features/tutorials/progress.ts),
 
 - **Dashboard** : compteurs audits DB et tutoriels commencés, joignant snapshots DB
   aux métadonnées statiques.
-- **Historique** : audits DB, actions reprendre/revoir selon statut.
+- **Historique** : audits DB paginés, chargement explicite de la suite,
+  actions reprendre/revoir selon statut ; compteurs globaux calculés côté serveur.
 - **Profil** : pseudo et email de session, lecture seule.
 - **Préférences** : apparence clair/sombre/système via `next-themes`, sur cet appareil.
 

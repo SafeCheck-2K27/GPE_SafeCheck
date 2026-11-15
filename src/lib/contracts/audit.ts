@@ -13,6 +13,18 @@ export type AuditSummaryDto = CreatedAuditDto & {
   answeredCount: number
 }
 
+export type AccountAuditCountsDto = {
+  total: number
+  completed: number
+  inProgress: number
+}
+
+export type AccountAuditPageDto = {
+  items: AuditSummaryDto[]
+  nextCursor: string | null
+  counts: AccountAuditCountsDto
+}
+
 export type AuditDto = AuditSummaryDto & {
   answers: { questionId: number; value: string }[]
 }
@@ -67,8 +79,23 @@ export function decodeAuditSummary(value: unknown): AuditSummaryDto {
   return { ...created, answeredCount: input.answeredCount }
 }
 
-export function decodeAccountAuditList(value: unknown): AuditSummaryDto[] {
+export function decodeAccountAuditList(value: unknown): AccountAuditPageDto {
   const input = object(value, "Audit list")
   if (!Array.isArray(input.items)) throw new ApiPayloadError("Audit list items must be an array")
-  return input.items.map(decodeAuditSummary)
+  if (input.nextCursor !== null && (typeof input.nextCursor !== "string" || input.nextCursor.length > 256)) {
+    throw new ApiPayloadError("Audit list nextCursor is invalid")
+  }
+  const rawCounts = object(input.counts, "Audit list counts")
+  const count = (key: keyof AccountAuditCountsDto) => {
+    const value = rawCounts[key]
+    if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 0) {
+      throw new ApiPayloadError(`Audit list ${key} must be a non-negative integer`)
+    }
+    return value
+  }
+  const counts = { total: count("total"), completed: count("completed"), inProgress: count("inProgress") }
+  if (counts.completed + counts.inProgress !== counts.total) {
+    throw new ApiPayloadError("Audit list counts do not add up")
+  }
+  return { items: input.items.map(decodeAuditSummary), nextCursor: input.nextCursor, counts }
 }

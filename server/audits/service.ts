@@ -44,15 +44,43 @@ export function getAudit(id: string, owner: AuditOwner) {
   })
 }
 
-export function listUserAudits(userId: string) {
-  return prisma.audit.findMany({
-    where: { userId },
-    select: {
-      ...auditFields,
-      _count: { select: { answers: true } },
+export async function listUserAudits(userId: string, options: {
+  take: number
+  after?: { createdAt: Date; id: string }
+}) {
+  const where = {
+    userId,
+    ...(options.after ? {
+      OR: [
+        { createdAt: { lt: options.after.createdAt } },
+        { createdAt: options.after.createdAt, id: { lt: options.after.id } },
+      ],
+    } : {}),
+  }
+  const [rows, statusCounts] = await Promise.all([
+    prisma.audit.findMany({
+      where,
+      take: options.take + 1,
+      select: {
+        ...auditFields,
+        _count: { select: { answers: true } },
+      },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    }),
+    prisma.audit.groupBy({
+      by: ["status"],
+      where: { userId },
+      _count: { _all: true },
+    }),
+  ])
+  return {
+    rows,
+    counts: {
+      total: statusCounts.reduce((sum, group) => sum + group._count._all, 0),
+      completed: statusCounts.find((group) => group.status === "COMPLETED")?._count._all ?? 0,
+      inProgress: statusCounts.find((group) => group.status === "IN_PROGRESS")?._count._all ?? 0,
     },
-    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-  })
+  }
 }
 
 export async function claimGuestAudits(guestSubject: string, userId: string) {

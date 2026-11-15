@@ -9,10 +9,18 @@ export function AccountHistory({
   audits,
   error,
   onRetry,
+  hasMore,
+  loadingMore,
+  loadMoreError,
+  onLoadMore,
 }: {
   audits: AccountAudit[] | null
   error: boolean
   onRetry: () => void
+  hasMore: boolean
+  loadingMore: boolean
+  loadMoreError: boolean
+  onLoadMore: () => void
 }) {
   return (
     <AccountSectionCard icon={History} title="Mes audits" description="Audits du plus récent au plus ancien.">
@@ -31,6 +39,14 @@ export function AccountHistory({
       ) : (
         <div className="space-y-3">
           {audits.map((audit) => <AuditRow key={audit.id} audit={audit} />)}
+          {hasMore && (
+            <div className="space-y-2">
+              {loadMoreError && <p role="alert" className="text-center text-sm text-[color:var(--sc-text-muted)]">La suite de l’historique n’a pas pu être chargée.</p>}
+              <button type="button" onClick={onLoadMore} disabled={loadingMore} className="w-full rounded-lg border border-[color:var(--sc-border)] px-4 py-3 text-sm font-semibold text-[color:var(--sc-blue)] hover:bg-[color:var(--sc-surface)] disabled:opacity-60">
+                {loadingMore ? "Chargement…" : loadMoreError ? "Réessayer" : "Charger la suite"}
+              </button>
+            </div>
+          )}
         </div>
       )}
     </AccountSectionCard>

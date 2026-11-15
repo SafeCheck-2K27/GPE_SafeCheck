@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useEffect, useState } from "react"
+import { Suspense, useEffect, useRef, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useTheme } from "next-themes"
 import { useAuth } from "@/components/safecheck/AuthProvider"
@@ -20,6 +20,7 @@ import { loadAccountTutorials } from "@/features/account/tutorial-loading"
 import { getTutorialProgressSnapshots } from "@/features/tutorials/api"
 import { tutorialSaveQueue } from "@/features/tutorials/transport"
 import { listAccountAudits, type AccountAudit } from "@/features/account/api"
+import type { AccountAuditCountsDto } from "@/lib/contracts/audit"
 import { getAccountSessionView } from "./_session-state"
 import {
   getAccountTab,
@@ -96,6 +97,12 @@ function AccountPageContent() {
   const activeTab = getAccountTab(tabParam)
 
   const [audits, setAudits] = useState<AccountAudit[] | null>(null)
+  const [auditCounts, setAuditCounts] = useState<AccountAuditCountsDto | null>(null)
+  const [auditCursor, setAuditCursor] = useState<string | null>(null)
+  const [loadingMoreAudits, setLoadingMoreAudits] = useState(false)
+  const [moreAuditsError, setMoreAuditsError] = useState(false)
+  const pageControllerRef = useRef<AbortController | null>(null)
+  const loadingMoreRef = useRef(false)
   const [auditError, setAuditError] = useState(false)
   const [retryKey, setRetryKey] = useState(0)
   const [tutorials, setTutorials] = useState<AccountTutorial[] | null>(null)
@@ -123,16 +130,23 @@ function AccountPageContent() {
 
   useEffect(() => {
     const controller = new AbortController()
-    listAccountAudits(controller.signal)
-      .then((items) => {
+    pageControllerRef.current = controller
+    listAccountAudits(null, controller.signal)
+      .then((page) => {
         if (controller.signal.aborted) return
-        setAudits(items)
+        setAudits(page.items)
+        setAuditCounts(page.counts)
+        setAuditCursor(page.nextCursor)
         setAuditError(false)
+        setMoreAuditsError(false)
       })
       .catch(() => {
         if (!controller.signal.aborted) setAuditError(true)
       })
-    return () => controller.abort()
+    return () => {
+      controller.abort()
+      if (pageControllerRef.current === controller) pageControllerRef.current = null
+    }
   }, [retryKey, auth.accountAuditsRevision])
 
   useEffect(() => {
@@ -145,14 +159,40 @@ function AccountPageContent() {
 
   const retryAudits = () => {
     setAudits(null)
+    setAuditCounts(null)
+    setAuditCursor(null)
+    setMoreAuditsError(false)
     setAuditError(false)
     setRetryKey((key) => key + 1)
+  }
+
+  const loadMoreAudits = async () => {
+    const controller = pageControllerRef.current
+    if (!auditCursor || loadingMoreRef.current || !controller || controller.signal.aborted) return
+    loadingMoreRef.current = true
+    setLoadingMoreAudits(true)
+    try {
+      const page = await listAccountAudits(auditCursor, controller.signal)
+      if (controller.signal.aborted || pageControllerRef.current !== controller) return
+      setAudits((current) => {
+        if (!current) return page.items
+        const existing = new Set(current.map((audit) => audit.id))
+        return [...current, ...page.items.filter((audit) => !existing.has(audit.id))]
+      })
+      setAuditCursor(page.nextCursor)
+      setMoreAuditsError(false)
+    } catch {
+      if (!controller.signal.aborted) setMoreAuditsError(true)
+    } finally {
+      loadingMoreRef.current = false
+      setLoadingMoreAudits(false)
+    }
   }
 
   return (
     <>
       <main className="flex-1 max-w-6xl mx-auto w-full px-4 md:px-6 py-8">
-        {auth.user && <AccountHero user={auth.user} audits={audits} />}
+        {auth.user && <AccountHero user={auth.user} counts={auditCounts} />}
 
         <AccountTabs
           activeTab={activeTab}
@@ -162,7 +202,7 @@ function AccountPageContent() {
 
         {activeTab === "dashboard" && (
           <div className="space-y-6">
-            <AccountDashboard audits={audits} error={auditError} onRetry={retryAudits} />
+            <AccountDashboard counts={auditCounts} error={auditError} loading={audits === null} onRetry={retryAudits} />
             <AccountTutorials items={tutorials} error={tutorialError} saveError={tutorialSaveError} onRetry={() => {
               setTutorials(null)
               setTutorialError(false)
@@ -173,7 +213,7 @@ function AccountPageContent() {
         )}
 
         {activeTab === "historique" && (
-          <AccountHistory audits={audits} error={auditError} onRetry={retryAudits} />
+          <AccountHistory audits={audits} error={auditError} onRetry={retryAudits} hasMore={auditCursor !== null} loadingMore={loadingMoreAudits} loadMoreError={moreAuditsError} onLoadMore={() => void loadMoreAudits()} />
         )}
 
         {activeTab === "profil" && auth.user && <AccountProfile user={auth.user} />}

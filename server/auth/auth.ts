@@ -14,11 +14,15 @@ if (!authOrigin || new URL(authOrigin).origin !== authOrigin) {
   throw new Error("BETTER_AUTH_URL must be an exact origin")
 }
 
-export const auth = betterAuth({
-  baseURL: authOrigin,
-  trustedOrigins: [webOrigin],
-  database: prismaAdapter(prisma, { provider: "postgresql" }),
-  emailAndPassword: { enabled: true },
-  advanced: { ipAddress: { ipAddressHeaders: [CANONICAL_IP_HEADER] } },
-  user: { modelName: "User" },
-})
+export function createAuth(database: Parameters<typeof prismaAdapter>[0] = prisma) {
+  return betterAuth({
+    baseURL: authOrigin,
+    trustedOrigins: [webOrigin],
+    database: prismaAdapter(database, { provider: "postgresql", transaction: true }),
+    emailAndPassword: { enabled: true },
+    advanced: { ipAddress: { ipAddressHeaders: [CANONICAL_IP_HEADER] } },
+    user: { modelName: "User" },
+  })
+}
+
+export const auth = createAuth()

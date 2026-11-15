@@ -1,9 +1,10 @@
 import { randomUUID } from "node:crypto"
-import type { FastifyPluginAsync, FastifyRequest } from "fastify"
+import { isIP } from "node:net"
+import type { FastifyPluginAsync, FastifyReply, FastifyRequest } from "fastify"
 import type { AuditAnswerValue } from "../../src/features/audit/types"
 import type { AuditDto, AuditSummaryDto, CreatedAuditDto } from "../../src/lib/contracts/audit"
-import { auth } from "../auth/auth"
-import { authRequestHeaders } from "../auth/request-headers"
+import { auditRateLimitKey, AuditRateLimiter } from "./rate-limit"
+import { authenticatedUserId } from "../auth/session"
 import { allowsBrowserMutation } from "../browser-mutation"
 import {
   claimGuestAudits,
@@ -30,6 +31,27 @@ const unsupportedVersion = {
   code: "AUDIT_VERSION_UNSUPPORTED",
   message: "This audit questionnaire or scoring version is not supported",
 }
+const auditPageSize = 20
+const maxAuditPageSize = 50
+
+function decodeAuditCursor(cursor: string): { createdAt: Date; id: string } | null {
+  if (!/^[A-Za-z0-9_-]{1,256}$/.test(cursor)) return null
+  try {
+    const decoded = Buffer.from(cursor, "base64url").toString("utf8")
+    if (Buffer.from(decoded, "utf8").toString("base64url") !== cursor) return null
+    const value: unknown = JSON.parse(decoded)
+    if (!Array.isArray(value) || value.length !== 2 || typeof value[0] !== "string" || typeof value[1] !== "string") return null
+    const createdAt = new Date(value[0])
+    if (!Number.isFinite(createdAt.getTime()) || createdAt.toISOString() !== value[0] || !UUID_V4.test(value[1])) return null
+    return { createdAt, id: value[1] }
+  } catch {
+    return null
+  }
+}
+
+function encodeAuditCursor(createdAt: Date, id: string): string {
+  return Buffer.from(JSON.stringify([createdAt.toISOString(), id]), "utf8").toString("base64url")
+}
 
 function guestSubjectFromCookie(request: FastifyRequest): string | null {
   const cookie = request.cookies[GUEST_COOKIE]
@@ -41,15 +63,8 @@ function guestSubjectFromCookie(request: FastifyRequest): string | null {
     : null
 }
 
-async function authenticatedUserId(request: FastifyRequest): Promise<string | null> {
-  const session = await auth.api.getSession({
-    headers: authRequestHeaders(request),
-  })
-  return session?.user.id ?? null
-}
-
-async function auditOwnerFromRequest(request: FastifyRequest): Promise<AuditOwner | null> {
-  const userId = await authenticatedUserId(request)
+async function auditOwnerFromRequest(request: FastifyRequest, reply: FastifyReply): Promise<AuditOwner | null> {
+  const userId = await authenticatedUserId(request, reply)
   if (userId) return { userId, guestSubject: null }
 
   const guestSubject = guestSubjectFromCookie(request)
@@ -79,14 +94,27 @@ function auditDto(audit: NonNullable<Awaited<ReturnType<typeof getAudit>>>): Aud
 }
 
 export const auditRoutes: FastifyPluginAsync = async (app) => {
+  // 10 new audits and 180 answer/submit/claim writes per 10 minutes per client subnet.
+  const createLimiter = new AuditRateLimiter(10, 10 * 60 * 1000)
+  const mutationLimiter = new AuditRateLimiter(180, 10 * 60 * 1000)
   app.addHook("onRequest", async (request, reply) => {
     if (["POST", "PUT"].includes(request.method) && !allowsBrowserMutation(request)) {
       return reply.code(403).send({ code: "INVALID_REQUEST", message: "Invalid request" })
     }
+    if (["POST", "PUT"].includes(request.method)) {
+      const isCreation = request.method === "POST" && request.routeOptions.url === "/audits"
+      const limiter = isCreation ? createLimiter : mutationLimiter
+      const clientIp = isIP(request.ip) ? request.ip : request.raw.socket.remoteAddress
+      const decision = limiter.consume(auditRateLimitKey(clientIp && isIP(clientIp) ? clientIp : "unknown"))
+      if (!decision.allowed) {
+        reply.header("Retry-After", String(decision.retryAfterSeconds))
+        return reply.code(429).send({ code: "RATE_LIMITED", message: "Too many audit requests. Try again later." })
+      }
+    }
   })
 
-  app.get("/audits", async (request, reply) => {
-    const userId = await authenticatedUserId(request)
+  app.get<{ Querystring: { cursor?: string; limit?: string } }>("/audits", async (request, reply) => {
+    const userId = await authenticatedUserId(request, reply)
     if (!userId) {
       return reply.code(401).send({
         code: "UNAUTHENTICATED",
@@ -94,7 +122,20 @@ export const auditRoutes: FastifyPluginAsync = async (app) => {
       })
     }
 
-    const audits = await listUserAudits(userId)
+    const rawLimit = request.query.limit
+    const limit = rawLimit === undefined ? auditPageSize : Number(rawLimit)
+    if (rawLimit !== undefined && (typeof rawLimit !== "string" || !/^\d{1,2}$/.test(rawLimit) || String(limit) !== rawLimit || !Number.isSafeInteger(limit) || limit < 1 || limit > maxAuditPageSize)) {
+      return reply.code(400).send({ code: "INVALID_AUDIT_LIMIT", message: "Audit page limit must be between 1 and 50" })
+    }
+    const rawCursor = request.query.cursor
+    const after = rawCursor === undefined ? undefined : decodeAuditCursor(rawCursor)
+    if (rawCursor !== undefined && (typeof rawCursor !== "string" || !after)) {
+      return reply.code(400).send({ code: "INVALID_AUDIT_CURSOR", message: "Invalid audit cursor" })
+    }
+
+    const result = await listUserAudits(userId, { take: limit, ...(after ? { after } : {}) })
+    const hasMore = result.rows.length > limit
+    const audits = result.rows.slice(0, limit)
     return {
       items: audits.map((audit) => ({
         id: audit.id,
@@ -105,11 +146,13 @@ export const auditRoutes: FastifyPluginAsync = async (app) => {
         scoringVersion: audit.scoringVersion,
         answeredCount: audit._count.answers,
       } satisfies AuditSummaryDto)),
+      nextCursor: hasMore && audits.length > 0 ? encodeAuditCursor(audits[audits.length - 1].createdAt, audits[audits.length - 1].id) : null,
+      counts: result.counts,
     }
   })
 
   app.post("/audits", async (request, reply) => {
-    const existingOwner = await auditOwnerFromRequest(request)
+    const existingOwner = await auditOwnerFromRequest(request, reply)
     const owner: AuditOwner = existingOwner ?? {
       userId: null,
       guestSubject: randomUUID(),
@@ -135,7 +178,7 @@ export const auditRoutes: FastifyPluginAsync = async (app) => {
   })
 
   app.post("/audits/claim-guest", async (request, reply) => {
-    const userId = await authenticatedUserId(request)
+    const userId = await authenticatedUserId(request, reply)
     if (!userId) {
       return reply.code(401).send({
         code: "UNAUTHENTICATED",
@@ -156,7 +199,7 @@ export const auditRoutes: FastifyPluginAsync = async (app) => {
       return reply.code(400).send(invalidAuditId)
     }
 
-    const owner = await auditOwnerFromRequest(request)
+    const owner = await auditOwnerFromRequest(request, reply)
     if (!owner) {
       return reply.code(404).send(auditNotFound)
     }
@@ -204,7 +247,7 @@ export const auditRoutes: FastifyPluginAsync = async (app) => {
         })
       }
 
-      const owner = await auditOwnerFromRequest(request)
+      const owner = await auditOwnerFromRequest(request, reply)
       if (!owner) return reply.code(404).send(auditNotFound)
 
       const result = await saveAuditAnswer(
@@ -246,7 +289,7 @@ export const auditRoutes: FastifyPluginAsync = async (app) => {
         return reply.code(400).send(invalidAuditId)
       }
 
-      const owner = await auditOwnerFromRequest(request)
+      const owner = await auditOwnerFromRequest(request, reply)
       if (!owner) return reply.code(404).send(auditNotFound)
 
       const result = await submitAudit(id, owner)

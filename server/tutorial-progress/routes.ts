@@ -1,7 +1,6 @@
 import type { FastifyPluginAsync } from "fastify"
 import { tutoriels } from "../../src/lib/tutoriels-data"
-import { auth } from "../auth/auth"
-import { authRequestHeaders } from "../auth/request-headers"
+import { authenticatedUserId } from "../auth/session"
 import { allowsBrowserMutation } from "../browser-mutation"
 import { parseTutorialId, parseTutorialProgress, parseTutorialVersion, tutorialProgressDto } from "./contract"
 import { listTutorialProgress, saveTutorialProgress, TutorialVersionConflict } from "./service"
@@ -21,8 +20,7 @@ export const tutorialProgressRoutes: FastifyPluginAsync = async (app) => {
     if (request.method === "PUT" && !allowsBrowserMutation(request)) {
       return reply.code(403).send({ code: "INVALID_REQUEST", message: "Invalid request" })
     }
-    const session = await auth.api.getSession({ headers: authRequestHeaders(request) })
-    request.tutorialProgressUserId = session?.user.id ?? null
+    request.tutorialProgressUserId = await authenticatedUserId(request, reply)
     if (!request.tutorialProgressUserId) {
       return reply.code(401).send({ code: "UNAUTHENTICATED", message: "Authentication required" })
     }
