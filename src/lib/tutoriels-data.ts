@@ -49,6 +49,8 @@ export interface TutoStep {
 
 export interface Tutoriel {
   id: number
+  /** Increment when step meanings/order change; persisted indices belong to this version. */
+  version: number
   slug: string
   title: string
   duration: string
@@ -88,6 +90,7 @@ export const tutoriels: Tutoriel[] = [
   /* DEBUTANT */
   {
     id: 1,
+    version: 1,
     slug: "double-authentification",
     title: "Activer la double authentification sur Google",
     duration: "5 min",
@@ -126,6 +129,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 2,
+    version: 1,
     slug: "creer-un-mot-de-passe-fort",
     title: "Creer un mot de passe fort",
     duration: "3 min",
@@ -156,6 +160,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 3,
+    version: 1,
     slug: "gestionnaire-mdp",
     title: "Installer et utiliser Bitwarden",
     duration: "10 min",
@@ -186,6 +191,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 4,
+    version: 1,
     slug: "verifier-si-ton-email-a-ete-compromis",
     title: "Verifier si ton email a ete compromis",
     duration: "3 min",
@@ -215,12 +221,13 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 5,
+    version: 1,
     slug: "sauvegardes",
     title: "Sauvegarder ses fichiers importants",
     duration: "10 min",
     level: "Debutant",
     description:
-      "Apprends a mettre en place la regle 3-2-1 pour ne jamais perdre tes photos et documents, meme en cas de ransomware.",
+      "Apprends a mettre en place la regle 3-2-1 pour disposer de plusieurs copies de tes photos et documents, meme en cas de ransomware.",
     category: "sauvegardes",
     tags: ["essentiel", "donnees"],
     icon: "save",
@@ -244,12 +251,13 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 6,
+    version: 1,
     slug: "phishing",
     title: "Identifier un email de phishing",
     duration: "5 min",
     level: "Debutant",
     description:
-      "Le phishing represente 90% des attaques. Apprends a reconnaitre les signaux d'alarme pour ne plus jamais cliquer sur un lien malveillant.",
+      "Apprends a reconnaitre les signaux d'alarme d'un message de phishing et a verifier les liens avant de les ouvrir.",
     category: "phishing",
     tags: ["essentiel", "phishing", "populaire"],
     icon: "alert-triangle",
@@ -274,6 +282,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 7,
+    version: 1,
     slug: "mises-a-jour",
     title: "Mettre a jour Windows ou macOS",
     duration: "10 min",
@@ -303,6 +312,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 8,
+    version: 1,
     slug: "securiser-wifi",
     title: "Securiser son Wi-Fi domestique",
     duration: "8 min",
@@ -333,6 +343,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 9,
+    version: 1,
     slug: "verifier-les-permissions-de-son-smartphone",
     title: "Verifier les permissions de son smartphone",
     duration: "6 min",
@@ -362,6 +373,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 10,
+    version: 1,
     slug: "reconnaitre-un-faux-lien-url-spoofing",
     title: "Reconnaitre un faux lien (URL spoofing)",
     duration: "5 min",
@@ -391,6 +403,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 11,
+    version: 1,
     slug: "eviter-les-arnaques-classiques-en-ligne",
     title: "Eviter les arnaques classiques en ligne",
     duration: "7 min",
@@ -410,7 +423,7 @@ export const tutoriels: Tutoriel[] = [
     prerequisites: ["Aucun prerequis"],
     platform: "Email, SMS, navigateur web",
     steps: [
-      { title: "Faux support Microsoft / Apple", description: "Pop-up qui te dit que ton PC est infecte. Toujours faux." },
+      { title: "Faux support technique", description: "Un pop-up alarmiste qui demande d'appeler un numero ou d'installer un outil d'acces a distance est suspect." },
       { title: "Faux SMS de livraison", description: "Lien pour 'payer 1.99E de douane'. Toujours suspect." },
       { title: "Faux gains et tirages au sort", description: "Tu n'as pas joue, tu n'as donc pas gagne." },
       { title: "Faux conseillers bancaires", description: "Une banque ne demande JAMAIS un code par telephone." },
@@ -420,6 +433,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 12,
+    version: 1,
     slug: "mettre-a-jour-son-navigateur",
     title: "Mettre a jour son navigateur",
     duration: "3 min",
@@ -449,6 +463,7 @@ export const tutoriels: Tutoriel[] = [
   /* INTERMEDIAIRE */
   {
     id: 13,
+    version: 1,
     slug: "securiser-son-navigateur-web",
     title: "Securiser son navigateur web",
     duration: "10 min",
@@ -478,6 +493,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 14,
+    version: 1,
     slug: "configurer-bitwarden-sur-plusieurs-appareils",
     title: "Configurer Bitwarden sur plusieurs appareils",
     duration: "12 min",
@@ -507,6 +523,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 15,
+    version: 1,
     slug: "chiffrer-ses-fichiers-sensibles",
     title: "Chiffrer ses fichiers sensibles",
     duration: "15 min",
@@ -536,6 +553,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 16,
+    version: 1,
     slug: "verifier-les-sessions-actives-sur-ses-comptes",
     title: "Verifier les sessions actives sur ses comptes",
     duration: "8 min",
@@ -565,6 +583,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 17,
+    version: 1,
     slug: "configurer-la-confidentialite-de-windows",
     title: "Configurer la confidentialite de Windows",
     duration: "12 min",
@@ -594,6 +613,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 18,
+    version: 1,
     slug: "choisir-et-installer-les-bonnes-extensions-navigateur",
     title: "Choisir et installer les bonnes extensions navigateur",
     duration: "10 min",
@@ -623,6 +643,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 19,
+    version: 1,
     slug: "detecter-les-apps-a-risque-sur-son-telephone",
     title: "Detecter les apps a risque sur son telephone",
     duration: "9 min",
@@ -652,6 +673,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 20,
+    version: 1,
     slug: "mettre-en-place-une-routine-de-sauvegarde-3-2-1",
     title: "Mettre en place une routine de sauvegarde 3-2-1",
     duration: "20 min",
@@ -681,6 +703,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 21,
+    version: 1,
     slug: "comprendre-les-bases-d-un-vpn-et-bien-le-choisir",
     title: "Comprendre les bases d'un VPN et bien le choisir",
     duration: "12 min",
@@ -710,6 +733,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 22,
+    version: 1,
     slug: "identifier-un-phishing-avance-spear-bec",
     title: "Identifier un phishing avance (spear / BEC)",
     duration: "10 min",
@@ -739,6 +763,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 23,
+    version: 1,
     slug: "separer-ses-usages-perso-et-sensibles",
     title: "Separer ses usages perso et sensibles",
     duration: "10 min",
@@ -769,6 +794,7 @@ export const tutoriels: Tutoriel[] = [
   /* AVANCE */
   {
     id: 24,
+    version: 1,
     slug: "limiter-la-telemetrie-systeme",
     title: "Limiter la telemetrie systeme",
     duration: "25 min",
@@ -798,6 +824,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 25,
+    version: 1,
     slug: "auditer-les-services-de-demarrage-windows",
     title: "Auditer les services de demarrage Windows",
     duration: "20 min",
@@ -827,6 +854,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 26,
+    version: 1,
     slug: "verifier-les-ports-ouverts-sur-sa-machine",
     title: "Verifier les ports ouverts sur sa machine",
     duration: "15 min",
@@ -856,6 +884,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 27,
+    version: 1,
     slug: "comprendre-et-durcir-son-pare-feu",
     title: "Comprendre et durcir son pare-feu",
     duration: "25 min",
@@ -885,6 +914,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 28,
+    version: 1,
     slug: "analyser-les-permissions-avancees-d-une-app-android",
     title: "Analyser les permissions avancees d'une app Android",
     duration: "20 min",
@@ -914,6 +944,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 29,
+    version: 1,
     slug: "verifier-l-etat-du-chiffrement-disque",
     title: "Verifier l'etat du chiffrement disque",
     duration: "10 min",
@@ -943,6 +974,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 30,
+    version: 1,
     slug: "hygiene-de-comptes-compartimentee",
     title: "Hygiene de comptes compartimentee",
     duration: "30 min",
@@ -972,6 +1004,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 31,
+    version: 1,
     slug: "controler-les-surfaces-d-exposition-reseau-a-domicile",
     title: "Controler les surfaces d'exposition reseau a domicile",
     duration: "25 min",
@@ -1001,6 +1034,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 32,
+    version: 1,
     slug: "lire-les-logs-de-connexion-google-microsoft",
     title: "Lire les logs de connexion Google / Microsoft",
     duration: "15 min",
@@ -1030,6 +1064,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 33,
+    version: 1,
     slug: "strategie-de-navigation-cloisonnee",
     title: "Strategie de navigation cloisonnee",
     duration: "20 min",
@@ -1059,6 +1094,7 @@ export const tutoriels: Tutoriel[] = [
   },
   {
     id: 34,
+    version: 1,
     slug: "configurer-un-dns-chiffre-doh-dot-sur-son-reseau",
     title: "Configurer un DNS chiffre (DoH / DoT) sur son reseau",
     duration: "20 min",
@@ -1087,22 +1123,6 @@ export const tutoriels: Tutoriel[] = [
     tip: "NextDNS te donne aussi un blocage de tracker / malware au niveau DNS, sans rien installer sur les appareils.",
   },
 ]
-
-export const userProgress = {
-  level: "Petit Scarabee",
-  levelKey: "Debutant" as Niveau,
-  levelIndex: 1,
-  totalLevels: 5,
-  progressPercent: 18,
-  nextLevel: "Luciole",
-  stepsToNextLevel: 3,
-  completedTutos: 2,
-  totalTutos: tutoriels.length,
-  percentileBetter: 42,
-  avgUserMessage:
-    "Les utilisateurs de ton profil commencent souvent par securiser leurs comptes et leur Wi-Fi.",
-  badges: ["Badge 01"],
-}
 
 export const levels = [
   { name: "Petit Scarabee", icon: "S", color: "var(--sc-warn)", key: "Debutant" as Niveau },

@@ -1,7 +1,6 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import type { MouseEvent } from "react"
 import {
   ArrowLeft,
   ArrowRight,
@@ -9,15 +8,13 @@ import {
   Filter as FilterIcon,
 } from "lucide-react"
 import { ScBadge, ScChip } from "@/components/safecheck/primitives"
-import { HABIT_TAGS, HABITUDES, STATUS_LABELS } from "../data"
+import { HABIT_TAGS, HABITUDES } from "../data"
 import { filterHabits } from "../filters"
 import type {
   Habit,
   HabitLevel,
   HabitTag,
-  RecommendationStatus,
 } from "../types"
-import { getNextRecommendationStatus } from "../utils"
 import { HabitDetail } from "./HabitDetail"
 import { RecommendationIcon } from "./RecommendationIcon"
 
@@ -25,21 +22,11 @@ export function HabitsView({ onBack }: { onBack: () => void }) {
   const [selected, setSelected] = useState<Habit | null>(null)
   const [levelFilter, setLevelFilter] = useState<"all" | HabitLevel>("all")
   const [tagFilter, setTagFilter] = useState<"all" | HabitTag>("all")
-  const [statuses, setStatuses] = useState<Record<string, RecommendationStatus>>({})
 
   const filtered = useMemo(
     () => filterHabits(HABITUDES, { level: levelFilter, tag: tagFilter }),
     [levelFilter, tagFilter],
   )
-
-  const cycleStatus = (id: string, e: MouseEvent) => {
-    e.stopPropagation()
-    const current = statuses[id] ?? "todo"
-    setStatuses((currentStatuses) => ({
-      ...currentStatuses,
-      [id]: getNextRecommendationStatus(current),
-    }))
-  }
 
   return (
     <>
@@ -102,8 +89,6 @@ export function HabitsView({ onBack }: { onBack: () => void }) {
 
       <section className="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filtered.map((h, i) => {
-          const status = statuses[h.id] ?? "todo"
-          const { label: statusLabel, color: statusColor } = STATUS_LABELS[status]
           return (
             <article
               key={h.id}
@@ -132,15 +117,6 @@ export function HabitsView({ onBack }: { onBack: () => void }) {
                   </ScBadge>
                   <ScBadge tone="muted">{h.tag}</ScBadge>
                 </div>
-                <button
-                  type="button"
-                  onClick={(e) => cycleStatus(h.id, e)}
-                  className={`relative z-20 shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border transition-colors ${statusColor}`}
-                  title="Changer le statut"
-                  aria-label={`Changer le statut de ${h.title}. Statut actuel : ${statusLabel}`}
-                >
-                  {statusLabel}
-                </button>
               </div>
               <h3 className="font-bold text-base text-[color:var(--sc-text)]">{h.title}</h3>
               <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed">{h.pitch}</p>
@@ -161,8 +137,6 @@ export function HabitsView({ onBack }: { onBack: () => void }) {
         <HabitDetail
           h={selected}
           onClose={() => setSelected(null)}
-          status={statuses[selected.id] ?? "todo"}
-          onStatusChange={(s) => setStatuses((prev) => ({ ...prev, [selected.id]: s }))}
         />
       )}
     </>

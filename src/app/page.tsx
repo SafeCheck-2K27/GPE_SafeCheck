@@ -53,8 +53,6 @@ export default function PreHomePage() {
           onClose={() => setShowLogin(false)}
           onSuccess={async (email, password) => {
             await auth.login(email, password)
-            setShowLogin(false)
-            router.push("/accueil")
           }}
         />
       )}

@@ -1,9 +1,3 @@
-export interface HomeTestimonial {
-  name: string
-  role: string
-  text: string
-}
-
 export interface HomeJourneyStep {
   number: number
   title: string

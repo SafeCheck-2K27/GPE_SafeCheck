@@ -1,242 +1,199 @@
-# Checklist manuelle de régression frontend
+# Recette manuelle — parcours utilisateur SafeCheck
 
-Cette checklist conserve les scénarios navigateur importants après le retrait de
-Playwright. Elle doit être exécutée pour toute modification significative de
-l'interface, de la navigation, des providers, des paramètres d'URL ou des
-primitives partagées.
+Cette checklist est la référence courante pour les observations navigateur ;
+**CURRENT REFERENCE**.
+les rapports liés depuis l'[index QA](README.md) sont des comptes rendus datés
+de leur étape.
 
-## Fiche d'exécution
+Cette recette complète les tests unitaires et d'intégration. Elle sert à vérifier
+les parcours visibles dans un navigateur après une modification qui touche
+l'authentification, Audit, Résultats, les tutoriels, le compte, la navigation ou
+les composants partagés. Elle ne constitue pas une suite E2E automatisée : le
+projet n'en maintient pas.
+
+## Fiche de recette
 
 ```text
-Date :
-Opérateur :
+Date / opérateur :
 Branche / commit :
-Navigateur et version :
-Système :
-Commande de démarrage :
-Résultat build :
-Anomalies connues avant test :
+Environnement et URL :
+Navigateur / version / système :
+Viewport et thème :
+Résultat des contrôles automatisés déjà exécutés :
+Incidents préexistants :
 ```
 
-Utiliser un build de production lorsque le changement concerne le rendu serveur,
-l'hydratation ou les paramètres d'URL :
+Utiliser un environnement local ou QA relié à l'API et à une base de test. Prévoir
+un compte de test contrôlé et un navigateur invité propre. Ne pas utiliser de
+données personnelles. Garder la console et l'onglet réseau visibles ; noter les
+erreurs et réponses HTTP utiles sans copier de cookie, jeton, mot de passe ou
+autre secret dans le compte rendu.
 
-```bash
-npm run build
-npm run start
-```
+## Authentification et récupération
 
-Ouvrir les outils de développement et conserver la console visible pendant les
-parcours. Tester avec un profil local vierge, puis avec un utilisateur mocké
-connecté lorsque le scénario le demande.
+### Création de compte et connexion
 
-## Matrice obligatoire
+- [ ] Depuis la Navbar, ouvrir Créer un compte ; vérifier les champs, labels,
+  erreurs de validation et états d'envoi. Une soumission répétée rapide ne crée
+  qu'une tentative visible ; les contrôles sont désactivés pendant l'envoi.
+- [ ] Depuis l'action dédiée de la landing, ouvrir la page `/compte/creer`.
+  Créer un compte de test valide ; vérifier la confirmation de session puis
+  l'arrivée à `/compte`. Cette route est le point de départ du formulaire, pas
+  sa destination après succès.
+- [ ] Depuis la modale Créer un compte de la Navbar, vérifier qu'une inscription
+  réussie ouvre `/compte`, sauf destination protégée en attente.
+- [ ] Se déconnecter, ouvrir Connexion et tester un mot de passe invalide, puis
+  une connexion valide. L'erreur reste compréhensible et une nouvelle tentative
+  est possible.
+- [ ] Basculer directement entre Inscription et Connexion. La modale précédente
+  se ferme, la destination en attente reste la même et il n'y a pas de backdrop
+  superposé.
+- [ ] Pendant une requête, vérifier le libellé d'attente et les contrôles
+  désactivés. Au repos, Échap ferme la modale et le focus retourne à son
+  déclencheur.
+- [ ] Pour la recette QA, provoquer un échec de confirmation de session après
+  un POST Signup réussi, puis après un POST Login réussi. L'action Vérifier ma
+  session reprend la confirmation sans renvoyer le POST d'identifiants et
+  conserve la destination en attente jusqu'à la navigation. Dans le réseau,
+  vérifier méthode/chemin et nombre de requêtes seulement ; ne pas relever les
+  corps ou secrets.
 
-Exécuter les contrôles globaux et les routes touchées dans chaque case :
+### Destination en attente (`pendingHref`)
 
-| Largeur | Hauteur indicative | Clair | Sombre |
-|---:|---:|:---:|:---:|
-| 320 px | 720 px | [ ] | [ ] |
-| 360 px | 800 px | [ ] | [ ] |
-| 390 px | 844 px | [ ] | [ ] |
-| 768 px | 1024 px | [ ] | [ ] |
-| 1024 px | 768 px | [ ] | [ ] |
-| 1280 px | 800 px | [ ] | [ ] |
+- [ ] En invité, démarrer un Audit et ouvrir depuis Résultats une recommandation
+  nécessitant un compte. Se connecter : après confirmation, le rattachement des
+  audits invités et l'actualisation de session, la route du tutoriel demandé
+  s'ouvre.
+- [ ] Refaire le parcours avec Inscription, puis avec un compte déjà existant en
+  choisissant Connexion depuis la modale. La même destination est conservée.
+- [ ] Depuis la Navbar sans destination en attente, vérifier les destinations par
+  défaut de la modale : inscription vers `/compte`, connexion vers `/accueil`.
+- [ ] Vérifier que la navigation conserve les paramètres et fragments d'une
+  destination interne. La validation des destinations externes et des formes
+  hostiles de `pendingHref` est couverte par les tests automatisés
+  `tests/unit/auth-navigation.test.ts` ; il n'existe pas de champ utilisateur
+  pour saisir arbitrairement cette destination.
 
-Pour chaque case validée :
+### Session, erreur et déconnexion
 
-- [ ] aucune barre de défilement horizontale sur la page ;
-- [ ] aucun texte, contrôle ou média ne sort de son conteneur ;
-- [ ] les contenus principaux restent visibles et atteignables ;
-- [ ] les états hover, focus, active et disabled restent lisibles ;
-- [ ] le thème sélectionné survit à une navigation et à un rechargement ;
-- [ ] aucune erreur React, hydratation, chargement ou runtime dans la console ;
-- [ ] aucune requête inattendue en échec dans l'onglet réseau.
+- [ ] Recharger une page après connexion : l'identité reste disponible après
+  vérification de la session.
+- [ ] Simuler une indisponibilité de l'API de session dans l'environnement QA.
+  L'application affiche une erreur récupérable avec Réessayer ; elle ne traite
+  pas cet état comme une déconnexion confirmée et ne révèle pas les données du
+  compte.
+- [ ] Réessayer après rétablissement de l'API ; vérifier que la session et la
+  page Compte se chargent sans boucle de requêtes.
+- [ ] En connecté, lancer Déconnexion. L'identité et les données personnelles
+  disparaissent pendant la transition ; après succès, retour à `/` et accès
+  direct à `/compte` redirigé vers l'accueil public.
+- [ ] En invité, vérifier que les progressions de tutoriel ne révèlent pas celles
+  d'un autre compte.
 
-## Navigation globale
+### Rattachement des audits invités
 
-### Navbar desktop
+- [ ] En invité, terminer au moins un audit, puis créer un compte ou se connecter.
+  Après authentification, l'audit apparaît dans l'historique du compte.
+- [ ] Dans l'environnement QA, provoquer une réponse d'échec au rattachement
+  après une authentification réussie. La connexion et la destination continuent,
+  une notice indique le problème et propose Réessayer.
+- [ ] Réessayer après rétablissement de l'API ; le compte récupère l'audit sans
+  doublon. Vérifier que l'état et la version de l'audit sont conservés.
+- [ ] Suspendre le POST de claim ou sa reconfirmation : après 15 secondes,
+  la connexion continue, le rattachement échoué propose un retry et les opérations
+  Auth redeviennent disponibles. Une réponse tardive ne masque pas cette erreur.
+- [ ] Après un claim échoué, recharger la page avec la session User restaurée :
+  une tentative est faite une fois, puis le retry reste visible si l'API échoue.
+  Pas de boucle automatique ; après déconnexion confirmée puis retour au même
+  compte, un nouveau rattachement reste possible.
+- [ ] Sur `/audit?auditId=…` puis `/resultats?auditId=…`, afficher un audit Guest
+  devenu inaccessible sous User ; cliquer Réessayer le rattachement et vérifier
+  le nouveau GET et le contenu récupéré sur la même URL sans F5. Tester aussi
+  une première mutation serveur réussie dont la réponse est perdue, suivie d'un
+  retry à zéro audit transféré : la relecture récupère les données.
+- [ ] Sur `/audit` sans ID, retarder la création pendant un claim réussi :
+  conserver un seul POST de création et l'ID dans l'URL à sa fin. Un claim initial
+  à zéro ne réinitialise pas la question d'un audit déjà en cours.
 
-- [ ] le logo ouvre `/accueil` ;
-- [ ] les menus Audits, Tutoriels, Essentiels, Recommandations et Découvrir
-  s'ouvrent au clic ;
-- [ ] un seul menu est ouvert à la fois ;
-- [ ] un clic à l'extérieur ferme le menu ;
-- [ ] chaque lien ferme le menu et ouvre la bonne route ;
-- [ ] le menu Audits ouvert ne provoque aucun débordement horizontal ;
-- [ ] les toggles langue et thème sont utilisables au clavier ;
-- [ ] Connexion, Créer un compte, Mon profil et Déconnexion ont un focus visible.
+## Audit, Résultats et Compte
 
-### Navbar mobile
+- [ ] `/audit` : répondre à une question, avancer puis revenir ; la réponse est
+  conservée. Impossible d'avancer sans réponse. Terminer le questionnaire et
+  ouvrir Résultats.
+- [ ] `/resultats` : vérifier score, niveau, recommandations et destinations. Un
+  lien de tutoriel protégé propose l'authentification tout en gardant la cible.
+  Une session en erreur expose son action de reprise.
+- [ ] Connecté, ouvrir `/compte` : pendant le chargement, aucune ancienne donnée
+  personnelle ne reste affichée. Une fois chargé, vérifier les audits et les
+  progressions de tutoriels enregistrés.
+- [ ] Parcourir les onglets du Compte, recharger chaque onglet, puis utiliser
+  précédent/suivant. La section active reste cohérente avec l'URL ; une section
+  inconnue revient au tableau de bord.
+- [ ] Si un GET du compte échoue dans l'environnement QA, utiliser Réessayer et
+  vérifier les données restaurées sans recharger l'application.
 
-- [ ] le bouton Menu est présent jusqu'au breakpoint desktop ;
-- [ ] le drawer s'ouvre et se ferme sans déplacer la largeur de page ;
-- [ ] toutes les sections et actions sont accessibles par défilement ;
-- [ ] le drawer ouvert à 320, 360 et 390 px ne déborde pas horizontalement ;
-- [ ] choisir un lien referme le drawer ;
-- [ ] le focus clavier ne disparaît pas derrière le drawer.
+## Tutoriels, progression et navigation
 
-### Footer
+- [ ] `/tutoriels` : rechercher, filtrer et ouvrir un tutoriel. En invité,
+  vérifier le comportement local en mémoire ; connecté, avancer puis recharger
+  pour vérifier la progression persistée.
+- [ ] Connecté, dans `/tutoriels/[id]`, avancer une étape puis recharger ou
+  naviguer vers Mes tutoriels : retrouver la progression persistée.
+- [ ] Valider puis dévalider une étape : le pourcentage suit les étapes validées.
+  Avancer sans validation ne la marque pas terminée ; Terminer valide toutes les
+  étapes et conserve la position de lecture. Vérifier badges et actions
+  Commencer/Reprendre/Revoir dans le lecteur et le compte.
+- [ ] Avec une sauvegarde PUT retardée ou en échec dans l'environnement QA,
+  observer l'état de synchronisation et utiliser le retry proposé. Vérifier la
+  progression après confirmation serveur ; les snapshots non confirmés ne sont
+  pas garantis après un rechargement du navigateur.
+- [ ] Invité, constater que la progression de page est temporaire. Se connecter
+  ou s'inscrire : cette progression Guest n'est pas transférée au compte ;
+  après changement d'identité/remontage, elle ne doit pas être présentée comme
+  une progression persistée.
+- [ ] Vérifier que les liens directs vers un tutoriel valide fonctionnent et
+  qu'un identifiant inconnu présente un état récupérable.
+- [ ] Depuis la Navbar et le footer, ouvrir les routes principales. Les liens
+  ferment les menus/drawers ; clic extérieur et Échap ferment les menus ouverts.
+- [ ] Vérifier `/audits`, `/essentiels`, `/lexique`, `/recommandations`,
+  `/personalisation`, `/culture-cyber`, `/vulnerabilite`, `/simulations` et
+  `/hall-of-fame` lorsqu'ils sont touchés par le changement.
 
-- [ ] tous les groupes de liens sont lisibles ;
-- [ ] les liens internes pointent vers une route existante ;
-- [ ] le footer ne recouvre pas le dernier contenu de la page.
+## Clavier, affichage et thèmes
 
-## Parcours principaux
+Pour les routes touchées, vérifier au clavier :
 
-### Landing `/`
+- [ ] Tab et Maj+Tab suivent un ordre logique et le focus reste visible ; Entrée
+  et Espace activent les contrôles attendus.
+- [ ] Les formulaires annoncent leurs erreurs près du champ concerné. Les menus,
+  modales et drawers ont un nom accessible ; Échap les ferme au repos, le focus
+  revient au déclencheur et le contenu derrière une modale est inactif.
+- [ ] Les liens sont des liens et les actions sont des boutons ; aucun contrôle
+  interactif n'est imbriqué dans un autre.
 
-- [ ] le contenu de marque est visible dès le premier viewport ;
-- [ ] Découvrir la plateforme ouvre `/accueil` ;
-- [ ] le CTA d'audit ouvre `/audit` ;
-- [ ] les sections restent dans l'ordre et sans chevauchement ;
-- [ ] la modale de connexion propre à la landing s'ouvre et se ferme.
+Parcourir au minimum une largeur mobile (320–390 px) et une largeur desktop
+(1280 px), en thème clair puis sombre :
 
-### Accueil `/accueil`
-
-- [ ] le titre et le CTA Passer le questionnaire restent visibles aux six
-  largeurs ;
-- [ ] les cartes et sections ne créent pas de débordement ;
-- [ ] Voir les audits ouvre `/audits` ;
-- [ ] les CTA Tutoriels, Essentiels et Recommandations ouvrent les bonnes routes.
-
-### Audit `/audit`
-
-- [ ] quatre réponses sont proposées et l'état choisi est identifiable ;
-- [ ] Suivant reste désactivé sans réponse ;
-- [ ] Précédent restaure la réponse déjà choisie ;
-- [ ] la navigation directe par question conserve les réponses ;
-- [ ] les dix questions peuvent être terminées ;
-- [ ] Voir mes résultats ouvre `/personalisation` avec score et réponses valides ;
-- [ ] la barre latérale ou barre de progression ouverte ne déborde pas à 320,
-  360 ou 390 px.
-
-### Personnalisation `/personalisation`
-
-- [ ] les réponses et le score provenant de l'URL sont conservés ;
-- [ ] les valeurs URL absentes ou invalides produisent un fallback compréhensible ;
-- [ ] Passer cette étape ouvre `/resultats` sans perdre les paramètres utiles ;
-- [ ] le formulaire est utilisable uniquement au clavier.
-
-### Résultats `/resultats`
-
-- [ ] les scores 0, 34, 35, 59, 60, 79, 80 et 100 affichent le bon niveau ;
-- [ ] les recommandations conservent leur ordre et leurs liens ;
-- [ ] une URL incomplète ou invalide ne fait pas planter la page ;
-- [ ] les actions Audit, Audits, Tutoriels et création de compte fonctionnent ;
-- [ ] la modale d'inscription respecte le thème et ne masque pas son contenu.
-
-### Recommandations `/recommandations`
-
-- [ ] le hub ouvre les vues habitudes et techniques ;
-- [ ] `?type=habitudes` et `?type=techniques` survivent au rechargement ;
-- [ ] chaque carte possède une action de détail et une action de statut distinctes ;
-- [ ] aucun bouton n'est imbriqué dans un autre bouton ;
-- [ ] le statut passe visiblement à En cours ;
-- [ ] les modales Habitude et Technique se ferment par bouton, Échap et backdrop.
-
-### Tutoriels `/tutoriels` et `/tutoriels/[id]`
-
-- [ ] la recherche ignore casse et accents ;
-- [ ] chaque filtre, niveau, statut, durée, type et tri donne un résultat cohérent ;
-- [ ] Réinitialiser restaure l'URL et le catalogue par défaut ;
-- [ ] un résultat ouvre la route détail canonique ;
-- [ ] les liens directs et le rechargement d'un détail fonctionnent ;
-- [ ] le tutoriel en modale s'ouvre, se parcourt et se ferme ;
-- [ ] Signaler une précision ouvre une deuxième modale au-dessus de la première ;
-- [ ] fermer la modale supérieure restitue le focus dans le tutoriel ;
-- [ ] fermer la dernière modale restitue le focus à la carte du catalogue.
-
-### Essentiels `/essentiels`
-
-- [ ] `?q=gestionnaire` initialise le champ de recherche ;
-- [ ] la recherche et les filtres restent utilisables au clavier ;
-- [ ] chaque détail s'ouvre dans une modale nommée ;
-- [ ] la modale se ferme par bouton, Échap et backdrop.
-
-### Lexique `/lexique`
-
-- [ ] la recherche et les filtres affichent des termes cohérents ;
-- [ ] `?terme=phishing` ouvre le drawer au rechargement ;
-- [ ] le drawer est collé au bord droit et limité au viewport ;
-- [ ] le drawer occupe toute la hauteur sans sortir de l'écran ;
-- [ ] le contenu derrière est inerte et ne défile pas ;
-- [ ] la fermeture retire le paramètre et restitue le focus ;
-- [ ] contrôler spécialement 390 px clair et 1280 px sombre.
-
-### Compte `/compte`
-
-- [ ] un utilisateur non connecté reçoit le comportement MVP prévu ;
-- [ ] les quatre sections sont des liens et non des boutons ;
-- [ ] le lien actif porte `aria-current="page"` ;
-- [ ] les paramètres URL étrangers sont conservés ;
-- [ ] rechargement, précédent et suivant conservent la bonne section ;
-- [ ] un onglet invalide revient au tableau de bord canonique ;
-- [ ] Tab puis Entrée permettent de changer de section ;
-- [ ] la suppression de compte ouvre une modale de confirmation accessible.
-
-### Création de compte `/compte/creer`
-
-- [ ] Prénom, Nom, Adresse email et Mot de passe ont des labels visibles et des
-  noms accessibles identiques ;
-- [ ] les erreurs de validation sont annoncées et proches du champ concerné ;
-- [ ] le formulaire long reste atteignable à 320 px ;
-- [ ] la Navbar ne permet pas d'ouvrir une seconde inscription concurrente.
-
-## Routes secondaires
-
-- [ ] `/audits` : catalogue lisible, cartes et CTA fonctionnels ;
-- [ ] `/vulnerabilite` : aucun débordement, notamment à 320 px dans les deux thèmes ;
-- [ ] `/culture-cyber` : contenu et navigation cohérents ;
-- [ ] `/hall-of-fame` : contributeurs lisibles et layout stable ;
-- [ ] `/simulations` : état MVP explicite et navigation fonctionnelle ;
-- [ ] `/wip` : le paramètre `feature` est affiché sans casser la mise en page ;
-- [ ] route inconnue : page 404 lisible et lien de récupération fonctionnel ;
-- [ ] boundary d'erreur : message non technique, Réessayer et Retour à l'accueil
-  accessibles.
-
-## Protocole commun à toutes les modales
-
-Appliquer cette section à Connexion Navbar, Connexion landing, Inscription,
-Essentiel, Habitude, Recommandation technique, Tutoriel, Précision tutoriel,
-Lexique et Suppression du compte.
-
-- [ ] le dialogue possède un nom accessible et `aria-modal="true"` ;
-- [ ] le rendu est porté directement sous `body` ;
-- [ ] l'arrière-plan est inerte et non cliquable ;
-- [ ] le scroll de la page est verrouillé sans saut horizontal ;
-- [ ] le focus initial se place dans le dialogue ;
-- [ ] Tab et Shift+Tab restent dans le dialogue ;
-- [ ] Échap ferme uniquement la modale supérieure ;
-- [ ] le bouton Fermer/Annuler fonctionne ;
-- [ ] le backdrop ferme seulement lorsque ce comportement est prévu ;
-- [ ] le focus revient au déclencheur encore présent ;
-- [ ] après fermeture finale, aucun `inert`, `aria-hidden` ou verrou de scroll ne fuit ;
-- [ ] le backdrop et les surfaces restent lisibles en clair et sombre.
-
-## Authentification mockée
-
-- [ ] la connexion avec une adresse de test crée la session locale ;
-- [ ] la session survit au rechargement et à une navigation ;
-- [ ] Mon profil devient disponible ;
-- [ ] Déconnexion efface la session locale et revient à `/` ;
-- [ ] ouvrir Inscription depuis Connexion ferme d'abord la première modale ;
-- [ ] ouvrir Connexion depuis Inscription ne crée pas deux backdrops concurrents.
+- [ ] Aucun débordement horizontal ; contenu, formulaire et modale restent
+  atteignables avec le défilement vertical.
+- [ ] Texte, erreurs, focus, états désactivés et notices restent lisibles dans
+  les deux thèmes.
+- [ ] Changer de thème, naviguer puis recharger : le thème choisi persiste.
+- [ ] Pas d'erreur console, d'erreur React/hydratation ni de requête échouée
+  inattendue liée au parcours.
 
 ## Compte rendu
 
 ```text
-Cases de matrice exécutées :
-Routes exécutées :
-Modales exécutées :
-Erreurs console :
-Erreurs d'hydratation :
-Débordements :
-Captures jointes :
+Scénarios exécutés :
 Scénarios non exécutés et raison :
+Erreurs console / réseau :
+Résultat destination pendingHref :
+Résultat session / claim / logout :
+Débordements ou défauts clavier :
+Captures sans donnée sensible :
 Verdict : PASS / PASS AVEC RÉSERVES / FAIL
 ```
 
-Ne cocher que les contrôles réellement observés. Une absence de navigateur, un
-parcours non testé ou un défaut préexistant doit rester visible dans le compte
-rendu.
+Cocher uniquement ce qui a été observé. Distinguer un contrôle automatisé d'une
+observation navigateur et signaler les parcours non exécutés.

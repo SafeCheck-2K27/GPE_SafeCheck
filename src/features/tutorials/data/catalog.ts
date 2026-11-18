@@ -1,8 +1,6 @@
 export {
   CATEGORY_LABEL,
-  levels,
   tutoriels,
-  userProgress,
 } from "@/lib/tutoriels-data"
 
 export type {

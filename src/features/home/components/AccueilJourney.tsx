@@ -21,7 +21,7 @@ export function AccueilJourney({
         </h2>
         <p className="mt-1.5 text-sm text-[color:var(--sc-text-2)] max-w-xl text-pretty">
           Pas besoin d'être expert. Commencez par le questionnaire&nbsp;: il suffit de 5 minutes
-          pour que SafeCheck adapte tout le reste à votre profil.
+          pour obtenir un score et des recommandations selon la tranche de ce score.
         </p>
       </div>
 
@@ -101,11 +101,11 @@ export function AccueilJourney({
               Résultat attendu
             </ScBadge>
             <h3 className="font-display font-semibold text-base text-[color:var(--sc-text)] mb-1.5">
-              Tutos personnalisés
+              Tutoriels par thème et niveau
             </h3>
             <p className="text-xs text-[color:var(--sc-text-2)] leading-relaxed text-pretty">
-              Après le questionnaire, SafeCheck sélectionne les tutoriels les plus utiles
-              pour votre profil. Du débutant au confirmé, chacun trouve son parcours.
+              Explorez une sélection éditoriale pour débuter, ou choisissez un thème
+              et un niveau dans le catalogue. Votre compte conserve votre progression.
             </p>
           </div>
           <button

@@ -12,10 +12,10 @@ import {
   tutorielsLinks,
 } from "../../src/components/safecheck/layout/nav-data"
 import { AUDIT_LEVELS } from "../../src/features/audits/levels"
+import { auditQuestions } from "../../src/features/audit/data"
 import { ESSENTIALS } from "../../src/features/essentials/data"
 import { CATEGORY_LABELS, HABITUDES, TECH } from "../../src/features/recommendations/data"
 import { scoreRecommendations } from "../../src/features/results/data"
-import { mockTutos } from "../../src/lib/account-data"
 import { tutoriels } from "../../src/lib/tutoriels-data"
 
 function assertSerializable(value: unknown, path = "root", ancestors = new Set<object>()): void {
@@ -49,6 +49,7 @@ function assertSerializable(value: unknown, path = "root", ancestors = new Set<o
 test("exported content catalogs remain JSON-serializable", () => {
   const catalogs = {
     auditLevels: AUDIT_LEVELS,
+    auditQuestions,
     essentials: ESSENTIALS,
     navigation: {
       auditLinks,
@@ -59,7 +60,6 @@ test("exported content catalogs remain JSON-serializable", () => {
     },
     recommendations: { categories: CATEGORY_LABELS, habits: HABITUDES, technical: TECH },
     resultRecommendations: scoreRecommendations,
-    tutorialHistory: mockTutos,
     tutorials: tutoriels,
     vulnerability: { examples: VULNERABILITY_EXAMPLES, factors: VULNERABILITY_FACTORS },
   }

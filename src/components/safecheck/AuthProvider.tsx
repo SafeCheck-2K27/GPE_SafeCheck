@@ -1,203 +1,222 @@
 "use client"
 
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useSyncExternalStore,
-} from "react"
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react"
+import { authApiOrigin, authClient } from "@/lib/auth-client"
+import { invalidateAuthRequests } from "@/lib/auth-request-lifecycle"
+import {
+  AuthActionError,
+  claimGuestAudits,
+  confirmSession,
+  resolveAuthSession,
+  resumeAuthConfirmation,
+  runAuthOperation,
+  toBetterAuthSignup,
+  toSafeCheckUser,
+  type SafeCheckUser,
+} from "./auth-logic"
+import { createGuestClaimRecovery, type GuestClaimStatus } from "./guest-claim-recovery"
+import { GuestClaimNotice } from "./GuestClaimNotice"
+import { SessionNotice } from "./SessionNotice"
 
-/*
-   SafeCheck - Auth context (frontend mockup)
-
-   This is a UI mockup, so there is no real backend. We persist
-   the "session" in localStorage so the user stays logged in
-   across page navigations and reloads, exactly like a real app.
-
-   Replace the bodies of `login` / `signup` with real API calls
-   when wiring a backend.
- */
-
-const STORAGE_KEY = "safecheck.user.v1"
-
-export interface SafeCheckUser {
-  email: string
-  pseudo: string
-  prenom?: string
-  nom?: string
-  pays?: string
-  age?: string
-}
+export { AuthActionError } from "./auth-logic"
+export type { AuthErrorKind, SafeCheckUser } from "./auth-logic"
 
 interface AuthContextValue {
   user: SafeCheckUser | null
   isLoggedIn: boolean
-  /** True after the first client snapshot has been read from localStorage. */
   isHydrated: boolean
+  authChanging: boolean
+  sessionError: boolean
+  retrySession: () => Promise<void>
+  guestClaimStatus: GuestClaimStatus
+  accountAuditsRevision: number
+  retryGuestClaim: () => Promise<void>
   login: (email: string, password: string) => Promise<SafeCheckUser>
-  signup: (data: Partial<SafeCheckUser> & { email: string; password: string }) => Promise<SafeCheckUser>
-  logout: () => void
-  updateUser: (patch: Partial<SafeCheckUser>) => void
+  signup: (data: { email: string; password: string; pseudo: string }) => Promise<SafeCheckUser>
+  logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
-type AuthSnapshot = string | null | undefined
-
-const authListeners = new Set<() => void>()
-let memorySnapshot: string | null = null
-
-function getAuthSnapshot(): AuthSnapshot {
-  if (typeof window === "undefined") return undefined
-  try {
-    return window.localStorage.getItem(STORAGE_KEY)
-  } catch {
-    return memorySnapshot
-  }
-}
-
-function getServerAuthSnapshot(): AuthSnapshot {
-  return undefined
-}
-
-function parseAuthSnapshot(snapshot: AuthSnapshot): SafeCheckUser | null {
-  if (!snapshot) return null
-  try {
-    const parsed = JSON.parse(snapshot)
-    if (parsed && typeof parsed === "object" && typeof parsed.email === "string") {
-      return parsed as SafeCheckUser
-    }
-    return null
-  } catch {
-    return null
-  }
-}
-
-function subscribeToAuth(listener: () => void) {
-  authListeners.add(listener)
-
-  const onStorage = (event: StorageEvent) => {
-    if (event.key === STORAGE_KEY) listener()
-  }
-  window.addEventListener("storage", onStorage)
-
-  return () => {
-    authListeners.delete(listener)
-    window.removeEventListener("storage", onStorage)
-  }
-}
-
-function emitAuthChange() {
-  authListeners.forEach((listener) => listener())
-}
-
-function writeToStorage(user: SafeCheckUser | null) {
-  if (typeof window === "undefined") return
-  const nextSnapshot = user ? JSON.stringify(user) : null
-  memorySnapshot = nextSnapshot
-
-  try {
-    if (nextSnapshot) {
-      window.localStorage.setItem(STORAGE_KEY, nextSnapshot)
-    } else {
-      window.localStorage.removeItem(STORAGE_KEY)
-    }
-  } catch {
-    /* ignore quota / privacy mode errors */
-  }
-
-  emitAuthChange()
-}
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const snapshot = useSyncExternalStore(
-    subscribeToAuth,
-    getAuthSnapshot,
-    getServerAuthSnapshot,
+  const { data: session, isPending, error: sessionLookupError, refetch } = authClient.useSession()
+  const [authChanging, setAuthChanging] = useState(false)
+  const [confirmationError, setConfirmationError] = useState(false)
+  const [claimOperationRevision, setClaimOperationRevision] = useState(0)
+  const operationLock = useRef(false)
+  const pendingAuthentication = useRef<SafeCheckUser | null>(null)
+  const attemptedIdentity = useRef<string | null>(null)
+  const providerActive = useRef(false)
+  const [claimRecovery] = useState(() => createGuestClaimRecovery(async (userId, signal) => {
+    // A retry must still belong to the confirmed account before sending its cookie.
+    await confirmSession(userId, { getSession: () => authClient.getSession({ fetchOptions: { signal } }) })
+    signal.throwIfAborted()
+    return claimGuestAudits({ fetcher: fetch, apiOrigin: authApiOrigin, warn: console.warn }, signal)
+  }))
+  const claimSnapshot = useSyncExternalStore(
+    claimRecovery.subscribe,
+    claimRecovery.getSnapshot,
+    claimRecovery.getServerSnapshot,
   )
-  const user = useMemo(() => parseAuthSnapshot(snapshot), [snapshot])
-  const isHydrated = snapshot !== undefined
-
-  const login = useCallback(async (email: string, password: string) => {
-    void password
-    // Mockup: derive a friendly pseudo from the email local part.
-    const local = email.split("@")[0] || "Utilisateur"
-    const pseudo = local
-      .replace(/[._-]+/g, " ")
-      .split(" ")
-      .filter(Boolean)
-      .map((w) => w[0]?.toUpperCase() + w.slice(1))
-      .join("")
-      || "Utilisateur"
-
-    const next: SafeCheckUser = { email, pseudo }
-    writeToStorage(next)
-    return next
-  }, [])
-
-  const signup = useCallback(
-    async (data: Partial<SafeCheckUser> & { email: string; password: string }) => {
-      const next: SafeCheckUser = {
-        email: data.email,
-        pseudo: data.pseudo || data.prenom || data.email.split("@")[0] || "Utilisateur",
-        prenom: data.prenom,
-        nom: data.nom,
-        pays: data.pays,
-        age: data.age,
+  const cachedUser = useMemo(
+    () => session?.user ? toSafeCheckUser(session.user) : null,
+    [session],
+  )
+  const resolved = resolveAuthSession(cachedUser, isPending, authChanging, !!sessionLookupError || confirmationError)
+  const cachedUserId = cachedUser?.id
+  // An unavailable session is unresolved, never a confirmed logout or Guest identity.
+  const identity = resolved.isHydrated ? resolved.user?.id ?? null : undefined
+  const runClaimOperation = useCallback((userId: string) =>
+    runAuthOperation(operationLock, () => claimRecovery.claim(userId)).finally(() => {
+      // Identity may have changed while its previous auto/manual claim held the lock.
+      if (providerActive.current) setClaimOperationRevision((revision) => revision + 1)
+    }), [claimRecovery])
+  useEffect(() => { invalidateAuthRequests() }, [identity])
+  useEffect(() => {
+    if (identity !== undefined) {
+      if (claimRecovery.getSnapshot().userId !== identity) attemptedIdentity.current = null
+      claimRecovery.setIdentity(identity)
+      if (identity && !operationLock.current && attemptedIdentity.current !== identity) {
+        attemptedIdentity.current = identity
+        void runClaimOperation(identity)
       }
-      writeToStorage(next)
-      return next
-    },
-    []
+    } else if (cachedUserId && cachedUserId !== claimRecovery.getSnapshot().userId) {
+      attemptedIdentity.current = null
+      claimRecovery.setIdentity(null)
+    }
+  }, [cachedUserId, claimOperationRevision, claimRecovery, identity, runClaimOperation])
+  useEffect(() => {
+    providerActive.current = true
+    return () => {
+      providerActive.current = false
+      // Strict Mode replays setup before the microtask; preserve its one pending attempt.
+      queueMicrotask(() => { if (!providerActive.current) claimRecovery.setIdentity(null) })
+    }
+  }, [claimRecovery])
+  const ownsClaim = resolved.isLoggedIn && claimSnapshot.userId === resolved.user?.id
+  const guestClaimStatus = ownsClaim ? claimSnapshot.status : "idle"
+  const accountAuditsRevision = ownsClaim ? claimSnapshot.auditsRevision : 0
+
+  const retryGuestClaim = useCallback(async () => {
+    if (operationLock.current || !resolved.isLoggedIn || !resolved.user || claimSnapshot.userId !== resolved.user.id) return
+    const userId = resolved.user.id
+    await runClaimOperation(userId)
+  }, [claimSnapshot.userId, resolved.isLoggedIn, resolved.user, runClaimOperation])
+
+  const runChangingOperation = useCallback(<T,>(operation: () => Promise<T>) => runAuthOperation(operationLock, async () => {
+    invalidateAuthRequests()
+    setAuthChanging(true)
+    try {
+      return await operation()
+    } finally {
+      setAuthChanging(false)
+    }
+  }), [])
+
+  const finishAuthentication = useCallback(async function finishAuthentication(authenticatedUser: SafeCheckUser): Promise<SafeCheckUser> {
+    pendingAuthentication.current = authenticatedUser
+    try {
+      await confirmSession(authenticatedUser.id, { getSession: () => authClient.getSession() })
+    } catch {
+      setConfirmationError(true)
+      throw new AuthActionError("network", () => runChangingOperation(() =>
+        resumeAuthConfirmation(pendingAuthentication, authenticatedUser, finishAuthentication),
+      ))
+    }
+    setConfirmationError(false)
+    attemptedIdentity.current = authenticatedUser.id
+    claimRecovery.setIdentity(authenticatedUser.id)
+    await claimRecovery.claim(authenticatedUser.id)
+    pendingAuthentication.current = null
+    await refetch()
+    return authenticatedUser
+  }, [claimRecovery, refetch, runChangingOperation])
+
+  const retrySession = useCallback(async () => {
+    if (operationLock.current) return
+    await runChangingOperation(async () => {
+      try {
+        const pendingUser = pendingAuthentication.current
+        if (pendingUser) {
+          await resumeAuthConfirmation(pendingAuthentication, pendingUser, finishAuthentication)
+        } else {
+          // Better Auth refetch resolves void and publishes lookup failures through useSession.error.
+          await refetch()
+          setConfirmationError(false)
+        }
+      } catch {
+        setConfirmationError(true)
+      }
+    })
+  }, [finishAuthentication, refetch, runChangingOperation])
+
+  const login = useCallback((email: string, password: string) => runChangingOperation(async () => {
+    pendingAuthentication.current = null
+    let result: Awaited<ReturnType<typeof authClient.signIn.email>>
+    try {
+      result = await authClient.signIn.email({ email, password })
+    } catch {
+      throw new AuthActionError("network")
+    }
+    if (result.error) {
+      throw new AuthActionError(result.error.status === 401 ? "invalid_credentials" : "generic")
+    }
+    if (!result.data?.user) throw new AuthActionError("generic")
+    return finishAuthentication(toSafeCheckUser(result.data.user))
+  }), [finishAuthentication, runChangingOperation])
+
+  const signup = useCallback((data: { email: string; password: string; pseudo: string }) => runChangingOperation(async () => {
+    pendingAuthentication.current = null
+    let result: Awaited<ReturnType<typeof authClient.signUp.email>>
+    try {
+      result = await authClient.signUp.email(toBetterAuthSignup(data))
+    } catch {
+      throw new AuthActionError("network")
+    }
+    if (result.error) throw new AuthActionError("generic")
+    if (!result.data?.user) throw new AuthActionError("generic")
+    return finishAuthentication(toSafeCheckUser(result.data.user))
+  }), [finishAuthentication, runChangingOperation])
+
+  const logout = useCallback(() => runChangingOperation(async () => {
+    pendingAuthentication.current = null
+    try {
+      const result = await authClient.signOut()
+      if (result.error) throw new AuthActionError("generic")
+    } catch (error) {
+      if (error instanceof AuthActionError) throw error
+      throw new AuthActionError("network")
+    }
+    // Preserve recovery on sign-out failure; clear it only after the server accepts sign-out.
+    attemptedIdentity.current = null
+    claimRecovery.setIdentity(null)
+    setConfirmationError(false)
+    await refetch()
+  }), [claimRecovery, refetch, runChangingOperation])
+
+  const value = useMemo<AuthContextValue>(() => ({
+    ...resolved,
+    authChanging,
+    retrySession,
+    guestClaimStatus,
+    accountAuditsRevision,
+    retryGuestClaim,
+    login,
+    signup,
+    logout,
+  }), [accountAuditsRevision, authChanging, guestClaimStatus, login, logout, resolved, retryGuestClaim, retrySession, signup])
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+      <SessionNotice error={resolved.sessionError} retrying={authChanging} onRetry={retrySession} />
+      <GuestClaimNotice status={guestClaimStatus} onRetry={retryGuestClaim} />
+    </AuthContext.Provider>
   )
-
-  const logout = useCallback(() => {
-    writeToStorage(null)
-  }, [])
-
-  const updateUser = useCallback((patch: Partial<SafeCheckUser>) => {
-    if (!user) return
-    writeToStorage({ ...user, ...patch })
-  }, [user])
-
-  const value = useMemo<AuthContextValue>(
-    () => ({
-      user,
-      isLoggedIn: !!user,
-      isHydrated,
-      login,
-      signup,
-      logout,
-      updateUser,
-    }),
-    [isHydrated, login, logout, signup, updateUser, user],
-  )
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export function useAuth(): AuthContextValue {
-  const ctx = useContext(AuthContext)
-  if (!ctx) {
-    // Permissive fallback so a forgotten provider doesn't crash the
-    // whole app - but we still warn loudly in dev.
-    if (process.env.NODE_ENV !== "production") {
-      console.warn("[v0] useAuth() called outside <AuthProvider>. Wrap your tree in <AuthProvider> in app/layout.tsx.")
-    }
-    return {
-      user: null,
-      isLoggedIn: false,
-      isHydrated: true,
-      login: async () => {
-        throw new Error("AuthProvider missing")
-      },
-      signup: async () => {
-        throw new Error("AuthProvider missing")
-      },
-      logout: () => {},
-      updateUser: () => {},
-    }
-  }
-  return ctx
+  const context = useContext(AuthContext)
+  if (!context) throw new Error("useAuth must be used within AuthProvider")
+  return context
 }

@@ -14,7 +14,6 @@ import {
   RotateCcw,
   Sparkles,
   Star,
-  TrendingUp,
 } from "lucide-react"
 import type { TutoStatus } from "../types"
 import { TutorialIcon } from "./TutorialIcon"
@@ -92,7 +91,7 @@ export function TutorialRow({
           )}
           {!isDone && showPopularBadge && !tuto.isEssential && !tuto.isRecommended && (
             <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-[color:var(--sc-violet-soft)] text-[color:var(--sc-text-on-strong)]">
-              <TrendingUp className="w-2.5 h-2.5" /> Populaire
+              <Sparkles className="w-2.5 h-2.5" /> Mis en avant
             </span>
           )}
         </div>
@@ -218,8 +217,8 @@ export function TutorialCard({
         )}
         {!isDone && showPopularBadge && !tuto.isRecommended && !tuto.isEssential && (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[color:var(--sc-violet-soft)] text-[color:var(--sc-text-on-strong)] shadow-sm">
-            <TrendingUp className="w-2.5 h-2.5" />
-            Populaire
+            <Sparkles className="w-2.5 h-2.5" />
+            Mis en avant
           </span>
         )}
         {!isDone && tuto.isNextStep && (
@@ -301,7 +300,7 @@ export function TutorialCard({
                 key={tag}
                 className="text-[9px] uppercase tracking-wider font-semibold px-1.5 py-0.5 rounded bg-[color:var(--sc-surface-2)] text-[color:var(--sc-text-muted)] border border-[color:var(--sc-border)]"
               >
-                {tag}
+                {tag === "populaire" ? "Mis en avant" : tag}
               </span>
             ))}
           </div>

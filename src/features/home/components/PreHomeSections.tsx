@@ -46,8 +46,8 @@ export function AuditBenefitsSection() {
             <span className="sc-gradient-text">vraiment adapté</span>.
           </h2>
           <p className="text-base text-[color:var(--sc-text-2)] text-pretty">
-            SafeCheck commence par comprendre votre niveau, votre contexte et vos usages.
-            Tout le reste de la plateforme s&apos;adapte ensuite à vous, pas l&apos;inverse.
+            SafeCheck calcule un score à partir de vos réponses à l&apos;audit.
+            Les résultats proposent des recommandations selon la tranche de ce score.
           </p>
         </div>
 
@@ -62,7 +62,7 @@ export function AuditBenefitsSection() {
             index={1}
             icon={<Compass className="w-5 h-5" />}
             title="Suivre le bon parcours"
-            text="Tutoriels, essentiels, recommandations : tout est priorisé selon vos besoins, pas dans le désordre."
+            text="Les résultats suggèrent des actions selon votre score. Les catalogues restent des sélections éditoriales que vous pouvez explorer."
           />
           <ValueCard
             index={2}

@@ -1,3 +1,10 @@
+> **Document historique — comparaison de la baseline frontend LTS.** Les
+> indications de ce document décrivent une étape antérieure du produit et ne
+> font pas foi pour l'état actuel de l'application. Consultez le
+> [README du projet](README.md), le [guide d'onboarding](docs/frontend-onboarding-lts.md),
+> la [carte d'architecture](docs/frontend-architecture.md) et l'[index des
+> rapports QA](docs/qa/README.md) pour les références actuelles.
+
 # SafeCheck - Du dossier Tony à la baseline frontend LTS
 
 ## Pourquoi ce document existe

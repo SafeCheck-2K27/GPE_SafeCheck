@@ -1,5 +1,6 @@
 import type { Tutoriel } from "./data/catalog"
-import { mockTutoStatus, POPULAR_IDS } from "./data"
+import { POPULAR_IDS } from "./data"
+import { getTutorialCardStatus, type TutorialProgressById } from "./session"
 import type {
   LibraryCategoryDefinition,
   TutorialFilters,
@@ -24,6 +25,7 @@ export function hasActiveTutorialFilters(filters: TutorialFilters): boolean {
 export function matchesTutorialFilters(
   tutorial: Tutoriel,
   filters: TutorialFilters,
+  progressById: TutorialProgressById = {},
 ): boolean {
   const {
     catFilter,
@@ -37,7 +39,7 @@ export function matchesTutorialFilters(
   if (levelFilter !== "all" && tutorial.level !== levelFilter) return false
 
   if (statusFilter !== "all") {
-    const status = mockTutoStatus[tutorial.id] || "todo"
+    const status = getTutorialCardStatus(tutorial, progressById)
     if (status !== statusFilter) return false
   }
 

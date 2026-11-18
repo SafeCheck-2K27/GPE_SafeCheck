@@ -31,8 +31,8 @@ export function AccueilHero({
               </h1>
               <p className="text-sm md:text-base text-[color:var(--sc-text-2)] leading-relaxed mb-5 max-w-xl text-pretty">
                 Apprenez les bonnes pratiques sur Internet et sur votre ordinateur, à votre niveau.
-                Pour commencer, passez le petit questionnaire de qualification&nbsp;: nous adapterons
-                ensuite la plateforme à votre profil et à vos priorités.
+                Pour commencer, passez le questionnaire de qualification&nbsp;: vous obtiendrez
+                un score et des recommandations correspondant à sa tranche.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <ScButton variant="primary" size="md" onClick={onStartAudit}>
@@ -63,7 +63,7 @@ function DiagnosticCard() {
   return (
     <div
       className="lg:w-64 shrink-0 rounded-2xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] shadow-[0_4px_16px_-6px_rgb(var(--sc-blue-rgb)/0.14),0_2px_6px_-2px_rgb(var(--sc-ink-rgb)/0.06)] overflow-hidden"
-      aria-label="Aperçu d'un diagnostic SafeCheck"
+      aria-label="Exemple fictif de présentation SafeCheck"
     >
       <div
         className="px-4 py-3 flex items-center justify-between"
@@ -73,7 +73,7 @@ function DiagnosticCard() {
           <ShieldCheck className="w-4 h-4 text-[rgb(var(--sc-white-rgb)/0.90)]" />
           <span className="text-xs font-semibold text-[color:var(--sc-text-on-strong)]">Diagnostic SafeCheck</span>
         </div>
-        <span className="text-[10px] text-[rgb(var(--sc-white-rgb)/0.70)] font-medium">Exemple</span>
+        <span className="text-[10px] text-[rgb(var(--sc-white-rgb)/0.70)] font-medium">Démo fictive</span>
       </div>
 
       <div className="p-4">
@@ -85,7 +85,7 @@ function DiagnosticCard() {
           </div>
           <div>
             <p className="text-xs font-semibold text-[color:var(--sc-text)]">Score de sécurité</p>
-            <p className="text-[11px] text-[color:var(--sc-text-muted)] mt-0.5">3 priorités détectées</p>
+            <p className="text-[11px] text-[color:var(--sc-text-muted)] mt-0.5">3 exemples de conseils</p>
             <div className="mt-1.5 h-1.5 w-28 rounded-full bg-[color:var(--sc-border)] overflow-hidden">
               <div
                 className="h-full rounded-full"
@@ -115,7 +115,7 @@ function DiagnosticCard() {
         </ul>
 
         <p className="text-[10px] text-center text-[color:var(--sc-text-muted)] italic leading-snug">
-          Plan d&apos;action en 5 minutes &mdash; résultats immédiats
+          Illustration fictive &mdash; aucun résultat personnel dans cet aperçu
         </p>
       </div>
     </div>

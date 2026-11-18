@@ -7,6 +7,7 @@ export function AuditQuestionPanel({
   selectedOption,
   currentQuestionIndex,
   isLast,
+  busy,
   onSelect,
   onPrevious,
   onNext,
@@ -15,6 +16,7 @@ export function AuditQuestionPanel({
   selectedOption: AuditAnswerValue | null
   currentQuestionIndex: number
   isLast: boolean
+  busy: boolean
   onSelect: (value: AuditAnswerValue) => void
   onPrevious: () => void
   onNext: () => void
@@ -62,6 +64,7 @@ export function AuditQuestionPanel({
               <button
                 key={option.value}
                 onClick={() => onSelect(option.value)}
+                disabled={busy}
                 className={`group relative flex items-start gap-3.5 text-left px-4 py-3.5 rounded-xl border transition-all duration-200 cursor-pointer ${selected ? "border-[color:var(--sc-blue)] bg-[color:var(--sc-bg-soft)] shadow-[0_8px_24px_-8px_rgb(var(--sc-blue-rgb)/0.40)] ring-1 ring-[color:var(--sc-blue)]/40" : "border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] hover:border-[color:var(--sc-blue)]/55 hover:-translate-y-0.5 hover:shadow-[var(--sc-shadow)] hover:bg-[color:var(--sc-bg-soft)]/40"}`}
                 aria-pressed={selected}
               >
@@ -93,7 +96,7 @@ export function AuditQuestionPanel({
             size="md"
             className="w-full sm:w-auto"
             onClick={onPrevious}
-            disabled={currentQuestionIndex === 0}
+            disabled={currentQuestionIndex === 0 || busy}
           >
             <ChevronLeft className="w-4 h-4 mr-0.5" />
             Précédent
@@ -104,7 +107,7 @@ export function AuditQuestionPanel({
             size="md"
             className="w-full sm:w-auto"
             onClick={onNext}
-            disabled={!selectedOption}
+            disabled={!selectedOption || busy}
           >
             {isLast ? "Voir mes résultats" : "Question suivante"}
             <ChevronRight className="w-4 h-4 ml-0.5" />

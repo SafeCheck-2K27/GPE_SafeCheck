@@ -31,7 +31,7 @@ export function PersonalizationActions({
       </div>
 
       <p className="text-xs text-[color:var(--sc-text-muted)] text-center">
-        Vous pourrez modifier ces préférences plus tard depuis votre profil.
+        Ces préférences ne sont pas encore enregistrées dans cette version.
       </p>
     </div>
   )

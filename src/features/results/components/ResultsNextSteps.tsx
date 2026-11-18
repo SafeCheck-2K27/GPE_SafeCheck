@@ -1,4 +1,4 @@
-import { ArrowRight, RotateCcw, Save } from "lucide-react"
+import { ArrowRight, RotateCcw, User } from "lucide-react"
 import { ScButton } from "@/components/safecheck/primitives"
 import type { ResultTranslator } from "../types"
 
@@ -33,7 +33,7 @@ export function ResultsNextSteps({
         <p className="text-sm text-[color:var(--sc-text-2)] mb-4">
           {isLoggedIn
             ? "Continue sur ta lancée et commence le premier tutoriel recommandé."
-            : "Crée un compte pour retrouver tes résultats à tout moment, ou commence à explorer sans compte."}
+            : "Crée un compte pour rattacher cet audit à ton identité, ou explore sans compte."}
         </p>
         <div className="flex flex-col sm:flex-row gap-3">
           {isLoggedIn ? (
@@ -44,8 +44,8 @@ export function ResultsNextSteps({
                 className="flex-1"
                 onClick={onDashboard}
               >
-                <Save className="w-4 h-4 mr-1.5" />
-                Sauvegarder dans mon tableau de bord
+                <User className="w-4 h-4 mr-1.5" />
+                Ouvrir mon compte
               </ScButton>
               <ScButton
                 variant="secondary"
@@ -65,7 +65,7 @@ export function ResultsNextSteps({
                 className="flex-1"
                 onClick={onOpenSignup}
               >
-                Créer mon compte pour sauvegarder mes résultats
+                Créer mon compte et rattacher cet audit
                 <ArrowRight className="w-4 h-4 ml-1" />
               </ScButton>
               <ScButton

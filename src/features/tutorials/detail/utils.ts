@@ -1,5 +1,4 @@
 import type { Tutoriel } from "../data/catalog"
-import type { TutorialDetailState } from "./types"
 
 export function resolveTutorialRoute(
   tutorials: readonly Tutoriel[],
@@ -24,24 +23,4 @@ export function getRelatedTutorials(
           candidate.level === tutorial.level),
     )
     .slice(0, limit)
-}
-
-export function getTutorialProgressPercent(
-  completedStepCount: number,
-  totalStepCount: number,
-) {
-  return completedStepCount > 0
-    ? Math.round((completedStepCount / totalStepCount) * 100)
-    : 0
-}
-
-export function getTutorialDetailState(
-  markedDone: boolean,
-  completedStepCount: number,
-): TutorialDetailState {
-  return markedDone
-    ? "done"
-    : completedStepCount > 0
-      ? "in_progress"
-      : "not_started"
 }

@@ -2,11 +2,9 @@ import { ScBadge, ScButton } from "@/components/safecheck/primitives"
 import { CATEGORY_LABEL } from "../../data/catalog"
 import type { Tutoriel } from "../../data/catalog"
 import {
-  Bookmark,
   CheckCircle2,
   Clock,
   Flame,
-  RotateCcw,
   Target,
   Zap,
 } from "lucide-react"
@@ -22,21 +20,15 @@ export function TutorialDetailHero({
   tutorialState,
   progressPercent,
   completedStepCount,
-  saved,
-  markedDone,
   onOpenReader,
-  onToggleSaved,
-  onToggleMarkedDone,
+  onComplete,
 }: {
   tutorial: Tutoriel
   tutorialState: TutorialDetailState
   progressPercent: number
   completedStepCount: number
-  saved: boolean
-  markedDone: boolean
   onOpenReader: () => void
-  onToggleSaved: () => void
-  onToggleMarkedDone: () => void
+  onComplete: () => void
 }) {
   return (
     <div className="relative overflow-hidden rounded-2xl border border-[color:var(--sc-border)] bg-[color:var(--sc-surface)] shadow-[var(--sc-shadow-md)] mb-6">
@@ -61,13 +53,13 @@ export function TutorialDetailHero({
               {tutorial.platform}
             </span>
           )}
-          {tutorialState === "in_progress" && (
+          {tutorialState === "IN_PROGRESS" && (
             <ScBadge tone="warn">
               <Flame className="w-3 h-3" />
-              En cours ({progressPercent}%)
+              En cours ({Math.round(progressPercent)}%)
             </ScBadge>
           )}
-          {tutorialState === "done" && (
+          {tutorialState === "COMPLETED" && (
             <ScBadge tone="success">
               <CheckCircle2 className="w-3 h-3" />
               Termine
@@ -100,23 +92,13 @@ export function TutorialDetailHero({
         <div className="flex flex-wrap items-center gap-2">
           <ScButton variant="primary" onClick={onOpenReader} className="gap-2">
             <Zap className="w-4 h-4" />
-            Lancer le tutoriel guide
+            {tutorialState === "COMPLETED" ? "Revoir le tutoriel guide" : tutorialState === "IN_PROGRESS" ? "Reprendre le tutoriel guide" : "Commencer le tutoriel guide"}
           </ScButton>
-          <ScButton variant="secondary" size="sm" onClick={onToggleSaved}>
-            <Bookmark className={`w-3.5 h-3.5 ${saved ? "fill-current" : ""}`} />
-            {saved ? "Sauvegarde" : "Sauvegarder"}
-          </ScButton>
-          {tutorialState === "in_progress" && (
-            <ScButton variant="ghost" size="sm" onClick={onOpenReader}>
-              <RotateCcw className="w-3.5 h-3.5" />
-              Reprendre
-            </ScButton>
-          )}
-          <ScButton variant="ghost" size="sm" onClick={onToggleMarkedDone}>
+          <ScButton variant="ghost" size="sm" onClick={onComplete} disabled={tutorialState === "COMPLETED"}>
             <CheckCircle2
-              className={`w-3.5 h-3.5 ${markedDone ? "text-[color:var(--sc-success)]" : ""}`}
+              className={`w-3.5 h-3.5 ${tutorialState === "COMPLETED" ? "text-[color:var(--sc-success)]" : ""}`}
             />
-            {markedDone ? "Marque comme termine" : "Marquer comme termine"}
+            {tutorialState === "COMPLETED" ? "Termine" : "Marquer comme termine"}
           </ScButton>
         </div>
 
@@ -124,7 +106,7 @@ export function TutorialDetailHero({
           text={`${tutorial.title} ${tutorial.description} ${tutorial.objective ?? ""}`}
         />
 
-        {tutorialState === "in_progress" && (
+        {tutorialState !== "NOT_STARTED" && (
           <div className="mt-4 pt-4 border-t border-[color:var(--sc-border)]">
             <div className="flex justify-between text-xs text-[color:var(--sc-text-2)] mb-1.5">
               <span>
@@ -132,7 +114,7 @@ export function TutorialDetailHero({
                 {tutorial.steps.length} completee{completedStepCount > 1 ? "s" : ""}
               </span>
               <span className="font-bold text-[color:var(--sc-blue)]">
-                {progressPercent}%
+                {Math.round(progressPercent)}%
               </span>
             </div>
             <div className="relative h-1.5 bg-[color:var(--sc-surface-2)] rounded-full overflow-hidden">

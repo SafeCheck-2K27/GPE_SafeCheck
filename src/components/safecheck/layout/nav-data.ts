@@ -20,7 +20,7 @@ export const auditLinks: DropdownItem[] = [
 ]
 
 export const tutorielsLinks: DropdownItem[] = [
-  { label: "Mes tutoriels personnalisés", href: "/tutoriels" },
+  { label: "Sélection pour débuter", href: "/tutoriels" },
   { label: "Tous les tutoriels", href: "/tutoriels?vue=tous" },
   { label: "Niveau débutant", href: "/tutoriels?niveau=debutant" },
   { label: "Niveau intermédiaire", href: "/tutoriels?niveau=intermediaire" },
@@ -40,10 +40,10 @@ export const recommandationLinks: DropdownItem[] = [
   { label: "Vue d'ensemble", href: "/recommandations" },
   { label: "Bonnes habitudes & réflexes", href: "/recommandations?type=habitudes" },
   { label: "Recommandations techniques", href: "/recommandations?type=techniques" },
-  { label: "Système d'exploitation", href: "/recommandations?cat=os" },
-  { label: "Hardware", href: "/recommandations?cat=hardware" },
-  { label: "Logiciels", href: "/recommandations?cat=logiciels" },
-  { label: "Navigateur web", href: "/recommandations?cat=navigateur" },
+  { label: "Système d'exploitation", href: "/recommandations?type=techniques&cat=os" },
+  { label: "Hardware", href: "/recommandations?type=techniques&cat=hardware" },
+  { label: "Logiciels", href: "/recommandations?type=techniques&cat=logiciels" },
+  { label: "Navigateur web", href: "/recommandations?type=techniques&cat=navigateur" },
 ]
 
 export const decouvrirLinks: DropdownItem[] = [

@@ -15,13 +15,27 @@ import { LexiconTermDetailModal } from "./LexiconTermDetailModal"
 
 export function LexiconContent() {
   const params = useSearchParams()
+  const domain = parseLexiconDomain(params.get("domaine"))
+  const term = resolveLexiconTerm(params.get("terme"))
+  return (
+    <LexiconContentView
+      key={JSON.stringify([domain, term?.slug ?? null])}
+      initialDomain={domain}
+      initialTerm={term}
+    />
+  )
+}
+
+function LexiconContentView({
+  initialDomain,
+  initialTerm,
+}: {
+  initialDomain: DomainId | null
+  initialTerm: LexiqueTerm | null
+}) {
   const [search, setSearch] = useState("")
-  const [activeDomain, setActiveDomain] = useState<DomainId | null>(() =>
-    parseLexiconDomain(params.get("domaine")),
-  )
-  const [selected, setSelected] = useState<LexiqueTerm | null>(() =>
-    resolveLexiconTerm(params.get("terme")),
-  )
+  const [activeDomain, setActiveDomain] = useState<DomainId | null>(initialDomain)
+  const [selected, setSelected] = useState<LexiqueTerm | null>(initialTerm)
 
   const isSearching = search.trim().length > 0
   const searchResults = useMemo(

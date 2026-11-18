@@ -1,13 +1,9 @@
 import type { SignupFormData, SignupFormField } from "./types"
 
 export const INITIAL_SIGNUP_FORM: SignupFormData = {
-  prenom: "",
-  nom: "",
   email: "",
   password: "",
   pseudo: "",
-  age: "",
-  pays: "France",
 }
 
 export function updateSignupForm(

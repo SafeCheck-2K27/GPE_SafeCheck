@@ -1,11 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState, type FormEvent } from "react"
+import { useAuth } from "@/components/safecheck/AuthProvider"
+import { getLoginErrorKey } from "@/components/safecheck/auth-form"
+import { useI18n } from "@/components/safecheck/I18nProvider"
 import { SafeCheckMark, ScButton } from "@/components/safecheck/primitives"
 import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
+import { getAuthFormRecovery, submitAuthForm, type AuthFormRecovery } from "@/components/safecheck/auth-form-recovery"
 
 const loginCardClassName =
-  "w-full max-w-sm rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgb(var(--sc-ink-rgb)/0.30)]"
+  "w-full max-w-sm max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-2xl p-6 sc-fade-in bg-[color:var(--sc-surface)] border border-[color:var(--sc-border)] shadow-[0_30px_60px_-20px_rgb(var(--sc-ink-rgb)/0.30)]"
 
 const loginInputClassName =
   "sc-focus w-full px-3 py-2.5 rounded-lg text-sm bg-[color:var(--sc-surface)] text-[color:var(--sc-text)] border border-[color:var(--sc-border-strong)] focus:border-[color:var(--sc-blue)] outline-none transition-colors"
@@ -20,14 +24,34 @@ export function PreHomeLoginModal({
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [submitting, setSubmitting] = useState(false)
-  const canSubmit = email.trim().length > 0 && password.length > 0 && !submitting
+  const [error, setError] = useState<string | null>(null)
+  const auth = useAuth()
+  const submittingRef = useRef(false)
+  const recoveryRef = useRef<AuthFormRecovery | null>(null)
+  const [recoveringSession, setRecoveringSession] = useState(false)
+  const busy = submitting || auth.authChanging
+  const handleClose = () => {
+    if (!submittingRef.current && !auth.authChanging) onClose()
+  }
+  const { t } = useI18n()
+  const canSubmit = (recoveringSession || (email.trim().length > 0 && password.length > 0)) && !busy
 
-  const handleSubmit = async () => {
-    if (!canSubmit) return
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault()
+    if (!canSubmit || submittingRef.current) return
+    setError(null)
+    submittingRef.current = true
     setSubmitting(true)
     try {
-      await onSuccess(email.trim(), password)
+      await submitAuthForm(async () => onSuccess(email.trim(), password), recoveryRef.current)
+      recoveryRef.current = null
+      onClose()
+    } catch (failure) {
+      recoveryRef.current = getAuthFormRecovery(failure, recoveryRef.current)
+      setRecoveringSession(!!recoveryRef.current)
+      setError(t(recoveryRef.current ? "session.failed" : getLoginErrorKey(failure)))
     } finally {
+      submittingRef.current = false
       setSubmitting(false)
     }
   }
@@ -35,10 +59,12 @@ export function PreHomeLoginModal({
   return (
     <AccessibleModal
       open
-      onClose={onClose}
+      onClose={handleClose}
+      closeOnBackdrop={!busy}
+      closeOnEscape={!busy}
       aria-labelledby="prehome-login-title"
     >
-      <div className={loginCardClassName} onClick={(e) => e.stopPropagation()}>
+      <form onSubmit={handleSubmit} aria-busy={busy} className={loginCardClassName} onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center gap-2 mb-1">
           <SafeCheckMark />
           <h2
@@ -58,6 +84,7 @@ export function PreHomeLoginModal({
             </label>
             <input
               id="prehome-login-email"
+              disabled={recoveringSession}
               name="email"
               type="email"
               autoComplete="email"
@@ -73,6 +100,7 @@ export function PreHomeLoginModal({
             </label>
             <input
               id="prehome-login-password"
+              disabled={recoveringSession}
               name="password"
               type="password"
               autoComplete="current-password"
@@ -83,24 +111,27 @@ export function PreHomeLoginModal({
             />
           </div>
         </div>
+        {error && <p role="alert" className="mt-3 text-sm text-[color:var(--sc-danger)]">{error}</p>}
         <div className="mt-6 flex flex-col gap-2">
           <ScButton
+            type="submit"
             variant="primary"
             size="md"
             className="w-full"
             disabled={!canSubmit}
-            onClick={handleSubmit}
           >
-            {submitting ? "Connexion…" : "Se connecter"}
+            {recoveringSession ? t(busy ? "session.retrying" : "session.verify") : submitting ? "Connexion…" : "Se connecter"}
           </ScButton>
           <button
-            onClick={onClose}
+            type="button"
+            disabled={busy}
+            onClick={handleClose}
             className="text-sm text-center text-[color:var(--sc-text-muted)] hover:text-[color:var(--sc-blue)] transition-colors mt-1"
           >
             Annuler
           </button>
         </div>
-      </div>
+      </form>
     </AccessibleModal>
   )
 }

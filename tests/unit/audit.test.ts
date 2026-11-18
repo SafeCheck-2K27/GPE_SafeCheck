@@ -1,14 +1,7 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
 import { calculateAuditScore } from "../../src/features/audit/scoring"
-import {
-  parseAuditAnswersParam,
-  serializeAuditAnswers,
-} from "../../src/features/audit/url-payload"
-import type {
-  AuditAnswers,
-  AuditQuestion,
-} from "../../src/features/audit/types"
+import type { AuditQuestion } from "../../src/features/audit/types"
 
 const questions: AuditQuestion[] = [
   {
@@ -39,27 +32,4 @@ test("calculateAuditScore converts selected option scores to a percentage", () =
 test("calculateAuditScore ignores missing and unknown answers", () => {
   assert.equal(calculateAuditScore(questions, { 1: "a" }), 50)
   assert.equal(calculateAuditScore(questions, { 1: "c", 2: "d" }), 0)
-})
-
-test("audit answer payloads serialize and parse without changing values", () => {
-  const answers: AuditAnswers = { 1: "a", 2: "d" }
-  const serialized = serializeAuditAnswers(answers)
-
-  assert.deepEqual(parseAuditAnswersParam(serialized), answers)
-})
-
-test("audit answer parsing rejects malformed or unsupported payloads", () => {
-  const invalidPayloads = [
-    null,
-    "",
-    "not-json",
-    "[]",
-    JSON.stringify({ unknown: "a" }),
-    JSON.stringify({ 1: "unknown" }),
-    JSON.stringify({ 1: 1 }),
-  ]
-
-  invalidPayloads.forEach((payload) => {
-    assert.equal(parseAuditAnswersParam(payload), null)
-  })
 })

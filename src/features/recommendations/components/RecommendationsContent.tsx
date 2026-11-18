@@ -38,6 +38,7 @@ export function RecommendationsContent() {
         {view === "habitudes" && <HabitsView onBack={goHub} />}
         {view === "techniques" && (
           <TechnicalRecommendationsView
+            key={params.get("cat") ?? "all"}
             onBack={goHub}
             initialCat={params.get("cat")}
           />

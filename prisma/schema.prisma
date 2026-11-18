@@ -12,14 +12,118 @@ datasource db {
 
 /// Application user account.
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String                 @id @default(uuid())
+  email            String                 @unique
+  name             String
+  emailVerified    Boolean                @default(false)
+  image            String?
+  role             Role                   @default(USER)
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  sessions         Session[]
+  accounts         Account[]
+  audits           Audit[]
+  tutorialProgress UserTutorialProgress[]
 
   @@map("users")
+}
+
+/// User-owned progress; indices belong to tutorialVersion in the static catalog.
+/// SQL migration also enforces positive IDs/versions and nonnegative, non-null step indices.
+model UserTutorialProgress {
+  userId          String
+  tutorialId      Int
+  tutorialVersion Int      @default(1)
+  currentStep     Int      @default(0)
+  completedSteps  Int[]    @default([])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, tutorialId])
+  @@map("user_tutorial_progress")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @default(now())
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+/// Exactly one owner (userId XOR guestSubject), enforced by a SQL CHECK.
+/// updatedAt tracks successful answer writes, submission and ownership claims via the application.
+model Audit {
+  id                   String        @id @default(uuid())
+  userId               String?
+  user                 User?         @relation(fields: [userId], references: [id], onDelete: Restrict)
+  guestSubject         String?
+  status               AuditStatus   @default(IN_PROGRESS)
+  questionnaireVersion Int           @default(1)
+  scoringVersion       Int           @default(1)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  answers              AuditAnswer[]
+
+  @@index([userId])
+  @@index([guestSubject])
+  @@map("audits")
+}
+
+/// Positive questionId is enforced by SQL; catalog membership remains application-owned.
+model AuditAnswer {
+  auditId    String
+  questionId Int
+  value      String
+  audit      Audit  @relation(fields: [auditId], references: [id], onDelete: Cascade)
+
+  @@id([auditId, questionId])
+  @@map("audit_answers")
+}
+
+enum AuditStatus {
+  IN_PROGRESS
+  COMPLETED
 }
 
 enum Role {

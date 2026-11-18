@@ -9,6 +9,8 @@ export function SignupProfileStep({
   form,
   canSubmit,
   submitting,
+  recoveringSession = false,
+  submitLabel,
   onChange,
   onBack,
   onSubmit,
@@ -16,6 +18,8 @@ export function SignupProfileStep({
   form: SignupFormData
   canSubmit: boolean
   submitting: boolean
+  recoveringSession?: boolean
+  submitLabel?: string
   onChange: (field: SignupFormField, value: string) => void
   onBack: () => void
   onSubmit: () => void
@@ -23,7 +27,7 @@ export function SignupProfileStep({
   return (
     <div className="space-y-3">
       <p className="text-sm font-semibold text-[color:var(--sc-text)] mb-1">
-        Personnalisation du profil
+        Nom d&apos;affichage
       </p>
       <div>
         <label htmlFor="signup-pseudo" className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
@@ -31,6 +35,7 @@ export function SignupProfileStep({
         </label>
         <input
           id="signup-pseudo"
+          disabled={recoveringSession}
           name="nickname"
           type="text"
           autoComplete="nickname"
@@ -39,51 +44,6 @@ export function SignupProfileStep({
           placeholder="TheAliasMan"
           className={inputClassName}
         />
-      </div>
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label
-            htmlFor="signup-age"
-            className="block text-xs font-medium text-[color:var(--sc-text)] mb-1"
-          >
-            Tranche d&apos;âge
-          </label>
-          <select
-            id="signup-age"
-            value={form.age}
-            onChange={(event) => onChange("age", event.target.value)}
-            className={inputClassName}
-          >
-            <option value="">Choisir une tranche…</option>
-            <option value="moins-18">Moins de 18 ans</option>
-            <option value="18-24">18 - 24 ans</option>
-            <option value="25-34">25 - 34 ans</option>
-            <option value="35-44">35 - 44 ans</option>
-            <option value="45-54">45 - 54 ans</option>
-            <option value="55-64">55 - 64 ans</option>
-            <option value="65-plus">65 ans et plus</option>
-            <option value="non-renseigne">Préfère ne pas répondre</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="signup-country" className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
-            Pays
-          </label>
-          <select
-            id="signup-country"
-            name="country-name"
-            autoComplete="country-name"
-            value={form.pays}
-            onChange={(event) => onChange("pays", event.target.value)}
-            className={inputClassName}
-          >
-            <option>France</option>
-            <option>Belgique</option>
-            <option>Suisse</option>
-            <option>Canada</option>
-            <option>Autre</option>
-          </select>
-        </div>
       </div>
       <div
         className="rounded-lg p-3 text-xs text-[color:var(--sc-text)] leading-relaxed"
@@ -95,7 +55,7 @@ export function SignupProfileStep({
         En créant un compte, tu acceptes les Conditions générales d&apos;utilisation et la Politique de protection des données personnelles de SafeCheck.
       </div>
       <div className="flex gap-3">
-        <ScButton variant="secondary" size="md" onClick={onBack}>
+        <ScButton variant="secondary" size="md" disabled={submitting || recoveringSession} onClick={onBack}>
           Retour
         </ScButton>
         <ScButton
@@ -106,7 +66,7 @@ export function SignupProfileStep({
           onClick={onSubmit}
         >
           <Check className="w-3.5 h-3.5 mr-1" />
-          {submitting ? "Création…" : "Créer mon compte"}
+          {submitLabel ?? (submitting ? "Création…" : "Créer mon compte")}
         </ScButton>
       </div>
     </div>

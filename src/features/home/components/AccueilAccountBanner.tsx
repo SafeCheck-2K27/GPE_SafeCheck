@@ -39,8 +39,8 @@ export function AccueilAccountBanner({
                 {firstName ? `Bienvenue, ${firstName}\u00A0!` : "Bonne reprise\u00A0!"}
               </h2>
               <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed max-w-2xl">
-                Continuez votre progression SafeCheck - consultez votre tableau de bord,
-                reprenez là où vous en étiez ou lancez un nouveau diagnostic.
+                Vos nouveaux audits sont liés à votre compte. Lancez un nouveau diagnostic
+                ou consultez votre espace personnel.
               </p>
             </div>
             <div className="relative shrink-0 flex flex-col sm:flex-row gap-2">
@@ -60,8 +60,8 @@ export function AccueilAccountBanner({
                 Créez votre espace SafeCheck gratuit
               </h2>
               <p className="text-sm text-[color:var(--sc-text-2)] leading-relaxed max-w-2xl">
-                Gardez votre progression, débloquez des badges, sauvegardez vos tutoriels
-                préférés et accédez à votre tableau de bord personnalisé - le tout gratuitement.
+                Créez un compte pour rattacher vos audits invités et vos prochains diagnostics
+                à votre identité.
               </p>
             </div>
             <div className="relative shrink-0">

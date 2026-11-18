@@ -26,8 +26,8 @@ interface NavbarProps {
    */
   onLoginClick?: () => void
   /**
-   * Optional override for "Créer un compte". Defaults to navigating to
-   * /compte/creer.
+   * Optional override for "Créer un compte". Without an override or signupHref,
+   * the navbar opens SignupModal.
    */
   onSignupClick?: () => void
   /** Serializable navigation override for Server Component parents. */
@@ -72,14 +72,15 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
   const [mobileOpen, setMobileOpen] = useState(false)
   const [loginOpen, setLoginOpen] = useState(false)
   const [signupOpen, setSignupOpen] = useState(false)
+  const [loggingOut, setLoggingOut] = useState(false)
+  const [logoutError, setLogoutError] = useState(false)
   const router = useRouter()
   const auth = useAuth()
   const { t } = useI18n()
 
-  // Prop wins if explicitly provided (e.g. forced "logged in" preview screens).
-  // Otherwise we read the persistent session from the AuthProvider so the
-  // navbar stays in sync across every page navigation automatically.
+  // Prop wins if explicitly provided; otherwise the Better Auth session drives the navbar.
   const isLoggedIn = typeof isLoggedInProp === "boolean" ? isLoggedInProp : auth.isLoggedIn
+  const isAuthPending = typeof isLoggedInProp !== "boolean" && !auth.isHydrated
 
   const toggleMenu = (menu: string) => {
     setOpenMenu(openMenu === menu ? null : menu)
@@ -117,10 +118,19 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
     }
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    if (loggingOut) return
     closeMenus()
-    auth.logout()
-    router.push("/")
+    setLogoutError(false)
+    setLoggingOut(true)
+    try {
+      await auth.logout()
+      router.push("/")
+    } catch {
+      setLogoutError(true)
+    } finally {
+      setLoggingOut(false)
+    }
   }
 
   return (
@@ -206,7 +216,7 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
           <LanguageToggle />
           <ThemeToggle />
 
-          {isLoggedIn ? (
+          {isAuthPending ? null : isLoggedIn ? (
             <>
               <Link
                 href="/compte"
@@ -221,6 +231,7 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
                 size="sm"
                 onClick={handleLogout}
                 aria-label={t("nav.deconnexion")}
+                disabled={loggingOut}
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">{t("nav.deconnexion")}</span>
@@ -266,7 +277,7 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
           <MobileSection title={t("nav.essentiels")} items={essentielLinks} onClose={closeMenus} />
           <MobileSection title={t("nav.recommandations")} items={recommandationLinks} onClose={closeMenus} />
           <MobileSection title={t("nav.decouvrir")} items={decouvrirLinks} onClose={closeMenus} />
-          {!isLoggedIn && (
+          {!isAuthPending && !isLoggedIn && (
             <div className={mobileActionRowClassName}>
               <button
                 type="button"
@@ -285,7 +296,7 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
               </button>
             </div>
           )}
-          {isLoggedIn && (
+          {!isAuthPending && isLoggedIn && (
             <div className={mobileActionRowClassName}>
               <Link
                 href="/compte"
@@ -299,6 +310,7 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
                 type="button"
                 onClick={handleLogout}
                 className={mobileLogoutClassName}
+                disabled={loggingOut}
               >
                 {t("nav.deconnexion")}
               </button>
@@ -310,6 +322,12 @@ export default function Navbar({ isLoggedIn: isLoggedInProp, onLoginClick, onSig
       {/* Click-outside overlay */}
       {openMenu && <div className="fixed inset-0 z-40" onClick={closeMenus} />}
     </nav>
+
+    {logoutError && (
+      <p role="alert" className="px-4 py-2 text-sm text-[color:var(--sc-danger)]">
+        Déconnexion impossible. Réessaie.
+      </p>
+    )}
 
     {/* Built-in login modal - works from any page that mounts the Navbar */}
     {loginOpen && (

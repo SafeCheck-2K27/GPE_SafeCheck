@@ -23,40 +23,8 @@ export function SignupCredentialsStep({
   return (
     <div className="space-y-3">
       <p className="text-sm font-semibold text-[color:var(--sc-text)] mb-1">
-        Informations personnelles
+        Identifiants
       </p>
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label htmlFor="signup-first-name" className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
-            Prénom
-          </label>
-          <input
-            id="signup-first-name"
-            name="given-name"
-            type="text"
-            autoComplete="given-name"
-            value={form.prenom}
-            onChange={(event) => onChange("prenom", event.target.value)}
-            placeholder="Alaan"
-            className={inputClassName}
-          />
-        </div>
-        <div>
-          <label htmlFor="signup-last-name" className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
-            Nom
-          </label>
-          <input
-            id="signup-last-name"
-            name="family-name"
-            type="text"
-            autoComplete="family-name"
-            value={form.nom}
-            onChange={(event) => onChange("nom", event.target.value)}
-            placeholder="Smithe"
-            className={inputClassName}
-          />
-        </div>
-      </div>
       <div>
         <label htmlFor="signup-email" className="block text-xs font-medium text-[color:var(--sc-text)] mb-1">
           Adresse email

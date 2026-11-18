@@ -1,27 +1,14 @@
-import type { LibraryCategoryDefinition, PrecisionType, TutoStatus } from "./types"
-
-export { levels, userProgress } from "./data/catalog"
-
-export const mockTutoStatus: Record<number, TutoStatus> = {
-  1: "done",
-  6: "done",
-  3: "inprogress",
-  20: "inprogress",
-}
-
-export const mockTutoLastStep: Record<number, { step: number; label: string }> = {
-  3: { step: 3, label: "Installer l'application mobile" },
-  20: { step: 2, label: "Sauvegarde locale automatique" },
-}
+import type { LibraryCategoryDefinition } from "./types"
 
 export const RECOMMENDED_IDS = [1, 3, 5] as const
 
 export const RECOMMENDED_REASONS: Record<number, string> = {
-  1: "Recommande apres votre audit",
+  1: "Securiser son email",
   3: "Priorite securite",
   5: "Action rapide",
 }
 
+// Editorial selection; this list does not represent audience metrics.
 export const POPULAR_IDS = new Set([1, 3, 6, 11, 21])
 
 export const SEARCH_SUGGESTIONS = [
@@ -106,13 +93,3 @@ export const LIBRARY_CATEGORIES: LibraryCategoryDefinition[] = [
     level: "Avance",
   },
 ]
-
-export const PRECISION_LABELS: Record<PrecisionType, string> = {
-  information_fausse: "Information fausse",
-  information_obsolete: "Information obsolete",
-  reformulation: "Reformulation necessaire",
-  manque_clarte: "Manque de clarte",
-  lien_casse: "Lien casse",
-  etape_ne_fonctionne_plus: "Etape qui ne fonctionne plus",
-  precision_utile: "Precision utile a ajouter",
-}

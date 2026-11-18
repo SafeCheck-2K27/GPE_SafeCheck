@@ -3,6 +3,8 @@ import { AccessibleModal } from "@/components/safecheck/layout/AccessibleModal"
 import { ScBadge, ScButton } from "@/components/safecheck/primitives"
 import { CATEGORY_LABEL } from "../data/catalog"
 import type { Tutoriel } from "../data/catalog"
+import { completeTutorial, getTutorialProgressPercent, getTutorialStatus, isStepCompleted, nextTutorialStep, normalizeTutorialProgress, previousTutorialStep, toggleCompletedStep, type TutorialProgress } from "../progress"
+import type { TutorialProgressUpdate } from "../session"
 import {
   BookOpen,
   Check,
@@ -10,55 +12,38 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock,
-  Flag,
   Sparkles,
   X,
 } from "lucide-react"
 
 export function TutorialModal({
   tuto,
-  currentStep,
-  completedSteps,
-  onStepChange,
-  onMarkStep,
+  progress,
+  onProgressChange,
   onClose,
-  onOpenPrecision,
   renderStepDescription,
-  precisionLinkPosition = "before-completion",
+  syncStatus,
 }: {
   tuto: Tutoriel
-  currentStep: number
-  completedSteps: Set<number>
-  onStepChange: (i: number) => void
-  onMarkStep: (i: number) => void
+  progress: TutorialProgress
+  onProgressChange: (update: TutorialProgressUpdate) => void
   onClose: () => void
-  onOpenPrecision: (stepTitle?: string) => void
   renderStepDescription?: (description: string) => ReactNode
-  precisionLinkPosition?: "before-completion" | "after-completion"
+  syncStatus?: ReactNode
 }) {
+  const { currentStep } = progress
+  const totalSteps = tuto.steps.length
+  const progressPercent = getTutorialProgressPercent(progress, totalSteps)
+  const stepCompleted = isStepCompleted(progress, currentStep, totalSteps)
   const step = tuto.steps[currentStep]
   const isLast = currentStep === tuto.steps.length - 1
-  const allDone = completedSteps.size === tuto.steps.length
-  const precisionLink = (
-    <div
-      className={`mt-4 ${precisionLinkPosition === "after-completion" ? "pt-4" : "pt-3"} border-t border-[color:var(--sc-border)]`}
-    >
-      <button
-        type="button"
-        onClick={() => onOpenPrecision(step.title)}
-        className="inline-flex items-center gap-1.5 text-xs text-[color:var(--sc-text-muted)] hover:text-[color:var(--sc-blue)] transition-colors"
-      >
-        <Flag className="w-3 h-3" />
-        Un probleme avec cette etape ? Signaler une precision
-      </button>
-    </div>
-  )
+  const allDone = getTutorialStatus(progress, totalSteps) === "COMPLETED"
   const completionNotice = allDone ? (
     <div className="mt-5 rounded-xl bg-[color:var(--sc-success)]/10 border border-[color:var(--sc-success)]/30 p-4">
       <div className="flex items-center gap-2">
         <CheckCircle2 className="w-5 h-5 text-[color:var(--sc-success)]" />
         <p className="text-sm font-semibold text-[color:var(--sc-success)]">
-          Tutoriel termine ! Bravo, c&apos;est une etape de moins vers ton prochain niveau.
+          Tutoriel termine ! Toutes les etapes sont validees.
         </p>
       </div>
     </div>
@@ -76,6 +61,7 @@ export function TutorialModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative p-5 border-b border-[color:var(--sc-border)] bg-[color:var(--sc-bg-soft)]">
+          <div className="relative z-10">{syncStatus}</div>
           <div
             className="absolute inset-0 opacity-60"
             style={{ background: "radial-gradient(at 0% 0%, rgb(var(--sc-blue-rgb)/0.15), transparent 50%)" }}
@@ -118,13 +104,13 @@ export function TutorialModal({
               Etape {currentStep + 1} sur {tuto.steps.length}
             </span>
             <span className="font-bold text-[color:var(--sc-blue)]">
-              {Math.round(((currentStep + 1) / tuto.steps.length) * 100)}%
+              {Math.round(progressPercent)}%
             </span>
           </div>
           <div className="relative h-2 bg-[color:var(--sc-surface-2)] rounded-full overflow-hidden">
             <div
               className="absolute inset-y-0 left-0 bg-[linear-gradient(90deg,var(--sc-blue-soft),var(--sc-blue))] rounded-full transition-all duration-500"
-              style={{ width: `${((currentStep + 1) / tuto.steps.length) * 100}%` }}
+              style={{ width: `${progressPercent}%` }}
             />
           </div>
         </div>
@@ -143,10 +129,10 @@ export function TutorialModal({
           </div>
 
           <button
-            onClick={() => onMarkStep(currentStep)}
-            className={`mt-2 inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all ${ completedSteps.has(currentStep) ? "bg-[color:var(--sc-success)]/10 border-[color:var(--sc-success)]/40 text-[color:var(--sc-success)]" : "bg-[color:var(--sc-surface)] border-[color:var(--sc-border)] text-[color:var(--sc-text-2)] hover:border-[color:var(--sc-blue)]/45" }`}
+            onClick={() => onProgressChange((previous) => toggleCompletedStep(previous, currentStep, totalSteps))}
+            className={`mt-2 inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all ${ stepCompleted ? "bg-[color:var(--sc-success)]/10 border-[color:var(--sc-success)]/40 text-[color:var(--sc-success)]" : "bg-[color:var(--sc-surface)] border-[color:var(--sc-border)] text-[color:var(--sc-text-2)] hover:border-[color:var(--sc-blue)]/45" }`}
           >
-            {completedSteps.has(currentStep) ? (
+            {stepCompleted ? (
               <>
                 <CheckCircle2 className="w-3.5 h-3.5" /> Etape validee
               </>
@@ -170,17 +156,14 @@ export function TutorialModal({
               </div>
             </div>
           )}
-
-          {precisionLinkPosition === "before-completion" && precisionLink}
           {completionNotice}
-          {precisionLinkPosition === "after-completion" && precisionLink}
         </div>
 
         <div className="px-5 py-4 border-t border-[color:var(--sc-border)] bg-[color:var(--sc-bg-soft)] flex items-center justify-between gap-3">
           <ScButton
             variant="secondary"
             size="sm"
-            onClick={() => onStepChange(Math.max(0, currentStep - 1))}
+            onClick={() => onProgressChange((previous) => previousTutorialStep(previous, totalSteps))}
             disabled={currentStep === 0}
           >
             <ChevronLeft className="w-3.5 h-3.5" />
@@ -191,20 +174,23 @@ export function TutorialModal({
             {tuto.steps.map((step, i) => (
               <button
                 key={step.title}
-                onClick={() => onStepChange(i)}
-                className={`w-2 h-2 rounded-full transition-all ${ i === currentStep ? "bg-[color:var(--sc-blue)] w-6" : completedSteps.has(i) ? "bg-[color:var(--sc-success)]" : "bg-[color:var(--sc-border-strong)]" }`}
+                onClick={() => onProgressChange((previous) => normalizeTutorialProgress({ ...previous, currentStep: i }, totalSteps)!)}
+                className={`w-2 h-2 rounded-full transition-all ${ i === currentStep ? "bg-[color:var(--sc-blue)] w-6" : isStepCompleted(progress, i, totalSteps) ? "bg-[color:var(--sc-success)]" : "bg-[color:var(--sc-border-strong)]" }`}
                 aria-label={`Aller a l'etape ${i + 1}`}
               />
             ))}
           </div>
 
           {isLast ? (
-            <ScButton variant="primary" size="sm" onClick={onClose}>
+            <ScButton variant="primary" size="sm" onClick={() => {
+              onProgressChange((previous) => completeTutorial(previous, totalSteps))
+              onClose()
+            }}>
               Terminer
               <CheckCircle2 className="w-3.5 h-3.5" />
             </ScButton>
           ) : (
-            <ScButton variant="primary" size="sm" onClick={() => onStepChange(currentStep + 1)}>
+            <ScButton variant="primary" size="sm" onClick={() => onProgressChange((previous) => nextTutorialStep(previous, totalSteps))}>
               Suivant
               <ChevronRight className="w-3.5 h-3.5" />
             </ScButton>

@@ -1,9 +1,11 @@
+import { getTutorialCardStatus, type TutorialProgressById } from "../session"
 import { Layers, Search } from "lucide-react"
 import type { Tutoriel } from "../data/catalog"
-import { POPULAR_IDS, SEARCH_SUGGESTIONS, mockTutoStatus } from "../data"
+import { POPULAR_IDS, SEARCH_SUGGESTIONS } from "../data"
 import { TutorialCard } from "./TutorialCards"
 
 export function TutorialSearchResults({
+  progressById,
   query,
   results,
   hasActiveFilters,
@@ -11,6 +13,7 @@ export function TutorialSearchResults({
   onSearchChange,
   onReset,
 }: {
+  progressById: TutorialProgressById
   query: string
   results: Tutoriel[]
   hasActiveFilters: boolean
@@ -54,7 +57,7 @@ export function TutorialSearchResults({
                 key={tutorial.id}
                 tuto={tutorial}
                 onStart={() => onOpenTutorial(tutorial)}
-                status={mockTutoStatus[tutorial.id] || "todo"}
+                status={getTutorialCardStatus(tutorial, progressById)}
                 showPopularBadge={POPULAR_IDS.has(tutorial.id)}
               />
             ))}

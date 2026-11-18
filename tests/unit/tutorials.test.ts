@@ -21,6 +21,7 @@ function tutorial(overrides: Partial<Tutoriel> & Pick<Tutoriel, "id" | "title">)
 
   return {
     id,
+    version: 1,
     slug: `tutorial-${id}`,
     title,
     duration: "10 min",
@@ -29,7 +30,7 @@ function tutorial(overrides: Partial<Tutoriel> & Pick<Tutoriel, "id" | "title">)
     category: "comptes",
     tags: ["comptes"],
     icon: "shield",
-    steps: [],
+    steps: [{ title: "Étape", description: "Action" }],
     ...optionalOverrides,
   }
 }
@@ -83,7 +84,7 @@ test("searchTutorials matches synonyms and applies active filters", () => {
 test("tutorial filters cover category, level, status, duration and type", () => {
   assert.equal(matchesTutorialFilters(tutorials[1], filters({ catFilter: "phishing" })), true)
   assert.equal(matchesTutorialFilters(tutorials[1], filters({ levelFilter: "Avance" })), false)
-  assert.equal(matchesTutorialFilters(tutorials[0], filters({ statusFilter: "done" })), true)
+  assert.equal(matchesTutorialFilters(tutorials[0], filters({ statusFilter: "done" }), { 1: { currentStep: 0, completedSteps: [0] } }), true)
   assert.equal(matchesTutorialFilters(tutorials[0], filters({ durationFilter: "quick" })), true)
   assert.equal(matchesTutorialFilters(tutorials[1], filters({ durationFilter: "medium" })), true)
   assert.equal(matchesTutorialFilters(tutorials[2], filters({ durationFilter: "long" })), true)

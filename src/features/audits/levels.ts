@@ -8,12 +8,12 @@ export const AUDIT_LEVELS: AuditLevel[] = [
     duration: "Moins de 10 minutes",
     durationShort: "≈ 10 min",
     goal:
-      "Qualifier votre profil en quelques minutes et déterminer votre niveau (néophyte, intermédiaire ou avancé) pour vous orienter vers les bons contenus.",
+      "Calculer un score à partir de vos réponses et consulter les recommandations associées à sa tranche.",
     outputs: [
       "Premier score de sécurité",
-      "Profil utilisateur",
+      "Tranche de score",
       "Recommandations initiales",
-      "Onboarding personnalisé",
+      "Liens vers les tutoriels recommandés",
     ],
     audience: "Recommandé à toutes les nouvelles personnes inscrites.",
     status: "available",

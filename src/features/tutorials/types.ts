@@ -18,15 +18,6 @@ export type TypeFilter =
   | "populaire"
   | "technique"
 
-export type PrecisionType =
-  | "information_fausse"
-  | "information_obsolete"
-  | "reformulation"
-  | "manque_clarte"
-  | "lien_casse"
-  | "etape_ne_fonctionne_plus"
-  | "precision_utile"
-
 export type LibraryCategoryIcon =
   | "key"
   | "alert"

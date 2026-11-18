@@ -130,7 +130,7 @@ export function PreHomeHero({
             </li>
             <li className="inline-flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-[color:var(--sc-success)]" />
-              100% confidentiel
+              Audit sans compte
             </li>
           </ul>
         </div>

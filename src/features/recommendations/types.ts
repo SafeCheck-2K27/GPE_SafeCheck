@@ -35,8 +35,6 @@ export type HabitTag =
   | "appareils"
   | "données"
   | "réflexes"
-export type RecommendationStatus = "todo" | "en-cours" | "fait" | "sauvegarde"
-
 interface LinkedTutorial {
   id: number
   title: string

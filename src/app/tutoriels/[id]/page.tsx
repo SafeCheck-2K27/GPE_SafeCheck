@@ -6,8 +6,6 @@ import Footer from "@/components/safecheck/Footer"
 import Navbar from "@/components/safecheck/Navbar"
 import { PageShell } from "@/components/safecheck/layout/PageShell"
 import { TutorialModal } from "@/features/tutorials/components/TutorialModal"
-import { TutorialPrecisionModal } from "@/features/tutorials/components/TutorialPrecisionModal"
-import { TutorialDetailFeedback } from "@/features/tutorials/detail/components/TutorialDetailFeedback"
 import { TutorialDetailHero } from "@/features/tutorials/detail/components/TutorialDetailHero"
 import { TutorialTextWithLexicon } from "@/features/tutorials/detail/components/TutorialDetailLexicon"
 import {
@@ -18,12 +16,12 @@ import { TutorialDetailOverview } from "@/features/tutorials/detail/components/T
 import { TutorialDetailSidebar } from "@/features/tutorials/detail/components/TutorialDetailSidebar"
 import {
   getRelatedTutorials,
-  getTutorialDetailState,
-  getTutorialProgressPercent,
   resolveTutorialRoute,
 } from "@/features/tutorials/detail/utils"
 import { tutoriels } from "@/features/tutorials/data/catalog"
-import { Send } from "lucide-react"
+import { useTutorialProgress } from "@/features/tutorials/useTutorialProgress"
+import { TutorialProgressSyncStatus } from "@/features/tutorials/components/TutorialProgressSyncStatus"
+import { completeTutorial, getTutorialProgressPercent, getTutorialStatus } from "@/features/tutorials/progress"
 
 export default function TutorielDetailPage() {
   const params = useParams()
@@ -32,33 +30,14 @@ export default function TutorielDetailPage() {
   const tutorial = resolveTutorialRoute(tutoriels, routeParam)
 
   const [readerOpen, setReaderOpen] = useState(false)
-  const [currentStep, setCurrentStep] = useState(0)
-  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set())
-  const [saved, setSaved] = useState(false)
-  const [markedDone, setMarkedDone] = useState(false)
-  const [precisionOpen, setPrecisionOpen] = useState(false)
-  const [precisionStepTitle, setPrecisionStepTitle] = useState<
-    string | undefined
-  >(undefined)
-
-  const openPrecision = (stepTitle?: string) => {
-    setPrecisionStepTitle(stepTitle)
-    setPrecisionOpen(true)
-  }
-
-  const markStep = (stepIndex: number) => {
-    setCompletedSteps((previousSteps) => {
-      const nextSteps = new Set(previousSteps)
-      if (nextSteps.has(stepIndex)) nextSteps.delete(stepIndex)
-      else nextSteps.add(stepIndex)
-      return nextSteps
-    })
-  }
+  const { progressById, updateProgress, state, canInteract, sessionKey, retryHydration, retrySaves } = useTutorialProgress()
+  const [readerSessionKey, setReaderSessionKey] = useState<string | null>(null)
+  const syncStatus = <TutorialProgressSyncStatus state={state} retryHydration={retryHydration} retrySaves={retrySaves} />
 
   const openReader = () => {
+    if (!tutorial || !updateProgress(tutorial)) return
+    setReaderSessionKey(sessionKey)
     setReaderOpen(true)
-    setCurrentStep(0)
-    if (!markedDone) setCompletedSteps(new Set())
   }
 
   if (!tutorial) {
@@ -73,14 +52,9 @@ export default function TutorielDetailPage() {
     )
   }
 
-  const progressPercent = getTutorialProgressPercent(
-    completedSteps.size,
-    tutorial.steps.length,
-  )
-  const tutorialState = getTutorialDetailState(
-    markedDone,
-    completedSteps.size,
-  )
+  const progress = progressById[tutorial.id] ?? null
+  const progressPercent = getTutorialProgressPercent(progress, tutorial.steps.length)
+  const tutorialState = getTutorialStatus(progress, tutorial.steps.length)
   const relatedTutorials = getRelatedTutorials(
     tutoriels,
     tutorial,
@@ -92,31 +66,25 @@ export default function TutorielDetailPage() {
 
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-6">
         <TutorialDetailBreadcrumb title={tutorial.title} />
+        {syncStatus}
 
+        {canInteract && (
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
           <div className="min-w-0">
             <TutorialDetailHero
               tutorial={tutorial}
               tutorialState={tutorialState}
               progressPercent={progressPercent}
-              completedStepCount={completedSteps.size}
-              saved={saved}
-              markedDone={markedDone}
+              completedStepCount={progress?.completedSteps.length ?? 0}
               onOpenReader={openReader}
-              onToggleSaved={() => setSaved(!saved)}
-              onToggleMarkedDone={() => setMarkedDone(!markedDone)}
+              onComplete={() => updateProgress(tutorial, (previous) => completeTutorial(previous, tutorial.steps.length))}
             />
 
             <TutorialDetailOverview
               tutorial={tutorial}
-              completedSteps={completedSteps}
+              progress={progress}
               tutorialState={tutorialState}
               onOpenReader={openReader}
-            />
-
-            <TutorialDetailFeedback
-              tutorial={tutorial}
-              onOpenPrecision={openPrecision}
             />
           </div>
 
@@ -125,31 +93,21 @@ export default function TutorielDetailPage() {
             relatedTutorials={relatedTutorials}
           />
         </div>
+        )}
       </main>
 
       <Footer />
 
-      {readerOpen && (
+      {canInteract && readerSessionKey === sessionKey && readerOpen && progress && (
         <TutorialModal
           tuto={tutorial}
-          currentStep={currentStep}
-          completedSteps={completedSteps}
-          onStepChange={setCurrentStep}
-          onMarkStep={markStep}
+          progress={progress}
+          onProgressChange={(update) => updateProgress(tutorial, update)}
           onClose={() => setReaderOpen(false)}
-          onOpenPrecision={openPrecision}
           renderStepDescription={(description) => (
             <TutorialTextWithLexicon text={description} />
           )}
-          precisionLinkPosition="after-completion"
-        />
-      )}
-
-      {precisionOpen && (
-        <TutorialPrecisionModal
-          onClose={() => setPrecisionOpen(false)}
-          stepTitle={precisionStepTitle}
-          submitIcon={<Send className="w-3.5 h-3.5" />}
+          syncStatus={syncStatus}
         />
       )}
     </PageShell>

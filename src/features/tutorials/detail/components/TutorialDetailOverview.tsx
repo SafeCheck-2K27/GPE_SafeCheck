@@ -3,15 +3,16 @@ import type { Tutoriel } from "../../data/catalog"
 import { Check, ListChecks, Sparkles, Zap } from "lucide-react"
 import type { TutorialDetailState } from "../types"
 import { TutorialTextWithLexicon } from "./TutorialDetailLexicon"
+import { isStepCompleted, type TutorialProgress } from "../../progress"
 
 export function TutorialDetailOverview({
   tutorial,
-  completedSteps,
+  progress,
   tutorialState,
   onOpenReader,
 }: {
   tutorial: Tutoriel
-  completedSteps: Set<number>
+  progress: TutorialProgress | null
   tutorialState: TutorialDetailState
   onOpenReader: () => void
 }) {
@@ -54,12 +55,12 @@ export function TutorialDetailOverview({
           {tutorial.steps.map((step, index) => (
             <li
               key={step.title}
-              className={`flex items-start gap-3 rounded-xl p-3 border transition-all ${completedSteps.has(index) ? "bg-[color:var(--sc-success)]/6 border-[color:var(--sc-success)]/25" : "bg-[color:var(--sc-bg-soft)] border-[color:var(--sc-border)] hover:border-[color:var(--sc-blue)]/25"}`}
+              className={`flex items-start gap-3 rounded-xl p-3 border transition-all ${isStepCompleted(progress, index, tutorial.steps.length) ? "bg-[color:var(--sc-success)]/6 border-[color:var(--sc-success)]/25" : "bg-[color:var(--sc-bg-soft)] border-[color:var(--sc-border)] hover:border-[color:var(--sc-blue)]/25"}`}
             >
               <span
-                className={`shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center text-[10px] font-bold transition-all ${completedSteps.has(index) ? "bg-[color:var(--sc-success)] border-[color:var(--sc-success)] text-[color:var(--sc-text-on-strong)]" : "border-[color:var(--sc-border-strong)] text-[color:var(--sc-text-muted)]"}`}
+                className={`shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center text-[10px] font-bold transition-all ${isStepCompleted(progress, index, tutorial.steps.length) ? "bg-[color:var(--sc-success)] border-[color:var(--sc-success)] text-[color:var(--sc-text-on-strong)]" : "border-[color:var(--sc-border-strong)] text-[color:var(--sc-text-muted)]"}`}
               >
-                {completedSteps.has(index) ? (
+                {isStepCompleted(progress, index, tutorial.steps.length) ? (
                   <Check className="w-3 h-3" />
                 ) : (
                   index + 1
@@ -67,7 +68,7 @@ export function TutorialDetailOverview({
               </span>
               <div className="flex-1 min-w-0">
                 <p
-                  className={`text-sm font-semibold leading-snug ${completedSteps.has(index) ? "text-[color:var(--sc-success)] line-through decoration-[color:var(--sc-success)]/40" : "text-[color:var(--sc-text)]"}`}
+                  className={`text-sm font-semibold leading-snug ${isStepCompleted(progress, index, tutorial.steps.length) ? "text-[color:var(--sc-success)] line-through decoration-[color:var(--sc-success)]/40" : "text-[color:var(--sc-text)]"}`}
                 >
                   {step.title}
                 </p>
@@ -87,9 +88,9 @@ export function TutorialDetailOverview({
             className="w-full"
           >
             <Zap className="w-3.5 h-3.5" />
-            {tutorialState === "in_progress"
-              ? "Reprendre le tutoriel guide"
-              : "Lancer le tutoriel guide"}
+            {tutorialState === "COMPLETED"
+              ? "Revoir le tutoriel guide"
+              : tutorialState === "IN_PROGRESS" ? "Reprendre le tutoriel guide" : "Commencer le tutoriel guide"}
           </ScButton>
         </div>
       </section>

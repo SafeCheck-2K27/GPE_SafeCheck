@@ -2,6 +2,7 @@ import { CATEGORY_LABEL } from "./data/catalog"
 import type { Category, Tutoriel } from "./data/catalog"
 import type { TutorialFilters } from "./types"
 import { matchesTutorialFilters } from "./filters"
+import type { TutorialProgressById } from "./session"
 
 const CATEGORY_KEYWORDS: Record<Category, string[]> = {
   comptes: [
@@ -121,9 +122,10 @@ export function searchTutorials(
   tutorials: Tutoriel[],
   query: string,
   filters: TutorialFilters,
+  progressById: TutorialProgressById = {},
 ): Tutoriel[] {
   const scored = tutorials
-    .filter((tutorial) => matchesTutorialFilters(tutorial, filters))
+    .filter((tutorial) => matchesTutorialFilters(tutorial, filters, progressById))
     .map((tutorial) => ({
       tutorial,
       score: searchScore(tutorial, query),

@@ -1,5 +1,5 @@
 /*
-   LEXIQUE SafeCheck - données mockées
+   LEXIQUE SafeCheck - contenu éditorial statique
    Base de connaissance pédagogique reliée aux tutoriels SafeCheck.
    Structure "poupée russe" : Domaine -> Termes -> Fiche détail -> Tutos liés.
  */
@@ -16,12 +16,9 @@ export type DomainId =
   | "hardware"
   | "data-ia"
 
-interface RelatedTutoriel {
+export interface RelatedTutoriel {
   /** id de la fiche tutoriel SafeCheck (route /tutoriels/[id]) */
-  id: number
-  title: string
-  difficulty: Niveau
-  duration: string
+  tutorialId: number
 }
 
 export interface LexiqueTerm {
@@ -128,9 +125,9 @@ export const TERMS: LexiqueTerm[] = [
       "Le mot « phishing » vient de « fishing » (pêche) : les pirates lancent des milliers d'hameçons en espérant que quelqu'un morde.",
     motsLies: ["malware", "mot-de-passe", "fuite-de-donnees"],
     tutoriels: [
-      { id: 6, title: "Identifier un email de phishing", difficulty: "Débutant", duration: "5 min" },
-      { id: 10, title: "Reconnaitre un faux lien (URL spoofing)", difficulty: "Débutant", duration: "5 min" },
-      { id: 22, title: "Identifier un phishing avance (spear / BEC)", difficulty: "Avancé", duration: "12 min" },
+      { tutorialId: 6 },
+      { tutorialId: 10 },
+      { tutorialId: 22 },
     ],
   },
   {
@@ -148,8 +145,8 @@ export const TERMS: LexiqueTerm[] = [
       "Kevin Mitnick, l'un des hackers les plus célèbres au monde, affirmait que la quasi-totalité de ses intrusions reposaient sur l'ingénierie sociale, pas sur le code.",
     motsLies: ["phishing", "malware", "fuite-de-donnees"],
     tutoriels: [
-      { id: 6, title: "Identifier un email de phishing", difficulty: "Débutant", duration: "5 min" },
-      { id: 22, title: "Identifier un phishing avance (spear / BEC)", difficulty: "Avancé", duration: "12 min" },
+      { tutorialId: 6 },
+      { tutorialId: 22 },
     ],
   },
   {
@@ -167,7 +164,7 @@ export const TERMS: LexiqueTerm[] = [
       "Les pentesters commencent toujours par mapper la surface d'attaque : plus elle est vaste, plus il y a de chances de trouver une faille exploitable.",
     motsLies: ["siem", "pare-feu", "ingenierie-sociale"],
     tutoriels: [
-      { id: 31, title: "Controler les surfaces d'exposition reseau a domicile", difficulty: "Avancé", duration: "12 min" },
+      { tutorialId: 31 },
     ],
   },
   {
@@ -220,8 +217,8 @@ export const TERMS: LexiqueTerm[] = [
       "Activer la 2FA bloque selon Microsoft plus de 99,9 % des attaques automatisées sur les comptes.",
     motsLies: ["mot-de-passe", "gestionnaire-mdp", "authentificateur"],
     tutoriels: [
-      { id: 1, title: "Activer la double authentification sur Google", difficulty: "Débutant", duration: "5 min" },
-      { id: 16, title: "Verifier les sessions actives sur ses comptes", difficulty: "Intermédiaire", duration: "6 min" },
+      { tutorialId: 1 },
+      { tutorialId: 16 },
     ],
   },
   {
@@ -239,8 +236,8 @@ export const TERMS: LexiqueTerm[] = [
       "Le mot de passe le plus utilisé au monde reste « 123456 » : il se craque en moins d'une seconde.",
     motsLies: ["2fa", "gestionnaire-mdp", "fuite-de-donnees"],
     tutoriels: [
-      { id: 2, title: "Creer un mot de passe fort", difficulty: "Débutant", duration: "3 min" },
-      { id: 3, title: "Installer et utiliser Bitwarden", difficulty: "Débutant", duration: "10 min" },
+      { tutorialId: 2 },
+      { tutorialId: 3 },
     ],
   },
   {
@@ -258,8 +255,8 @@ export const TERMS: LexiqueTerm[] = [
       "Un bon gestionnaire peut générer un mot de passe de 30 caractères qu'aucun humain ne pourrait mémoriser… ni deviner.",
     motsLies: ["mot-de-passe", "2fa", "chiffrement"],
     tutoriels: [
-      { id: 3, title: "Installer et utiliser Bitwarden", difficulty: "Débutant", duration: "10 min" },
-      { id: 14, title: "Configurer Bitwarden sur plusieurs appareils", difficulty: "Intermédiaire", duration: "8 min" },
+      { tutorialId: 3 },
+      { tutorialId: 14 },
     ],
   },
   {
@@ -277,7 +274,7 @@ export const TERMS: LexiqueTerm[] = [
       "Ces codes fonctionnent même sans connexion Internet : ils sont calculés à partir de l'heure et d'une clé secrète.",
     motsLies: ["2fa", "mot-de-passe"],
     tutoriels: [
-      { id: 1, title: "Activer la double authentification sur Google", difficulty: "Débutant", duration: "5 min" },
+      { tutorialId: 1 },
     ],
   },
   {
@@ -296,7 +293,7 @@ export const TERMS: LexiqueTerm[] = [
       "Les passkeys ont été standardisés par l'alliance FIDO2 et sont supportés par Google, Apple et Microsoft depuis 2023.",
     motsLies: ["2fa", "mot-de-passe", "authentificateur"],
     tutoriels: [
-      { id: 1, title: "Activer la double authentification sur Google", difficulty: "Débutant", duration: "5 min" },
+      { tutorialId: 1 },
     ],
   },
   {
@@ -315,7 +312,7 @@ export const TERMS: LexiqueTerm[] = [
       "OAuth 2.0 (2012) est incompatible avec OAuth 1.0 (2010) - une réécriture complète plutôt qu'une évolution, ce qui a créé une fracture durable dans l'écosystème.",
     motsLies: ["jwt", "oidc", "passkey"],
     tutoriels: [
-      { id: 1, title: "Activer la double authentification sur Google", difficulty: "Débutant", duration: "5 min" },
+      { tutorialId: 1 },
     ],
   },
   {
@@ -333,7 +330,7 @@ export const TERMS: LexiqueTerm[] = [
       "OIDC a été finalisé en 2014 par la OpenID Foundation. Il est aujourd'hui implémenté par presque tous les grands fournisseurs d'identité : Google, Microsoft, Auth0, Keycloak.",
     motsLies: ["oauth2", "jwt", "rbac"],
     tutoriels: [
-      { id: 1, title: "Activer la double authentification sur Google", difficulty: "Débutant", duration: "5 min" },
+      { tutorialId: 1 },
     ],
   },
   {
@@ -351,7 +348,7 @@ export const TERMS: LexiqueTerm[] = [
       "Le payload d'un JWT n'est pas chiffré, seulement encodé en Base64. N'importe qui peut le décoder avec atob() - ne jamais y stocker de données sensibles.",
     motsLies: ["oauth2", "oidc", "chiffrement"],
     tutoriels: [
-      { id: 1, title: "Activer la double authentification sur Google", difficulty: "Débutant", duration: "5 min" },
+      { tutorialId: 1 },
     ],
   },
   {
@@ -387,8 +384,8 @@ export const TERMS: LexiqueTerm[] = [
       "Jules César utilisait déjà un chiffrement simple en décalant les lettres de l'alphabet : on l'appelle le « chiffre de César ».",
     motsLies: ["vpn", "ransomware", "fuite-de-donnees"],
     tutoriels: [
-      { id: 15, title: "Chiffrer ses fichiers sensibles", difficulty: "Intermédiaire", duration: "10 min" },
-      { id: 29, title: "Verifier l'etat du chiffrement disque", difficulty: "Avancé", duration: "10 min" },
+      { tutorialId: 15 },
+      { tutorialId: 29 },
     ],
   },
   {
@@ -406,8 +403,8 @@ export const TERMS: LexiqueTerm[] = [
       "Le site « Have I Been Pwned » recense plus de 12 milliards de comptes ayant fuité : vous pouvez y vérifier le vôtre gratuitement.",
     motsLies: ["mot-de-passe", "phishing", "data"],
     tutoriels: [
-      { id: 4, title: "Verifier si ton email a ete compromis", difficulty: "Débutant", duration: "3 min" },
-      { id: 16, title: "Verifier les sessions actives sur ses comptes", difficulty: "Intermédiaire", duration: "6 min" },
+      { tutorialId: 4 },
+      { tutorialId: 16 },
     ],
   },
   {
@@ -425,7 +422,7 @@ export const TERMS: LexiqueTerm[] = [
       "En 2012, l'activiste John McAfee a été localisé par des journalistes grâce aux métadonnées GPS d'une photo publiée pour prouver sa liberté.",
     motsLies: ["data", "fuite-de-donnees", "cookie"],
     tutoriels: [
-      { id: 24, title: "Limiter la telemetrie systeme", difficulty: "Intermédiaire", duration: "8 min" },
+      { tutorialId: 24 },
     ],
   },
   {
@@ -443,7 +440,7 @@ export const TERMS: LexiqueTerm[] = [
       "Le RGPD considère les données pseudonymisées comme toujours des données personnelles, tandis que les données anonymisées ne le sont plus.",
     motsLies: ["anonymisation", "metadonnees", "chiffrement"],
     tutoriels: [
-      { id: 24, title: "Limiter la telemetrie systeme", difficulty: "Intermédiaire", duration: "8 min" },
+      { tutorialId: 24 },
     ],
   },
   {
@@ -462,7 +459,7 @@ export const TERMS: LexiqueTerm[] = [
       "Depuis l'entrée en vigueur du RGPD en mai 2018, plus de 4 milliards d'euros d'amendes ont été infligés en Europe.",
     motsLies: ["fuite-de-donnees", "pseudonymisation", "cookie"],
     tutoriels: [
-      { id: 17, title: "Configurer la confidentialite de Windows", difficulty: "Intermédiaire", duration: "8 min" },
+      { tutorialId: 17 },
     ],
   },
   // Web & navigation
@@ -481,8 +478,8 @@ export const TERMS: LexiqueTerm[] = [
       "Le terme « cookie » vient des « magic cookies », des jetons de données utilisés par les premiers programmes Unix.",
     motsLies: ["phishing", "data"],
     tutoriels: [
-      { id: 13, title: "Securiser son navigateur web", difficulty: "Débutant", duration: "8 min" },
-      { id: 18, title: "Choisir et installer les bonnes extensions navigateur", difficulty: "Intermédiaire", duration: "8 min" },
+      { tutorialId: 13 },
+      { tutorialId: 18 },
     ],
   },
   {
@@ -501,8 +498,8 @@ export const TERMS: LexiqueTerm[] = [
       "En 2015, moins de 40 % du trafic web mondial était chiffré. En 2024, c'est plus de 95 % grâce à la généralisation du HTTPS.",
     motsLies: ["chiffrement", "cookie", "dns"],
     tutoriels: [
-      { id: 13, title: "Securiser son navigateur web", difficulty: "Débutant", duration: "8 min" },
-      { id: 10, title: "Reconnaitre un faux lien (URL spoofing)", difficulty: "Débutant", duration: "5 min" },
+      { tutorialId: 13 },
+      { tutorialId: 10 },
     ],
   },
   {
@@ -520,8 +517,8 @@ export const TERMS: LexiqueTerm[] = [
       "Google a repoussé plusieurs fois la suppression des cookies tiers dans Chrome, un navigateur qui représente plus de 65 % du marché mondial.",
     motsLies: ["cookie", "data", "metadonnees"],
     tutoriels: [
-      { id: 13, title: "Securiser son navigateur web", difficulty: "Débutant", duration: "8 min" },
-      { id: 18, title: "Choisir et installer les bonnes extensions navigateur", difficulty: "Intermédiaire", duration: "8 min" },
+      { tutorialId: 13 },
+      { tutorialId: 18 },
     ],
   },
   {
@@ -539,8 +536,8 @@ export const TERMS: LexiqueTerm[] = [
       "En 2020, 500 extensions frauduleuses cumulant 1,7 million d'installations ont été retirées du Chrome Web Store d'un coup.",
     motsLies: ["cookie", "malware", "https"],
     tutoriels: [
-      { id: 18, title: "Choisir et installer les bonnes extensions navigateur", difficulty: "Intermédiaire", duration: "8 min" },
-      { id: 13, title: "Securiser son navigateur web", difficulty: "Débutant", duration: "8 min" },
+      { tutorialId: 18 },
+      { tutorialId: 13 },
     ],
   },
   {
@@ -559,7 +556,7 @@ export const TERMS: LexiqueTerm[] = [
       "XSS est présent dans le Top 10 OWASP depuis sa création en 2003. Malgré des décennies de sensibilisation, il reste l'une des vulnérabilités web les plus répandues.",
     motsLies: ["csrf", "cookie", "https"],
     tutoriels: [
-      { id: 13, title: "Securiser son navigateur web", difficulty: "Débutant", duration: "8 min" },
+      { tutorialId: 13 },
     ],
   },
   {
@@ -578,7 +575,7 @@ export const TERMS: LexiqueTerm[] = [
       "La protection standard contre CSRF est le CSRF token : un secret aléatoire inclus dans chaque formulaire, que le serveur vérifie. Les navigateurs modernes ajoutent aussi `SameSite=Strict` sur les cookies pour bloquer ces attaques.",
     motsLies: ["xss", "cookie", "https"],
     tutoriels: [
-      { id: 13, title: "Securiser son navigateur web", difficulty: "Débutant", duration: "8 min" },
+      { tutorialId: 13 },
     ],
   },
   // Réseau
@@ -598,7 +595,7 @@ export const TERMS: LexiqueTerm[] = [
       "Beaucoup de VPN « gratuits » se financent en revendant les données de navigation de leurs utilisateurs : l'inverse du but recherché.",
     motsLies: ["adresse-ip", "chiffrement", "pare-feu"],
     tutoriels: [
-      { id: 21, title: "Comprendre les bases d'un VPN et bien le choisir", difficulty: "Intermédiaire", duration: "10 min" },
+      { tutorialId: 21 },
     ],
   },
   {
@@ -616,8 +613,8 @@ export const TERMS: LexiqueTerm[] = [
       "Le terme vient du bâtiment : un « firewall » est un mur coupe-feu qui empêche un incendie de se propager d'une pièce à l'autre.",
     motsLies: ["adresse-ip", "vpn"],
     tutoriels: [
-      { id: 27, title: "Comprendre et durcir son pare-feu", difficulty: "Avancé", duration: "12 min" },
-      { id: 26, title: "Verifier les ports ouverts sur sa machine", difficulty: "Avancé", duration: "10 min" },
+      { tutorialId: 27 },
+      { tutorialId: 26 },
     ],
   },
   {
@@ -635,7 +632,7 @@ export const TERMS: LexiqueTerm[] = [
       "Il existe deux formats : IPv4 (ex. 192.168.1.1) et IPv6, créé car les ~4 milliards d'adresses IPv4 ne suffisaient plus.",
     motsLies: ["vpn", "pare-feu"],
     tutoriels: [
-      { id: 31, title: "Controler les surfaces d'exposition reseau a domicile", difficulty: "Avancé", duration: "12 min" },
+      { tutorialId: 31 },
     ],
   },
   {
@@ -654,7 +651,7 @@ export const TERMS: LexiqueTerm[] = [
       "Le DNS date de 1983 et n'a pas été conçu pour la sécurité. Le « DNS over HTTPS » est l'une des améliorations modernes pour y remédier.",
     motsLies: ["adresse-ip", "https", "vpn"],
     tutoriels: [
-      { id: 31, title: "Controler les surfaces d'exposition reseau a domicile", difficulty: "Avancé", duration: "12 min" },
+      { tutorialId: 31 },
     ],
   },
   {
@@ -672,7 +669,7 @@ export const TERMS: LexiqueTerm[] = [
       "MAC ne vient pas de la marque Apple mais de « Media Access Control ». Apple s'appelait déjà Apple bien avant ce standard.",
     motsLies: ["adresse-ip", "vpn", "pare-feu"],
     tutoriels: [
-      { id: 31, title: "Controler les surfaces d'exposition reseau a domicile", difficulty: "Avancé", duration: "12 min" },
+      { tutorialId: 31 },
     ],
   },
   {
@@ -709,8 +706,8 @@ export const TERMS: LexiqueTerm[] = [
       "Le tout premier malware grand public, « ILOVEYOU » (2000), s'est propagé par email et a touché plus de 45 millions d'ordinateurs en une journée.",
     motsLies: ["ransomware", "phishing", "bug"],
     tutoriels: [
-      { id: 9, title: "Verifier les permissions de son smartphone", difficulty: "Débutant", duration: "5 min" },
-      { id: 19, title: "Detecter les apps a risque sur son telephone", difficulty: "Intermédiaire", duration: "8 min" },
+      { tutorialId: 9 },
+      { tutorialId: 19 },
     ],
   },
   {
@@ -729,8 +726,8 @@ export const TERMS: LexiqueTerm[] = [
       "Certains rançongiciels affichent un compte à rebours pour pousser la victime à payer dans la panique avant la « destruction » des fichiers.",
     motsLies: ["malware", "chiffrement", "phishing"],
     tutoriels: [
-      { id: 5, title: "Sauvegarder ses fichiers importants", difficulty: "Débutant", duration: "10 min" },
-      { id: 20, title: "Mettre en place une routine de sauvegarde 3-2-1", difficulty: "Intermédiaire", duration: "10 min" },
+      { tutorialId: 5 },
+      { tutorialId: 20 },
     ],
   },
   {
@@ -749,7 +746,7 @@ export const TERMS: LexiqueTerm[] = [
       "Sur Android, « rooter » son téléphone donne ces super-pouvoirs… mais annule la garantie et ouvre la porte à de nombreux risques.",
     motsLies: ["malware", "software"],
     tutoriels: [
-      { id: 25, title: "Auditer les services de demarrage Windows", difficulty: "Avancé", duration: "12 min" },
+      { tutorialId: 25 },
     ],
   },
   {
@@ -767,8 +764,8 @@ export const TERMS: LexiqueTerm[] = [
       "Le mot « bug » (insecte) viendrait d'un vrai papillon coincé dans un ordinateur en 1947, scotché dans le carnet de l'ingénieure Grace Hopper.",
     motsLies: ["malware", "software"],
     tutoriels: [
-      { id: 7, title: "Mettre a jour Windows ou macOS", difficulty: "Débutant", duration: "5 min" },
-      { id: 12, title: "Mettre a jour son navigateur", difficulty: "Débutant", duration: "3 min" },
+      { tutorialId: 7 },
+      { tutorialId: 12 },
     ],
   },
   {
@@ -786,8 +783,8 @@ export const TERMS: LexiqueTerm[] = [
       "Les experts parlent de « fenêtre de vulnérabilité » : le temps entre la publication d'une faille et la mise à jour par l'utilisateur. Elle peut durer des mois.",
     motsLies: ["bug", "malware", "ransomware"],
     tutoriels: [
-      { id: 7, title: "Mettre a jour Windows ou macOS", difficulty: "Débutant", duration: "5 min" },
-      { id: 12, title: "Mettre a jour son navigateur", difficulty: "Débutant", duration: "3 min" },
+      { tutorialId: 7 },
+      { tutorialId: 12 },
     ],
   },
   {
@@ -805,7 +802,7 @@ export const TERMS: LexiqueTerm[] = [
       "Le premier antivirus commercial date de 1987. Aujourd'hui, les solutions modernes utilisent l'IA pour détecter des comportements suspects plutôt que des signatures connues.",
     motsLies: ["malware", "ransomware", "mise-a-jour-securite"],
     tutoriels: [
-      { id: 7, title: "Mettre a jour Windows ou macOS", difficulty: "Débutant", duration: "5 min" },
+      { tutorialId: 7 },
     ],
   },
   {
@@ -824,7 +821,7 @@ export const TERMS: LexiqueTerm[] = [
       "Le terme « patch » vient de l'époque où les développeurs collaient littéralement des morceaux de papier sur les cartes perforées pour corriger le code.",
     motsLies: ["mise-a-jour-securite", "bug", "firmware"],
     tutoriels: [
-      { id: 7, title: "Mettre a jour Windows ou macOS", difficulty: "Débutant", duration: "5 min" },
+      { tutorialId: 7 },
     ],
   },
   // Hardware
@@ -843,7 +840,7 @@ export const TERMS: LexiqueTerm[] = [
       "Le premier disque dur commercial (IBM, 1956) pesait plus d'une tonne pour seulement 5 Mo de stockage.",
     motsLies: ["software", "chiffrement"],
     tutoriels: [
-      { id: 29, title: "Verifier l'etat du chiffrement disque", difficulty: "Avancé", duration: "10 min" },
+      { tutorialId: 29 },
     ],
   },
   {
@@ -861,8 +858,8 @@ export const TERMS: LexiqueTerm[] = [
       "Le terme « software » a été popularisé en 1958 par le mathématicien John Tukey, qui a aussi inventé le mot « bit ».",
     motsLies: ["hardware", "bug", "malware"],
     tutoriels: [
-      { id: 7, title: "Mettre a jour Windows ou macOS", difficulty: "Débutant", duration: "5 min" },
-      { id: 18, title: "Choisir et installer les bonnes extensions navigateur", difficulty: "Intermédiaire", duration: "8 min" },
+      { tutorialId: 7 },
+      { tutorialId: 18 },
     ],
   },
   {
@@ -881,7 +878,7 @@ export const TERMS: LexiqueTerm[] = [
       "Secure Boot a créé des controverses : au début, il bloquait l'installation de Linux sur les ordinateurs portables. Des corrections ont ensuite permis aux distributions Linux de s'enregistrer comme vendeurs de confiance.",
     motsLies: ["tpm", "hardware", "malware"],
     tutoriels: [
-      { id: 29, title: "Verifier l'etat du chiffrement disque", difficulty: "Avancé", duration: "10 min" },
+      { tutorialId: 29 },
     ],
   },
   {
@@ -900,7 +897,7 @@ export const TERMS: LexiqueTerm[] = [
       "Les premiers TPM remontent aux années 2000, mais peu d'utilisateurs les activaient. Le succès de Windows 11 (qui l'impose) a enfin popularisé cette technologie.",
     motsLies: ["secure-boot", "chiffrement", "hardware"],
     tutoriels: [
-      { id: 29, title: "Verifier l'etat du chiffrement disque", difficulty: "Avancé", duration: "10 min" },
+      { tutorialId: 29 },
     ],
   },
   {
@@ -919,7 +916,7 @@ export const TERMS: LexiqueTerm[] = [
       "Certains malwares très sophistiqués (comme LoJax, découvert en 2018) s'installent dans le firmware UEFI et survivent au formatage complet du disque dur.",
     motsLies: ["hardware", "bios", "mise-a-jour-securite"],
     tutoriels: [
-      { id: 31, title: "Controler les surfaces d'exposition reseau a domicile", difficulty: "Avancé", duration: "12 min" },
+      { tutorialId: 31 },
     ],
   },
   {
@@ -937,7 +934,7 @@ export const TERMS: LexiqueTerm[] = [
       "Le BIOS date de 1975 (CP/M). L'UEFI, son successeur moderne, supporte des disques de plus de 2 To et démarre nettement plus vite.",
     motsLies: ["firmware", "secure-boot", "tpm"],
     tutoriels: [
-      { id: 29, title: "Verifier l'etat du chiffrement disque", difficulty: "Avancé", duration: "10 min" },
+      { tutorialId: 29 },
     ],
   },
   {
@@ -972,8 +969,8 @@ export const TERMS: LexiqueTerm[] = [
       "On estime que l'humanité crée chaque jour plusieurs centaines de millions de gigaoctets de données nouvelles.",
     motsLies: ["fuite-de-donnees", "cookie"],
     tutoriels: [
-      { id: 24, title: "Limiter la telemetrie systeme", difficulty: "Intermédiaire", duration: "8 min" },
-      { id: 17, title: "Configurer la confidentialite de Windows", difficulty: "Intermédiaire", duration: "8 min" },
+      { tutorialId: 24 },
+      { tutorialId: 17 },
     ],
   },
   {
@@ -992,8 +989,8 @@ export const TERMS: LexiqueTerm[] = [
       "Le terme « cloud » est apparu dans la communication d'entreprise dans les années 1990 pour désigner le réseau Internet, représenté par un nuage dans les schémas.",
     motsLies: ["chiffrement", "fuite-de-donnees", "data"],
     tutoriels: [
-      { id: 5, title: "Sauvegarder ses fichiers importants", difficulty: "Débutant", duration: "10 min" },
-      { id: 20, title: "Mettre en place une routine de sauvegarde 3-2-1", difficulty: "Intermédiaire", duration: "10 min" },
+      { tutorialId: 5 },
+      { tutorialId: 20 },
     ],
   },
   {
@@ -1045,7 +1042,7 @@ export const TERMS: LexiqueTerm[] = [
       "Selon une étude de 2019, 99,98 % des individus dans un dataset de mobilité « anonymisé » à 15 attributs sont ré-identifiables de manière unique.",
     motsLies: ["data", "metadonnees", "fuite-de-donnees"],
     tutoriels: [
-      { id: 24, title: "Limiter la telemetrie systeme", difficulty: "Intermédiaire", duration: "8 min" },
+      { tutorialId: 24 },
     ],
   },
   {
