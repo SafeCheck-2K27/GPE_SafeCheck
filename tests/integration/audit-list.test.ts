@@ -36,7 +36,9 @@ test("GET /audits lists only the signed-in user's summaries", async (t) => {
   const userB = await signup(emails[1])
   const empty = await app.inject({ method: "GET", url: "/audits", headers: { cookie: userA } })
   assert.equal(empty.statusCode, 200)
-  assert.deepEqual(empty.json(), { items: [] })
+  assert.deepEqual(empty.json(), {
+    items: [], nextCursor: null, counts: { total: 0, completed: 0, inProgress: 0 },
+  })
 
   const older = await create(userA)
   const newer = await create(userA)

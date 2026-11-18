@@ -4,7 +4,7 @@ import { JSDOM } from "jsdom"
 import { act, createElement as h, StrictMode, useLayoutEffect, type ComponentType } from "react"
 import { createRoot, type Root } from "react-dom/client"
 import { AppRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime"
-import { SearchParamsContext } from "next/dist/shared/lib/hooks-client-context.shared-runtime"
+import { PathnameContext, SearchParamsContext } from "next/dist/shared/lib/hooks-client-context.shared-runtime"
 import { GUEST_CLAIM_TIMEOUT_MS } from "../../src/components/safecheck/guest-claim-recovery"
 import { questionnaireV1 } from "../../src/features/audit/versions/questionnaire-v1"
 
@@ -27,6 +27,7 @@ let AuthProvider: typeof import("../../src/components/safecheck/AuthProvider").A
 let useAuth: typeof import("../../src/components/safecheck/AuthProvider").useAuth
 let I18nProvider: typeof import("../../src/components/safecheck/I18nProvider").I18nProvider
 let AuditPage: ComponentType
+let AccountPage: ComponentType
 let ResultatsPage: ComponentType
 let authClient: typeof import("../../src/lib/auth-client").authClient
 let root: Root | null = null
@@ -40,6 +41,7 @@ let claimReply: (init: RequestInit) => Promise<Response>
 let sessionReply: ((init: RequestInit) => Promise<Response>) | null = null
 let auditReply: ((init: RequestInit) => Promise<Response>) | null = null
 let createReply: (() => Promise<Response>) | null = null
+let auditListReply: ((cursor: string | null) => Promise<Response>) | null = null
 
 function deferred<T>() {
   let resolve!: (value: T) => void
@@ -86,7 +88,8 @@ async function mount(Page?: ComponentType, strict = true) {
   const router = { back() {}, forward() {}, refresh() {}, push() {}, replace() {}, prefetch() {} }
   const content = h(AppRouterContext.Provider, { value: router },
     h(SearchParamsContext.Provider, { value: new URL(dom.window.location.href).searchParams },
-      h(I18nProvider, null, h(AuthProvider, null, h(Probe), Page ? h(Page) : null))))
+      h(PathnameContext.Provider, { value: dom.window.location.pathname },
+        h(I18nProvider, null, h(AuthProvider, null, h(Probe), Page ? h(Page) : null)))))
   await act(async () => { root!.render(strict ? h(StrictMode, null, content) : content) })
   await flush()
 }
@@ -105,7 +108,8 @@ async function clickRetry() {
 }
 
 async function networkFetch(input: RequestInfo | URL, init: RequestInit = {}): Promise<Response> {
-    const path = new URL(input instanceof Request ? input.url : String(input)).pathname
+    const url = new URL(input instanceof Request ? input.url : String(input))
+    const path = url.pathname
     if (path === "/api/auth/get-session") return sessionReply ? sessionReply(init) : sessionResponse()
     if (path === "/api/auth/sign-in/email" || path === "/api/auth/sign-up/email") {
       serverUser = "user-1"
@@ -118,6 +122,8 @@ async function networkFetch(input: RequestInfo | URL, init: RequestInit = {}): P
       return claimReply(init)
     }
     if (path === "/audits" && init.method === "POST") { creations++; return createReply ? createReply() : auditResponse() }
+    if (path === "/audits" && auditListReply) return auditListReply(url.searchParams.get("cursor"))
+    if (path === "/me/tutorial-progress") return Response.json({ items: [] })
     if (path === "/audits/guest-audit") {
       reads++
       return auditReply ? auditReply(init) : guestOwned ? Response.json({ code: "AUDIT_NOT_FOUND" }, { status: 404 }) : auditResponse()
@@ -130,6 +136,7 @@ before(async () => {
   ;({ AuthProvider, useAuth } = await import("../../src/components/safecheck/AuthProvider"))
   ;({ I18nProvider } = await import("../../src/components/safecheck/I18nProvider"))
   ;({ default: AuditPage } = await import("../../src/app/audit/page"))
+  ;({ default: AccountPage } = await import("../../src/app/compte/page"))
   ;({ default: ResultatsPage } = await import("../../src/app/resultats/page"))
   ;({ authClient } = await import("../../src/lib/auth-client"))
 })
@@ -139,6 +146,7 @@ beforeEach(async (t) => {
   claims = reads = creations = 0
   guestOwned = true
   sessionReply = auditReply = createReply = null
+  auditListReply = null
   claimReply = async () => Response.json({}, { status: 503 })
   dom.window.history.replaceState(null, "", "/audit?auditId=guest-audit")
   if ("mock" in t) t.mock.method(console, "warn", () => {})
@@ -148,6 +156,43 @@ beforeEach(async (t) => {
 })
 
 afterEach(async () => { await unmount() })
+
+test("account history uses the refreshed first page's cursor after a guest claim", async () => {
+  dom.window.history.replaceState(null, "", "/compte?tab=historique")
+  const refreshedPage = deferred<Response>()
+  const requestedCursors: Array<string | null> = []
+  let claimed = false
+  const page = (id: string, nextCursor: string | null) => Response.json({
+    items: [{
+      id, status: "in_progress", answeredCount: 0, questionnaireVersion: 1, scoringVersion: 1,
+      createdAt: "2026-10-05T12:00:00.000Z", updatedAt: "2026-10-05T12:00:00.000Z",
+    }],
+    nextCursor,
+    counts: { total: 2, completed: 0, inProgress: 2 },
+  })
+  const loadMoreButton = () => [...dom.window.document.querySelectorAll("button")].find(
+    (button) => button.textContent === "Charger la suite",
+  )
+  auditListReply = async (cursor) => {
+    requestedCursors.push(cursor)
+    if (cursor) return page("next-audit", null)
+    return claimed ? refreshedPage.promise : page("old-audit", "old-cursor")
+  }
+
+  await mount(AccountPage, false)
+  await until(() => auth.guestClaimStatus === "failed" && !!loadMoreButton())
+  claimReply = async () => { claimed = true; return Response.json({ claimedCount: 1 }) }
+  await clickRetry()
+  await until(() => requestedCursors.length === 2)
+  await act(async () => { loadMoreButton()?.click() })
+  assert.deepEqual(requestedCursors, [null, null], "a refresh in progress cannot use the previous cursor")
+
+  await act(async () => { refreshedPage.resolve(page("refreshed-audit", "refreshed-cursor")) })
+  await until(() => !!dom.window.document.querySelector('a[href="/audit?auditId=refreshed-audit"]'))
+  await act(async () => { loadMoreButton()?.click() })
+  await until(() => !!dom.window.document.querySelector('a[href="/audit?auditId=next-audit"]'))
+  assert.deepEqual(requestedCursors, [null, null, "refreshed-cursor"])
+})
 
 for (const [route, Page, expected] of [
   ["/audit?auditId=guest-audit", () => AuditPage, "La cybersécurité, tu t'y connais ou pas ?"],

@@ -32,10 +32,14 @@ describe("Audit HTTP guest lifecycle", { skip: !process.env.DATABASE_URL }, asyn
 
   let auditId: string
   let guestCookie: string
+  let scenario = 0
+  let remoteAddress: string
   // Each behavior gets a newly created HTTP guest audit. Save/submit sequences remain
   // inside the behavior that verifies them, rather than supplying later siblings.
   beforeEach(async () => {
-    const created = await app.inject({ method: "POST", url: "/audits" })
+    // Give each scenario its own client quota while sharing the integration app.
+    remoteAddress = `192.0.2.${++scenario}`
+    const created = await app.inject({ method: "POST", url: "/audits", remoteAddress })
     assert.equal(created.statusCode, 201)
     auditId = created.json<{ id: string; status: string }>().id
     assert.match(auditId, /^[0-9a-f-]{36}$/)
@@ -61,7 +65,7 @@ describe("Audit HTTP guest lifecycle", { skip: !process.env.DATABASE_URL }, asyn
     method: "GET" | "PUT" | "POST",
     url: string,
     payload?: { value: string },
-  ) => app.inject({ method, url, headers: { cookie: guestCookie }, payload })
+  ) => app.inject({ method, url, headers: { cookie: guestCookie }, payload, remoteAddress })
 
   const oldDate = new Date("2020-01-01T00:00:00.000Z")
   async function setOldTimestamp(id = auditId) {
@@ -102,7 +106,7 @@ describe("Audit HTTP guest lifecycle", { skip: !process.env.DATABASE_URL }, asyn
     })
     assert.equal(invalidCookie.statusCode, 404)
 
-    const secondGuest = await app.inject({ method: "POST", url: "/audits" })
+    const secondGuest = await app.inject({ method: "POST", url: "/audits", remoteAddress })
     assert.equal(secondGuest.statusCode, 201)
     createdAuditIds.push(secondGuest.json().id)
     const secondCookie = (secondGuest.headers["set-cookie"] as string).split(";")[0]

@@ -98,11 +98,10 @@ function AccountPageContent() {
 
   const [audits, setAudits] = useState<AccountAudit[] | null>(null)
   const [auditCounts, setAuditCounts] = useState<AccountAuditCountsDto | null>(null)
-  const [auditCursor, setAuditCursor] = useState<string | null>(null)
+  const [hasMoreAudits, setHasMoreAudits] = useState(false)
   const [loadingMoreAudits, setLoadingMoreAudits] = useState(false)
   const [moreAuditsError, setMoreAuditsError] = useState(false)
-  const pageControllerRef = useRef<AbortController | null>(null)
-  const loadingMoreRef = useRef(false)
+  const auditRequestRef = useRef<{ signal: AbortSignal; cursor: string | null; loadingMore: boolean } | null>(null)
   const [auditError, setAuditError] = useState(false)
   const [retryKey, setRetryKey] = useState(0)
   const [tutorials, setTutorials] = useState<AccountTutorial[] | null>(null)
@@ -130,13 +129,16 @@ function AccountPageContent() {
 
   useEffect(() => {
     const controller = new AbortController()
-    pageControllerRef.current = controller
+    const request = { signal: controller.signal, cursor: null as string | null, loadingMore: false }
+    auditRequestRef.current = request
     listAccountAudits(null, controller.signal)
       .then((page) => {
         if (controller.signal.aborted) return
+        request.cursor = page.nextCursor
         setAudits(page.items)
         setAuditCounts(page.counts)
-        setAuditCursor(page.nextCursor)
+        setHasMoreAudits(page.nextCursor !== null)
+        setLoadingMoreAudits(false)
         setAuditError(false)
         setMoreAuditsError(false)
       })
@@ -145,7 +147,7 @@ function AccountPageContent() {
       })
     return () => {
       controller.abort()
-      if (pageControllerRef.current === controller) pageControllerRef.current = null
+      if (auditRequestRef.current === request) auditRequestRef.current = null
     }
   }, [retryKey, auth.accountAuditsRevision])
 
@@ -160,32 +162,33 @@ function AccountPageContent() {
   const retryAudits = () => {
     setAudits(null)
     setAuditCounts(null)
-    setAuditCursor(null)
+    setHasMoreAudits(false)
     setMoreAuditsError(false)
     setAuditError(false)
     setRetryKey((key) => key + 1)
   }
 
   const loadMoreAudits = async () => {
-    const controller = pageControllerRef.current
-    if (!auditCursor || loadingMoreRef.current || !controller || controller.signal.aborted) return
-    loadingMoreRef.current = true
+    const request = auditRequestRef.current
+    if (!request?.cursor || request.loadingMore || request.signal.aborted) return
+    request.loadingMore = true
     setLoadingMoreAudits(true)
     try {
-      const page = await listAccountAudits(auditCursor, controller.signal)
-      if (controller.signal.aborted || pageControllerRef.current !== controller) return
+      const page = await listAccountAudits(request.cursor, request.signal)
+      if (request.signal.aborted) return
+      request.cursor = page.nextCursor
       setAudits((current) => {
         if (!current) return page.items
         const existing = new Set(current.map((audit) => audit.id))
         return [...current, ...page.items.filter((audit) => !existing.has(audit.id))]
       })
-      setAuditCursor(page.nextCursor)
+      setHasMoreAudits(page.nextCursor !== null)
       setMoreAuditsError(false)
     } catch {
-      if (!controller.signal.aborted) setMoreAuditsError(true)
+      if (!request.signal.aborted) setMoreAuditsError(true)
     } finally {
-      loadingMoreRef.current = false
-      setLoadingMoreAudits(false)
+      request.loadingMore = false
+      if (!request.signal.aborted) setLoadingMoreAudits(false)
     }
   }
 
@@ -213,7 +216,7 @@ function AccountPageContent() {
         )}
 
         {activeTab === "historique" && (
-          <AccountHistory audits={audits} error={auditError} onRetry={retryAudits} hasMore={auditCursor !== null} loadingMore={loadingMoreAudits} loadMoreError={moreAuditsError} onLoadMore={() => void loadMoreAudits()} />
+          <AccountHistory audits={audits} error={auditError} onRetry={retryAudits} hasMore={hasMoreAudits} loadingMore={loadingMoreAudits} loadMoreError={moreAuditsError} onLoadMore={() => void loadMoreAudits()} />
         )}
 
         {activeTab === "profil" && auth.user && <AccountProfile user={auth.user} />}

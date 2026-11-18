@@ -4,15 +4,16 @@ import { betterAuth } from "better-auth"
 import { prisma } from "../../src/lib/prisma"
 import { CANONICAL_IP_HEADER } from "./request-headers"
 
-const webOrigin = process.env.WEB_ORIGIN
-export const authOrigin = process.env.BETTER_AUTH_URL
+function requireExactOrigin(name: "WEB_ORIGIN" | "BETTER_AUTH_URL"): string {
+  const origin = process.env[name]
+  if (!origin || new URL(origin).origin !== origin) {
+    throw new Error(`${name} must be an exact origin`)
+  }
+  return origin
+}
 
-if (!webOrigin || new URL(webOrigin).origin !== webOrigin) {
-  throw new Error("WEB_ORIGIN must be an exact origin")
-}
-if (!authOrigin || new URL(authOrigin).origin !== authOrigin) {
-  throw new Error("BETTER_AUTH_URL must be an exact origin")
-}
+const webOrigin = requireExactOrigin("WEB_ORIGIN")
+export const authOrigin = requireExactOrigin("BETTER_AUTH_URL")
 
 export function createAuth(database: Parameters<typeof prismaAdapter>[0] = prisma) {
   return betterAuth({

@@ -8,7 +8,7 @@ const validAudit = {
   id: "audit-1", status: "in_progress", createdAt: "2026-09-29T10:00:00.000Z", updatedAt: "2026-09-29T10:00:00.000Z",
   questionnaireVersion: 1, scoringVersion: 1, answeredCount: 2,
 }
-const page = (items = [validAudit], nextCursor: string | null = null) => ({
+const page = (items: readonly unknown[] = [validAudit], nextCursor: string | null = null) => ({
   items, nextCursor, counts: { total: items.length, completed: 0, inProgress: items.length },
 })
 
